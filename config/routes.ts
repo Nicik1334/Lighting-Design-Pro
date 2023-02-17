@@ -54,12 +54,6 @@
     ],
   },
   {
-    name: '列表',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
-  },
-  {
     name: '个人页',
     icon: 'user',
     path: '/account',
