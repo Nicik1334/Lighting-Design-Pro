@@ -1,0 +1,37 @@
+.tags_wrapper {
+
+  :global {
+    .ant-tabs-nav {
+      margin-bottom: 24px;
+    }
+
+    .ant-tabs-tab-remove {
+      display: flex;
+    }
+  }
+
+  .contextmenu {
+    position: fixed;
+    z-index: 3000;
+    margin: 0;
+    padding: 5px 0;
+    color: #333;
+    font-weight: 400;
+    font-size: 12px;
+    list-style-type: none;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+
+    li {
+      margin: 0;
+      padding: 2px 16px;
+      line-height: 24px;
+      cursor: pointer;
+
+      &:hover {
+        background: #eee;
+      }
+    }
+  }
+}
