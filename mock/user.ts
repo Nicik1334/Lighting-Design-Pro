@@ -44,7 +44,7 @@ export default {
     res.send({
       success: true,
       data: {
-        name: 'Serati Ma',
+        name: '超级管理员',
         avatar:
           'http://mms2.baidu.com/it/u=2802105847,948817052&fm=253&app=138&f=JPEG&fmt=auto&q=75?w=500&h=500',
         userid: '00000001',

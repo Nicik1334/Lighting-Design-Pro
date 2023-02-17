@@ -1,6 +1,6 @@
 import React from 'react';
-import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Upload, message, Space, Card, Form } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { message, Space, Form } from 'antd';
 import { useRequest } from 'umi';
 import { queryCurrent } from '../service';
 import { queryProvince, queryCity } from '../service';
@@ -57,6 +57,7 @@ const BaseView: React.FC = () => {
                 avatar: [
                   {
                     url: currentUser?.avatar,
+                    thumbUrl: currentUser?.avatar,
                   },
                 ],
               }}

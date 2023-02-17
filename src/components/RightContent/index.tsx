@@ -22,7 +22,7 @@ const GlobalHeaderRight: React.FC = () => {
   return (
     <Space className={className}>
       <Avatar menu />
-      <SelectLang
+      {/* <SelectLang
         className={styles.action}
         postLocalesData={() => [
           {
@@ -44,7 +44,7 @@ const GlobalHeaderRight: React.FC = () => {
             title: 'Language',
           },
         ]}
-      />
+      /> */}
     </Space>
   );
 };

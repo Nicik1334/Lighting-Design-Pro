@@ -99,7 +99,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           {initialState?.currentUser && location.pathname !== loginPath ? (
             <>
               <TabsView children={<>{children}</>} home="/welcome" />
-              {!props.location?.pathname?.includes('/login') && (
+              {/* {!props.location?.pathname?.includes('/login') && (
                 <SettingDrawer
                   disableUrlParams
                   enableDarkTheme
@@ -111,7 +111,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
                     }));
                   }}
                 />
-              )}
+              )} */}
             </>
           ) : (
             <>{children}</>

@@ -91,7 +91,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
     // 没有该tag时追加一个,并打开这个tag页面,刷新页面后 tagList为[]（已被上面拦截）、跳转新路由 都会被触发
     if (!hasOpen) {
       const path = currentMenu?.path;
-      console.log(routeContext);
+      // console.log(routeContext);
       const {
         location: { query },
       } = routeContext;

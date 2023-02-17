@@ -14,10 +14,27 @@
     ],
   },
   {
-    path: '/welcome',
-    name: 'welcome',
+    name: '首页',
     icon: 'smile',
+    path: '/welcome',
     component: './Welcome',
+  },
+  {
+    path: '/form',
+    icon: 'form',
+    name: '表单页',
+    routes: [
+      {
+        path: '/form',
+        redirect: '/form/basic-form',
+      },
+      {
+        name: '基础表单',
+        icon: 'smile',
+        path: '/form/basic-form',
+        component: './form/basic-form',
+      },
+    ],
   },
   {
     path: '/admin',
@@ -37,7 +54,7 @@
     ],
   },
   {
-    name: 'list.table-list',
+    name: '列表',
     icon: 'table',
     path: '/list',
     component: './TableList',
@@ -51,12 +68,6 @@
         path: '/account',
         redirect: '/account/settings',
       },
-      // {
-      //   name: '个人中心',
-      //   icon: 'smile',
-      //   path: '/account/center',
-      //   component: './account/center',
-      // },
       {
         name: '个人设置',
         icon: 'smile',
