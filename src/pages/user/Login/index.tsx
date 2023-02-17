@@ -86,6 +86,7 @@ const Login: React.FC = () => {
         required
         disabledWhiteSpace
         placeholder="请输入用户名"
+        initialValue="admin"
         inputProps={{
           prefix: <UserOutlined />,
           placeholder: 'admin',
@@ -94,6 +95,7 @@ const Login: React.FC = () => {
       <LFormItemPassword
         name="password"
         required
+        initialValue="ant.design"
         passwordProps={{
           prefix: <LockOutlined />,
           placeholder: 'ant.design',

@@ -1,6 +1,6 @@
-# Ant Design Pro
+# ighting-Design-Pro
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+基于 Lighting Design 组件库与 antd Pro 开发后台管理系统模板
 
 ## Environment Prepare
 
@@ -51,7 +51,3 @@ npm run lint:fix
 ```bash
 npm test
 ```
-
-## More
-
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
