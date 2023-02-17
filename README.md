@@ -1,4 +1,4 @@
-# ighting-Design-Pro
+# Lighting-Design-Pro
 
 基于 Lighting Design 组件库与 antd Pro 开发后台管理系统模板
 
