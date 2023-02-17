@@ -34,12 +34,22 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
       currentMenu,
       location: { query },
     } = routeContext;
-
     const HomeTag = menuData.filter((el) => el.path === home)[0]; //如果当前没有路由则跳转到首页
     const path = currentMenu?.path;
-    console.log(currentMenu);
-
-    if (path === '/') {
+    if (!path) {
+      history.push({ pathname: '/404', query });
+      setPathKey('/404');
+      setTagList([
+        {
+          title: '404',
+          path: '/404',
+          children,
+          refresh: 0,
+          active: true,
+          icon: currentMenu?.icon,
+        },
+      ]);
+    } else if (path === '/') {
       // 如果路由是 "/" 则重定向首页（自定义）
       history.push({ pathname: HomeTag.path, query });
       setPathKey(HomeTag?.path);
@@ -133,9 +143,8 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
 
   // 关闭标签
   const handleCloseTag = (tag: TagsItemType) => {
-    if (tagList.length <= 1) {
-      return handleCloseAll();
-    }
+    if (tagList.length <= 1) return handleCloseAll();
+
     const tagsCopy: TagsItemType[] = tagList.map((el) => ({ ...el }));
     // 判断关闭标签是否处于打开状态
     tagList.forEach((el, i) => {

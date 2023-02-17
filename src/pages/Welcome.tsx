@@ -13,7 +13,7 @@ const CodePreview: React.FC = ({ children }) => (
 
 const Welcome: React.FC = () => {
   return (
-    <PageContainer>
+    <PageContainer breadcrumbRender={false}>
       <Card>
         <CodePreview>欢迎使用</CodePreview>
       </Card>

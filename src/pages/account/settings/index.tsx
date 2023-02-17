@@ -70,7 +70,12 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer
+      breadcrumbRender={false}
+      waterMarkProps={{
+        content: '超级管理员',
+      }}
+    >
       <GridContent>
         <div
           className={styles.main}

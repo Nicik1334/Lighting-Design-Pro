@@ -34,22 +34,11 @@
         path: '/form/basic-form',
         component: './form/basic-form',
       },
-    ],
-  },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
       {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        icon: 'smile',
-        component: './Welcome',
-      },
-      {
-        component: './404',
+        name: '弹窗表单',
+        icon: 'calendar',
+        path: '/form/modal-form',
+        component: './form/modal-form',
       },
     ],
   },
