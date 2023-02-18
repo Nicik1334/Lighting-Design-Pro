@@ -63,7 +63,8 @@
     path: '/',
     redirect: '/welcome',
   },
-  {
-    component: './404',
-  },
+  // {
+  //   component: './404',
+  // },
+  { path: '/*', component: './404' },
 ];

@@ -10,8 +10,8 @@ module.exports = {
     'no-console': 0,
     'no-unused-expressions': 0,
     'import/no-extraneous-dependencies': 0,
-    'import/newline-after-import': 2,
-    '@typescript-eslint/consistent-type-imports': 2,
+    '@typescript-eslint/no-unused-expressions': 0,
+    'react-hooks/rules-of-hooks': 0,
     'no-nested-ternary': 0, // 允许多元表达式
     'no-var': 2, // 禁用var，用let和const代替
     'react/no-array-index-key': 0, // 可以使用index作为key, 但是只能是展示列表的时候使用

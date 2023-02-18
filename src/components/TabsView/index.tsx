@@ -7,7 +7,7 @@ import TabsMenu from './TabsMenu';
 export type TagsItemType = {
   title?: string;
   icon?: string | any;
-  path?: string;
+  path: string;
   active: boolean;
   query?: any;
   children?: React.ReactNode;
@@ -24,6 +24,7 @@ interface IProps {
 const TagView: React.FC<IProps> = ({ children, home }) => {
   const [tagList, setTagList] = useState<TagsItemType[]>([]);
   const [_, setCurrentPath] = useState<any>();
+  const [currentMenuItem, setCurrentMenuItem] = useState();
   const [pathKey, setPathKey] = useState<any>('');
   const routeContextRef = useRef<RouteContextType>();
 
@@ -34,8 +35,11 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
       currentMenu,
       location: { query },
     } = routeContext;
+    // debugger;
     const HomeTag = menuData.filter((el) => el.path === home)[0]; //如果当前没有路由则跳转到首页
     const path = currentMenu?.path;
+    console.log(routeContext);
+
     if (!path) {
       history.push({ pathname: '/404', query });
       setPathKey('/404');
@@ -79,9 +83,14 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(tagList);
+  }, [tagList]);
+
   // 监听路由改变 routeContext为当前路由信息
   const handleOnChange = (routeContext: RouteContextType) => {
     const { currentMenu } = routeContext;
+    setCurrentMenuItem(currentMenu);
     if (tagList.length === 0) {
       return initTags(routeContext);
     }
@@ -101,19 +110,21 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
     // 没有该tag时追加一个,并打开这个tag页面,刷新页面后 tagList为[]（已被上面拦截）、跳转新路由 都会被触发
     if (!hasOpen) {
       const path = currentMenu?.path;
-      // console.log(routeContext);
-      const {
-        location: { query },
-      } = routeContext;
-      history.push({ pathname: path, query });
-      tagsCopy.push({
-        title: routeContext.title || '',
-        path,
-        children,
-        refresh: 0,
-        active: true,
-        icon: currentMenu?.icon,
-      });
+      if (path) {
+        // console.log(routeContext);
+        const {
+          location: { query },
+        } = routeContext;
+        history.push({ pathname: path, query });
+        tagsCopy.push({
+          title: routeContext.title || '',
+          path,
+          children,
+          refresh: 0,
+          active: true,
+          icon: currentMenu?.icon,
+        });
+      }
     }
     setPathKey(currentMenu?.path);
     setTagList(tagsCopy);
@@ -142,7 +153,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
   };
 
   // 关闭标签
-  const handleCloseTag = (tag: TagsItemType) => {
+  const handleClosePage = (tag: TagsItemType) => {
     if (tagList.length <= 1) return handleCloseAll();
 
     const tagsCopy: TagsItemType[] = tagList.map((el) => ({ ...el }));
@@ -165,7 +176,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
   };
 
   // 刷新选择的标签
-  const handleRefreshTag = (tag: TagsItemType) => {
+  const handleRefreshPage = (tag: TagsItemType) => {
     const tagsCopy: TagsItemType[] = tagList.map((item) => {
       if (item.path === tag.path) {
         history.push({ pathname: tag?.path, query: tag?.query });
@@ -186,11 +197,12 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
     <>
       <TabsMenu
         tagList={tagList}
-        closeTag={handleCloseTag}
-        closeAllTag={handleCloseAll}
-        closeOtherTag={handleCloseOther}
-        refreshTag={handleRefreshTag}
+        closePage={handleClosePage}
+        closeAllPage={handleCloseAll}
+        closeOtherPage={handleCloseOther}
+        refreshPage={handleRefreshPage}
         activeKey={pathKey}
+        menuItem={currentMenuItem}
       />
       <RouteContext.Consumer>
         {(value: RouteContextType) => {

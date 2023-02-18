@@ -1,5 +1,5 @@
 import type { TreeSelectProps } from 'antd';
-import { Card, message } from 'antd';
+import { Card } from 'antd';
 import {
   LForm,
   LFormItemAddress,
@@ -22,13 +22,11 @@ import {
   LFormItemTimePicker,
   LFormItemTreeSelect,
   LFormItemUpload,
-  LWaterMark,
 } from 'lighting-design';
-import { useRequest } from 'umi';
 import type { FC } from 'react';
 import { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { addressOptions, fakeSubmitForm, mockVal } from './service';
+import { addressOptions, mockVal } from './service';
 import type { DefaultOptionType } from 'antd/lib/select';
 
 const BasicForm: FC<Record<string, any>> = () => {

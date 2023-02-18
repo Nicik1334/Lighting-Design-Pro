@@ -1,5 +1,4 @@
 .tags_wrapper {
-
   :global {
     .ant-tabs-nav {
       margin-bottom: 24px;
@@ -32,6 +31,34 @@
       &:hover {
         background: #eee;
       }
+    }
+  }
+
+  .dropdown_content {
+    background: #fff;
+    box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
+      0 9px 28px 8px rgb(0 0 0 / 5%);
+
+    .ant-dropdown-menu {
+      box-shadow: none;
+    }
+  }
+}
+
+.tabs_full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden auto;
+  transition: all 0.2s linear;
+
+  :global {
+    .ant-tabs-nav {
+      height: 0 !important;
+      overflow: hidden;
     }
   }
 }

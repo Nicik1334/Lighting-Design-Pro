@@ -1,145 +1,193 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-import React, { useState, useRef, useEffect } from 'react';
-import { history } from 'umi';
+import React, { useState } from 'react';
 import type { TagsItemType } from '../index';
 import styles from './index.less';
-import { Tabs } from 'antd';
+import { history } from 'umi';
+import { Dropdown, Space, Tabs } from 'antd';
+import {
+  DownOutlined,
+  FullscreenOutlined,
+  HomeOutlined,
+  ReloadOutlined,
+  TagOutlined,
+} from '@ant-design/icons';
+import { useRef } from 'react';
+import { useKeyPress } from 'ahooks';
 
 interface IProps {
+  /**
+   * 菜单列表
+   */
   tagList: TagsItemType[];
+  /**
+   * 选中key
+   */
   activeKey: string;
-  closeTag: (tag: TagsItemType) => void;
-  closeAllTag: () => void;
-  closeOtherTag: (tag: TagsItemType) => void;
-  refreshTag: (tag: TagsItemType) => void;
+  /**
+   * 关闭当前标签
+   */
+  closePage: (tagVal: TagsItemType) => void;
+  /**
+   * 关闭所有标签
+   */
+  closeAllPage: () => void;
+  /**
+   * 关闭其他标签
+   */
+  closeOtherPage: (tagVal: TagsItemType) => void;
+  /**
+   * 刷新标签
+   */
+  refreshPage: (tagVal: TagsItemType) => void;
 }
 
 const TabsMenu: React.FC<IProps> = ({
   tagList,
   activeKey,
-  closeTag,
-  closeAllTag,
-  closeOtherTag,
-  refreshTag,
+  closePage,
+  closeAllPage,
+  closeOtherPage,
+  refreshPage,
+  menuItem,
 }) => {
-  const [left, setLeft] = useState(0);
-  const [top, setTop] = useState(0);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [currentTag, setCurrentTag] = useState<TagsItemType>();
-
-  const tagListRef = useRef<any>();
-  const contextMenuRef = useRef<any>();
-
-  useEffect(() => {
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
-  // 由于react的state不能及时穿透到 document.body.addEventListener去，需要在每次值发送改变时进行解绑和再次监听
-  useEffect(() => {
-    document.body.removeEventListener('click', handleClickOutside);
-    document.body.addEventListener('click', handleClickOutside);
-  }, [menuVisible]);
-
-  const handleClickOutside = (event: Event) => {
-    const isOutside = !(contextMenuRef.current && contextMenuRef.current.contains(event.target));
-    if (isOutside && menuVisible) {
-      setMenuVisible(false);
-    }
-  };
-
-  const openContextMenu = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    tag: TagsItemType,
-  ) => {
-    event.preventDefault();
-    const menuMinWidth = 105;
-    const clickX = event.clientX;
-    const clickY = event.clientY; //事件发生时鼠标的Y坐标
-    const clientWidth = tagListRef.current?.clientWidth || 0; // container width
-    const maxLeft = clientWidth - menuMinWidth; // left boundary
-    setCurrentTag(tag);
-    setMenuVisible(true);
-    setTop(clickY);
-
-    // 当鼠标点击位置大于左侧边界时，说明鼠标点击的位置偏右，将菜单放在左边
-    // 反之，当鼠标点击的位置偏左，将菜单放在右边
-    const Left = clickX > maxLeft ? clickX - menuMinWidth + 15 : clickX;
-    setLeft(Left);
-  };
+  const [tagItem, setTagItem] = useState<TagsItemType>({} as any);
+  const fullRef = useRef(null);
+  const [isFull, setIsFull] = useState<boolean>(false);
+  useKeyPress('esc', () => {
+    setIsFull(false);
+  });
 
   return (
-    <div className={styles.tags_wrapper} ref={tagListRef}>
+    <div
+      className={`${styles.tags_wrapper} ${isFull ? styles.tabs_full : ''}`}
+      ref={fullRef}
+      style={{ background: isFull ? '#fff' : 'unset' }}
+    >
       <Tabs
         hideAdd
+        tabBarExtraContent={{
+          right: (
+            <Space style={{ marginRight: 24 }}>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: (
+                        <div
+                          onClick={() => {
+                            closeOtherPage(tagItem);
+                          }}
+                        >
+                          关闭其他标签
+                        </div>
+                      ),
+                      key: '1',
+                    },
+                    {
+                      label: <div onClick={closeAllPage}>关闭所有标签</div>,
+                      key: '2',
+                    },
+                  ],
+                }}
+              >
+                <a onClick={(e) => e.preventDefault()}>
+                  <Space>
+                    关闭
+                    <DownOutlined size={12} />
+                  </Space>
+                </a>
+              </Dropdown>
+            </Space>
+          ),
+        }}
         activeKey={activeKey}
         size="small"
         type="editable-card"
         onEdit={(targetKey, action) => {
           if (action === 'remove') {
-            const tabArr = tagList.filter((item) => item.path === targetKey);
-            if (tabArr.length > 0) closeTag(tabArr[0]);
+            const tabItem = tagList.find((item) => item.path === targetKey);
+            if (tabItem) closePage(tabItem);
           }
         }}
-      >
-        {tagList.map((pane) => (
-          <Tabs.TabPane
-            forceRender
-            tab={
-              <div
-                onContextMenu={(e) => openContextMenu(e, pane)}
-                onClick={() => history.push({ pathname: pane.path, query: pane.query })}
-              >
-                {pane.title}
+        items={tagList.map((item) => {
+          return {
+            label: (
+              <div>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        label: (
+                          <Space align="center">
+                            <ReloadOutlined style={{ fontSize: 12 }} />
+                            <div onClick={() => refreshPage && refreshPage(item)}>刷新</div>
+                          </Space>
+                        ),
+                        key: '1',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <TagOutlined style={{ fontSize: 12 }} />
+                            <div onClick={() => closeOtherPage && closeOtherPage(item)}>
+                              关闭其他
+                            </div>
+                          </Space>
+                        ),
+                        key: '2',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <HomeOutlined style={{ fontSize: 12 }} />
+                            <div onClick={closeAllPage}>关闭所有</div>
+                          </Space>
+                        ),
+                        key: '3',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <FullscreenOutlined style={{ fontSize: 12 }} />
+                            <div onClick={() => setIsFull(true)}>全屏</div>
+                          </Space>
+                        ),
+                        key: '4',
+                      },
+                    ],
+                  }}
+                  trigger={['contextMenu']}
+                >
+                  <div
+                    onClick={() => {
+                      history.push({ pathname: item.path, query: item.query });
+                      setTagItem(item);
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                </Dropdown>
               </div>
-            }
-            key={pane.path}
-          >
-            <div
-              style={{
-                margin: '0 24px 24px',
-              }}
-            >
-              {pane.children}
-            </div>
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
-      {menuVisible ? (
-        <ul
-          className={styles.contextmenu}
-          style={{ left: `${left}px`, top: `${top}px` }}
-          ref={contextMenuRef}
-        >
-          <li
-            onClick={() => {
-              setMenuVisible(false);
-              currentTag && refreshTag && refreshTag(currentTag);
-            }}
-          >
-            刷新
-          </li>
-          <li
-            onClick={() => {
-              setMenuVisible(false);
-              currentTag && closeOtherTag && closeOtherTag(currentTag);
-            }}
-          >
-            关闭其他
-          </li>
-          <li
-            onClick={() => {
-              setMenuVisible(false);
-              closeAllTag && closeAllTag();
-            }}
-          >
-            关闭所有
-          </li>
-        </ul>
-      ) : null}
+            ),
+            children: (
+              <div
+                style={
+                  !isFull
+                    ? { margin: '0 24px 24px' }
+                    : {
+                        background: '#fff',
+                        overflowY: 'auto',
+                        overflowX: 'hidden',
+                        margin: '0 24px 24px',
+                      }
+                }
+              >
+                <div>{item.children}</div>
+              </div>
+            ),
+            key: item.path,
+          };
+        })}
+      />
     </div>
   );
 };
