@@ -40,6 +40,12 @@
         path: '/form/modal-form',
         component: './form/modal-form',
       },
+      {
+        name: '分步表单',
+        icon: 'calendar',
+        path: '/form/step-form',
+        component: './form/step-form',
+      },
     ],
   },
   {
