@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { RouteContext } from '@ant-design/pro-layout';
 import type { RouteContextType } from '@ant-design/pro-layout';
+import { RouteContext } from '@ant-design/pro-layout';
+import { parse } from 'query-string';
+import React, { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import TabsMenu from './TabsMenu';
 
@@ -30,16 +31,13 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
 
   // 初始化 visitedViews
   const initTags = (routeContext: RouteContextType) => {
-    const {
-      menuData = [],
-      currentMenu,
-      location: { query },
-    } = routeContext;
+    const { menuData = [], currentMenu } = routeContext;
+
+    const query = parse(history.location.search);
     // debugger;
     const HomeTag = menuData.filter((el) => el.path === home)[0]; //如果当前没有路由则跳转到首页
     const path = currentMenu?.path;
-    console.log(routeContext);
-
+    // console.log(routeContext);
     if (!path) {
       history.push({ pathname: '/404', query });
       setPathKey('/404');
@@ -84,7 +82,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
   };
 
   useEffect(() => {
-    console.log(tagList);
+    // console.log(tagList);
   }, [tagList]);
 
   // 监听路由改变 routeContext为当前路由信息
@@ -111,11 +109,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
     if (!hasOpen) {
       const path = currentMenu?.path;
       if (path) {
-        // console.log(routeContext);
-        const {
-          location: { query },
-        } = routeContext;
-        history.push({ pathname: path, query });
+        const query = parse(history.location.search);
         tagsCopy.push({
           title: routeContext.title || '',
           path,
@@ -124,6 +118,7 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
           active: true,
           icon: currentMenu?.icon,
         });
+        history.push({ pathname: path, query });
       }
     }
     setPathKey(currentMenu?.path);
@@ -179,10 +174,17 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
   const handleRefreshPage = (tag: TagsItemType) => {
     const tagsCopy: TagsItemType[] = tagList.map((item) => {
       if (item.path === tag.path) {
-        history.push({ pathname: tag?.path, query: tag?.query });
-        return { ...item, refresh: item.refresh + 1, active: true, children };
+        console.log('跳转', '/replace' + tag?.path);
+
+        history.replace({ pathname: '/replace' + tag?.path, query: tag?.query });
+        return {
+          ...item,
+          refresh: item.refresh + 1,
+          active: true,
+          children,
+        };
       }
-      return { ...item, active: false };
+      return { ...item, title: item.title, active: false };
     });
     setTagList(tagsCopy);
   };
@@ -206,6 +208,8 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
       />
       <RouteContext.Consumer>
         {(value: RouteContextType) => {
+          // console.log(value);
+
           setTimeout(() => {
             setCurrentPath(value.currentMenu?.path); //手动set更新渲染
           }, 0);

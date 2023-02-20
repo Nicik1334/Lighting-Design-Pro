@@ -1,10 +1,10 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import { PageContainer } from '@ant-design/pro-components';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import BaseView from './components/base';
 import SecurityView from './components/security';
 import styles from './style.less';
-import { PageContainer } from '@ant-design/pro-components';
 
 const { Item } = Menu;
 

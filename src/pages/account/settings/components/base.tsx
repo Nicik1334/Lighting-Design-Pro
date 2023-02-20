@@ -1,11 +1,9 @@
-import React from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
-import { message, Space, Form } from 'antd';
+import { Form, message, Space } from 'antd';
+import React from 'react';
 import { useRequest } from 'umi';
-import { queryCurrent } from '../service';
-import { queryProvince, queryCity } from '../service';
+import { queryCity, queryCurrent, queryProvince } from '../service';
 
-import styles from './BaseView.less';
 import {
   LForm,
   LFormItemInput,
@@ -13,6 +11,7 @@ import {
   LFormItemTextArea,
   LFormItemUpload,
 } from 'lighting-design';
+import styles from './BaseView.less';
 
 const BaseView: React.FC = () => {
   const { data: currentUser, loading } = useRequest(() => {

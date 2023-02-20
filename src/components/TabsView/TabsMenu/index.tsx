@@ -1,8 +1,3 @@
-import React, { useState } from 'react';
-import type { TagsItemType } from '../index';
-import styles from './index.less';
-import { history } from 'umi';
-import { Dropdown, Space, Tabs } from 'antd';
 import {
   DownOutlined,
   FullscreenOutlined,
@@ -10,8 +5,12 @@ import {
   ReloadOutlined,
   TagOutlined,
 } from '@ant-design/icons';
-import { useRef } from 'react';
 import { useKeyPress } from 'ahooks';
+import { Dropdown, Space, Tabs } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { history } from 'umi';
+import type { TagsItemType } from '../index';
+import styles from './index.less';
 
 interface IProps {
   /**
@@ -55,6 +54,10 @@ const TabsMenu: React.FC<IProps> = ({
   useKeyPress('esc', () => {
     setIsFull(false);
   });
+
+  useEffect(() => {
+    // console.log(tagList);
+  }, [tagList]);
 
   return (
     <div

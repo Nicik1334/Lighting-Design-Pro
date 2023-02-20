@@ -1,17 +1,9 @@
 import { PageContainer } from '@ant-design/pro-components';
-import { Alert, Card, message, Space, Typography } from 'antd';
+import { Card, Space } from 'antd';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styles from './Welcome.less';
-
-const CodePreview: React.FC = ({ children }) => (
-  <pre className={styles.pre}>
-    <code>
-      <Typography.Text copyable>{children}</Typography.Text>
-    </code>
-  </pre>
-);
 
 const Welcome: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
