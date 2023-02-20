@@ -1,4 +1,4 @@
-// export const BASE_URL = 'xxxxxx' as const; //
+// export const BASE_URL = 'xxxxxxxx' as const; //
 
 export const NOTIFICATION_TYPES = {
   success: '操作成功',
