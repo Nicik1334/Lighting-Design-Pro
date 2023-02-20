@@ -1,10 +1,24 @@
-import { LForm } from 'lighting-design';
 import type { FC } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
+import Demo1 from './components/demo1';
+import type { TabsProps } from 'antd';
+import { Card } from 'antd';
+import { Tabs } from 'antd';
+import Demo2 from './components/demo2';
 
 const BasicForm: FC<Record<string, any>> = () => {
-  const [form] = LForm.useForm();
-
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: `弹窗表单`,
+      children: <Demo1 />,
+    },
+    {
+      key: '2',
+      label: `抽屉表单`,
+      children: <Demo2 />,
+    },
+  ];
   return (
     <PageContainer
       breadcrumbRender={false}
@@ -13,7 +27,9 @@ const BasicForm: FC<Record<string, any>> = () => {
         content: '超级管理员',
       }}
     >
-      1
+      <Card>
+        <Tabs items={items} />
+      </Card>
     </PageContainer>
   );
 };
