@@ -16,5 +16,6 @@ module.exports = {
     'no-var': 2, // 禁用var，用let和const代替
     'react/no-array-index-key': 0, // 可以使用index作为key, 但是只能是展示列表的时候使用
     semi: [2, 'always'], // 语句强制分号结尾
+    'react-hooks/exhaustive-deps': 0,
   },
 };

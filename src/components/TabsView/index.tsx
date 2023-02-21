@@ -1,101 +1,144 @@
 import type { RouteContextType } from '@ant-design/pro-layout';
 import { RouteContext } from '@ant-design/pro-layout';
+import type { MenuDataItem } from '@umijs/route-utils';
 import { parse } from 'query-string';
 import React, { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import TabsMenu from './TabsMenu';
 
 export type TagsItemType = {
+  /**
+   * 标题
+   */
   title?: string;
+  /**
+   * 图标
+   */
   icon?: string | any;
-  path: string;
+  /**
+   * 路由
+   */
+  path?: string;
+  /**
+   * 路由展示标识
+   */
   active: boolean;
+  /**
+   * query参数
+   */
   query?: any;
+  /**
+   * children
+   */
   children?: React.ReactNode;
+  /**
+   * 刷新次数
+   */
   refresh: number;
 };
 
-interface IProps {
+interface TagViewProps {
+  /**
+   * 首页路由
+   */
   home: string;
 }
 
 /**
  * @component TagView 标签页组件
  */
-const TagView: React.FC<IProps> = ({ children, home }) => {
+const TagView: React.FC<TagViewProps> = ({ children, home }) => {
   const [tagList, setTagList] = useState<TagsItemType[]>([]);
   const [_, setCurrentPath] = useState<any>();
-  const [currentMenuItem, setCurrentMenuItem] = useState();
   const [pathKey, setPathKey] = useState<any>('');
   const routeContextRef = useRef<RouteContextType>();
+
+  //递归获取重定向路由
+  const currentData = (path: string, list: MenuDataItem[], keyList: MenuDataItem[]) => {
+    list.forEach((node) => {
+      if (node.children) currentData(path, node.children.reverse(), keyList);
+      if (node.path === path) keyList.push(node);
+    });
+    return keyList;
+  };
 
   // 初始化 visitedViews
   const initTags = (routeContext: RouteContextType) => {
     const { menuData = [], currentMenu } = routeContext;
-
     const query = parse(history.location.search);
-    // debugger;
-    const HomeTag = menuData.filter((el) => el.path === home)[0]; //如果当前没有路由则跳转到首页
-    const path = currentMenu?.path;
-    // console.log(routeContext);
-    if (!path) {
-      history.push({ pathname: '/404', query });
-      setPathKey('/404');
+    const HomeTag = menuData.filter((el) => el.path === home)[0];
+    const { path, redirect } = currentMenu as MenuDataItem;
+
+    if (redirect) {
+      // 路由找不到则重定向父路由
+      history.push({ pathname: redirect, query });
+      setPathKey(redirect);
+      const ItemData = currentData(redirect, menuData.reverse(), [])[0];
       setTagList([
         {
-          title: '404',
-          path: '/404',
+          title: ItemData?.name,
+          path: redirect,
           children,
           refresh: 0,
           active: true,
-          icon: currentMenu?.icon,
-        },
-      ]);
-    } else if (path === '/') {
-      // 如果路由是 "/" 则重定向首页（自定义）
-      history.push({ pathname: HomeTag.path, query });
-      setPathKey(HomeTag?.path);
-      setTagList([
-        {
-          title: HomeTag.name,
-          path: HomeTag.path,
-          children,
-          refresh: 0,
-          active: true,
-          icon: currentMenu?.icon,
+          icon: ItemData?.icon,
         },
       ]);
     } else {
-      history.push({ pathname: path, query });
-      setPathKey(path);
-      setTagList([
-        {
-          title: currentMenu?.name,
-          path,
-          children,
-          refresh: 0,
-          active: true,
-          icon: currentMenu?.icon,
-        },
-      ]);
+      switch (path) {
+        case undefined:
+          // 如果'path'与'redirect'都为undefined则重定向404
+          history.push({ pathname: '/404', query });
+          setPathKey('/404');
+          setTagList([
+            {
+              title: '404',
+              path: '/404',
+              children,
+              refresh: 0,
+              active: true,
+            },
+          ]);
+          break;
+        case '/':
+          // 如果路由是 "/" 则重定向首页（自定义）
+          history.push({ pathname: HomeTag.path, query });
+          setPathKey(HomeTag?.path);
+          setTagList([
+            {
+              title: HomeTag.name,
+              path: HomeTag.path,
+              children,
+              refresh: 0,
+              active: true,
+              icon: currentMenu?.icon,
+            },
+          ]);
+        default:
+          // 正常跳转
+          history.push({ pathname: path, query });
+          setPathKey(path);
+          setTagList([
+            {
+              title: currentMenu?.name,
+              path,
+              children,
+              refresh: 0,
+              active: true,
+              icon: currentMenu?.icon,
+            },
+          ]);
+          break;
+      }
     }
   };
-
-  useEffect(() => {
-    // console.log(tagList);
-  }, [tagList]);
 
   // 监听路由改变 routeContext为当前路由信息
   const handleOnChange = (routeContext: RouteContextType) => {
     const { currentMenu } = routeContext;
-    setCurrentMenuItem(currentMenu);
-    if (tagList.length === 0) {
-      return initTags(routeContext);
-    }
-
-    // 判断是否已打开过该页面
-    let hasOpen = false;
-    const tagsCopy: TagsItemType[] = tagList.map((item) => {
+    if (tagList.length === 0) return initTags(routeContext); // 初始化
+    let hasOpen = false; // 判断是否已打开过该页面
+    const tagsList = tagList.map((item) => {
       if (currentMenu?.path === item.path) {
         hasOpen = true;
         // 刷新浏览器时，重新覆盖当前 path 的 children
@@ -104,13 +147,21 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
         return { ...item, active: false };
       }
     });
-
-    // 没有该tag时追加一个,并打开这个tag页面,刷新页面后 tagList为[]（已被上面拦截）、跳转新路由 都会被触发
+    // 没有该tag时追加一个,并打开这个tag页面
+    // 刷新页面后 tagList为[]（已被上面拦截）
     if (!hasOpen) {
+      const query = parse(history.location.search);
+      if (currentMenu?.redirect) {
+        // 如果跳转有redirect属性，则跳转到redirect 比如history.push('/'),history.push('/form')
+        history.push({ pathname: currentMenu?.redirect, query });
+        setPathKey(currentMenu?.redirect);
+        setTagList(tagsList);
+        return;
+      }
+      // -------------------------
       const path = currentMenu?.path;
       if (path) {
-        const query = parse(history.location.search);
-        tagsCopy.push({
+        tagsList.push({
           title: routeContext.title || '',
           path,
           children,
@@ -122,16 +173,16 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
       }
     }
     setPathKey(currentMenu?.path);
-    setTagList(tagsCopy);
+    setTagList(tagsList);
   };
 
   // 关闭所有标签
   const handleCloseAll = () => {
     history.push(home);
-    const tagsCopy: TagsItemType[] = tagList.filter((el) => el.path === home);
-    if (tagsCopy.length !== 0) {
-      //表示路由栏有首页标签
-      setTagList([{ ...tagsCopy[0], children, refresh: 0, active: true }]);
+    const tagsList = tagList.find((el) => el.path === home);
+    //判断路由栏是否有首页标签
+    if (tagsList) {
+      setTagList([{ ...tagsList, children, refresh: 0, active: true }]);
     } else {
       const menuData = routeContextRef.current?.menuData || [];
       const homePath = menuData.filter((el) => el.path === home);
@@ -149,50 +200,49 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
 
   // 关闭标签
   const handleClosePage = (tag: TagsItemType) => {
+    // 如果剩余一个标签则关闭所有
     if (tagList.length <= 1) return handleCloseAll();
-
-    const tagsCopy: TagsItemType[] = tagList.map((el) => ({ ...el }));
+    const tagsList = tagList.map((el) => ({ ...el }));
     // 判断关闭标签是否处于打开状态
     tagList.forEach((el, i) => {
       if (el.path === tag.path && tag.active) {
-        const next = tagList[i - 1];
+        // 关闭当前路由后，跳转到左边，如果左边没路由则跳转到右边
+        const next = tagList[i - 1] || tagList[i + 1];
         next.active = true;
-        history.push({ pathname: next?.path, query: next?.query });
+        history.push({ pathname: next.path, query: next.query });
       }
     });
-    setTagList(tagsCopy.filter((el) => el.path !== tag?.path));
+    setTagList(tagsList.filter((el) => el.path !== tag.path));
   };
 
   // 关闭其他标签
   const handleCloseOther = (tag: TagsItemType) => {
-    const tagsCopy: TagsItemType[] = tagList.filter((el) => el.path === tag.path);
-    history.push({ pathname: tag?.path, query: tag?.query });
-    setTagList(tagsCopy);
+    const tagsList = tagList.filter((el) => el.path === tag.path);
+    const { path: pathname, query } = tag;
+    history.push({ pathname, query });
+    setTagList(tagsList);
   };
 
   // 刷新选择的标签
   const handleRefreshPage = (tag: TagsItemType) => {
-    const tagsCopy: TagsItemType[] = tagList.map((item) => {
+    const { path: pathname, query } = tag;
+    const tagsList = tagList.map((item) => {
       if (item.path === tag.path) {
-        console.log('跳转', '/replace' + tag?.path);
-
-        history.replace({ pathname: '/replace' + tag?.path, query: tag?.query });
+        history.push({ pathname, query });
         return {
           ...item,
           refresh: item.refresh + 1,
           active: true,
-          children,
+          children: <>{children}</>,
         };
       }
       return { ...item, title: item.title, active: false };
     });
-    setTagList(tagsCopy);
+    setTagList(tagsList);
   };
 
   useEffect(() => {
-    if (routeContextRef.current) {
-      handleOnChange(routeContextRef.current);
-    }
+    if (routeContextRef.current) handleOnChange(routeContextRef.current);
   }, [routeContextRef.current]);
 
   return (
@@ -204,12 +254,9 @@ const TagView: React.FC<IProps> = ({ children, home }) => {
         closeOtherPage={handleCloseOther}
         refreshPage={handleRefreshPage}
         activeKey={pathKey}
-        menuItem={currentMenuItem}
       />
       <RouteContext.Consumer>
         {(value: RouteContextType) => {
-          // console.log(value);
-
           setTimeout(() => {
             setCurrentPath(value.currentMenu?.path); //手动set更新渲染
           }, 0);

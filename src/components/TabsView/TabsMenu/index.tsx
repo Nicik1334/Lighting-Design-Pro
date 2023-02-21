@@ -46,7 +46,6 @@ const TabsMenu: React.FC<IProps> = ({
   closeAllPage,
   closeOtherPage,
   refreshPage,
-  menuItem,
 }) => {
   const [tagItem, setTagItem] = useState<TagsItemType>({} as any);
   const fullRef = useRef(null);
@@ -178,13 +177,16 @@ const TabsMenu: React.FC<IProps> = ({
                     ? { margin: '0 24px 24px' }
                     : {
                         background: '#fff',
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
                         margin: '0 24px 24px',
                       }
                 }
               >
-                <div>{item.children}</div>
+                <div
+                  className={item.active ? 'aaa' : 'bbb'}
+                  // style={!item.active ? { contentVisibility: 'auto' } : {}}
+                >
+                  {item.children}
+                </div>
               </div>
             ),
             key: item.path,

@@ -7,6 +7,7 @@ import { ConfigProvider } from 'antd';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
+import TabsView from './components/TabsView';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -97,8 +98,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           {initialState?.currentUser && location.pathname !== loginPath ? (
             <>
               <ConfigProvider>
-                {children}
-                {/* <TabsView children={<>{children}</>} home="/welcome" /> */}
+                {/* {children} */}
+                <TabsView children={<>{children}</>} home="/welcome" />
               </ConfigProvider>
               {/* {!props.location?.pathname?.includes('/login') && (
                 <SettingDrawer
