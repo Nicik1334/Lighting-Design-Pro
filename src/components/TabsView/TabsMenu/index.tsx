@@ -11,7 +11,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import type { TagsItemType } from '../index';
 import styles from './index.less';
-
 interface IProps {
   /**
    * 菜单列表
@@ -73,15 +72,7 @@ const TabsMenu: React.FC<IProps> = ({
                 menu={{
                   items: [
                     {
-                      label: (
-                        <div
-                          onClick={() => {
-                            closeOtherPage(tagItem);
-                          }}
-                        >
-                          关闭其他标签
-                        </div>
-                      ),
+                      label: <div onClick={() => closeOtherPage(tagItem)}>关闭其他标签</div>,
                       key: '1',
                     },
                     {
@@ -105,6 +96,8 @@ const TabsMenu: React.FC<IProps> = ({
         size="small"
         type="editable-card"
         onEdit={(targetKey, action) => {
+          console.log(targetKey);
+
           if (action === 'remove') {
             const tabItem = tagList.find((item) => item.path === targetKey);
             if (tabItem) closePage(tabItem);
@@ -121,7 +114,11 @@ const TabsMenu: React.FC<IProps> = ({
                         label: (
                           <Space align="center">
                             <ReloadOutlined style={{ fontSize: 12 }} />
-                            <div onClick={() => refreshPage && refreshPage(item)}>刷新</div>
+                            <div>刷新</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => refreshPage && refreshPage(item)}
+                            />
                           </Space>
                         ),
                         key: '1',
@@ -130,9 +127,11 @@ const TabsMenu: React.FC<IProps> = ({
                         label: (
                           <Space align="center">
                             <TagOutlined style={{ fontSize: 12 }} />
-                            <div onClick={() => closeOtherPage && closeOtherPage(item)}>
-                              关闭其他
-                            </div>
+                            <div>关闭其他</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => closeOtherPage && closeOtherPage(item)}
+                            />
                           </Space>
                         ),
                         key: '2',
@@ -141,7 +140,8 @@ const TabsMenu: React.FC<IProps> = ({
                         label: (
                           <Space align="center">
                             <HomeOutlined style={{ fontSize: 12 }} />
-                            <div onClick={closeAllPage}>关闭所有</div>
+                            <div>关闭所有</div>
+                            <div className={styles.drop_down_span} onClick={closeAllPage} />
                           </Space>
                         ),
                         key: '3',
@@ -150,7 +150,11 @@ const TabsMenu: React.FC<IProps> = ({
                         label: (
                           <Space align="center">
                             <FullscreenOutlined style={{ fontSize: 12 }} />
-                            <div onClick={() => setIsFull(true)}>全屏</div>
+                            <div>全屏</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => setIsFull(true)}
+                            />
                           </Space>
                         ),
                         key: '4',
@@ -166,6 +170,7 @@ const TabsMenu: React.FC<IProps> = ({
                     }}
                   >
                     {item.title}
+                    <div className={styles.drop_down_span} />
                   </div>
                 </Dropdown>
               </div>
@@ -182,8 +187,9 @@ const TabsMenu: React.FC<IProps> = ({
                 }
               >
                 <div
-                  className={item.active ? 'aaa' : 'bbb'}
+                  className={item.active ? 'animate__animated animate__fadeIn' : ''}
                   // style={!item.active ? { contentVisibility: 'auto' } : {}}
+                  style={{ animationDuration: '.8s' }}
                 >
                   {item.children}
                 </div>

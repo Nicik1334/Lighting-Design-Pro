@@ -1,9 +1,9 @@
 /* eslint-disable react/no-children-prop */
 import RightContent from '@/components/RightContent';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import { BookOutlined, LinkOutlined, LoadingOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-layout';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Spin } from 'antd';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
@@ -52,6 +52,8 @@ export async function getInitialState(): Promise<{
   };
 }
 
+Spin.setDefaultIndicator(<LoadingOutlined spin />);
+
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   // console.log('initialState', initialState);
@@ -92,13 +94,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       children: React.ReactNode,
       props: { location: { pathname: string | string[] } },
     ) => {
+      console.log(initialState);
+
+      if (initialState?.loading) return <PageLoading />;
       return (
-        // if (initialState?.loading) return <PageLoading />;
         <>
           {initialState?.currentUser && location.pathname !== loginPath ? (
             <>
               <ConfigProvider>
-                {/* {children} */}
                 <TabsView children={<>{children}</>} home="/welcome" />
               </ConfigProvider>
               {/* {!props.location?.pathname?.includes('/login') && (

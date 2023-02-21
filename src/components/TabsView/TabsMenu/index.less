@@ -5,9 +5,20 @@
     }
 
     .ant-tabs-tab-remove {
+      z-index: 10;
       display: flex;
     }
   }
+}
+
+.drop_down_span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: transparent;
 }
 
 .tabs_full {
@@ -18,7 +29,6 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden auto;
-  transition: all 0.2s linear;
 
   :global {
     .ant-tabs-nav {
