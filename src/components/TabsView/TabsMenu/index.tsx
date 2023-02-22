@@ -31,7 +31,7 @@ interface IProps {
   /**
    * 关闭其他标签
    */
-  closeOtherPage: (tagVal: TagsItemType) => void;
+  closeOtherPage: () => void;
   /**
    * 刷新标签
    */
@@ -46,7 +46,6 @@ const TabsMenu: React.FC<IProps> = ({
   closeOtherPage,
   refreshPage,
 }) => {
-  const [tagItem, setTagItem] = useState<TagsItemType>({} as any);
   const fullRef = useRef(null);
   const [isFull, setIsFull] = useState<boolean>(false);
   useKeyPress('esc', () => {
@@ -72,7 +71,7 @@ const TabsMenu: React.FC<IProps> = ({
                 menu={{
                   items: [
                     {
-                      label: <div onClick={() => closeOtherPage(tagItem)}>关闭其他标签</div>,
+                      label: <div onClick={closeOtherPage}>关闭其他标签</div>,
                       key: '1',
                     },
                     {
@@ -130,7 +129,7 @@ const TabsMenu: React.FC<IProps> = ({
                             <div>关闭其他</div>
                             <div
                               className={styles.drop_down_span}
-                              onClick={() => closeOtherPage && closeOtherPage(item)}
+                              onClick={() => closeOtherPage && closeOtherPage()}
                             />
                           </Space>
                         ),
@@ -163,12 +162,7 @@ const TabsMenu: React.FC<IProps> = ({
                   }}
                   trigger={['contextMenu']}
                 >
-                  <div
-                    onClick={() => {
-                      history.push({ pathname: item.path, query: item.query });
-                      setTagItem(item);
-                    }}
-                  >
+                  <div onClick={() => history.push({ pathname: item.path, query: item.query })}>
                     {item.title}
                     <div className={styles.drop_down_span} />
                   </div>

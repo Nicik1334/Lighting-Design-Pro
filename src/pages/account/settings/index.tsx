@@ -71,7 +71,6 @@ const Settings: React.FC = () => {
 
   return (
     <PageContainer
-      breadcrumbRender={false}
       waterMarkProps={{
         content: '超级管理员',
       }}

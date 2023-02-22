@@ -66,12 +66,10 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
   const initTags = (routeContext: RouteContextType) => {
     const { menuData = [], currentMenu } = routeContext;
     const query = parse(history.location.search);
-    const HomeTag = menuData.filter((el) => el.path === home)[0];
     const { path, redirect } = currentMenu as MenuDataItem;
-
     if (redirect) {
       // 路由找不到则重定向父路由
-      history.push({ pathname: redirect, query });
+      // history.push({ pathname: redirect, query });
       setPathKey(redirect);
       const ItemData = currentData(redirect, menuData.reverse(), [])[0];
       setTagList([
@@ -100,23 +98,9 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
             },
           ]);
           break;
-        case '/':
-          // 如果路由是 "/" 则重定向首页（自定义）
-          history.push({ pathname: HomeTag.path, query });
-          setPathKey(HomeTag?.path);
-          setTagList([
-            {
-              title: HomeTag.name,
-              path: HomeTag.path,
-              children,
-              refresh: 0,
-              active: true,
-              icon: currentMenu?.icon,
-            },
-          ]);
         default:
           // 正常跳转
-          history.push({ pathname: path, query });
+          // history.push({ pathname: path, query });
           setPathKey(path);
           setTagList([
             {
@@ -138,6 +122,7 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
     const { currentMenu } = routeContext;
     if (tagList.length === 0) return initTags(routeContext); // 初始化
     let hasOpen = false; // 判断是否已打开过该页面
+    debugger;
     const tagsList = tagList.map((item) => {
       if (currentMenu?.path === item.path) {
         hasOpen = true;
@@ -216,9 +201,9 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
   };
 
   // 关闭其他标签
-  const handleCloseOther = (tag: TagsItemType) => {
-    const tagsList = tagList.filter((el) => el.path === tag.path);
-    const { path: pathname, query } = tag;
+  const handleCloseOther = () => {
+    const tagsList = tagList.filter((el) => el.active);
+    const { path: pathname, query } = tagsList[0];
     history.push({ pathname, query });
     setTagList(tagsList);
   };
@@ -233,7 +218,7 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
           ...item,
           refresh: item.refresh + 1,
           active: true,
-          children: <>{children}</>,
+          children: <div className="animate__animated animate__fadeIn">{children}</div>,
         };
       }
       return { ...item, title: item.title, active: false };

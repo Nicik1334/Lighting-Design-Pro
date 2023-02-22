@@ -67,7 +67,6 @@ const BasicForm: FC<Record<string, any>> = () => {
   };
   return (
     <PageContainer
-      breadcrumbRender={false}
       content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。"
       waterMarkProps={{
         content: '超级管理员',

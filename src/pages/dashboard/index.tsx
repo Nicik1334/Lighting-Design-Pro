@@ -1,11 +1,12 @@
 import { PageContainer } from '@ant-design/pro-components';
-import { Card, Space } from 'antd';
+import { Button, Card, Space } from 'antd';
+import { history } from 'umi';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import styles from './Welcome.less';
+import styles from './index.less';
 
-const Welcome: React.FC = () => {
+const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   const [text] = useState('基于React、TypeScript、Ant Design、UmiJs、ahook等开发的后台模板组件。');
   useEffect(() => {
@@ -19,6 +20,9 @@ const Welcome: React.FC = () => {
   return (
     <PageContainer breadcrumbRender={false}>
       <Card style={{ height: '100%' }}>
+        {/* <Button onClick={() => history.push('/404')}>404</Button>
+        <Button onClick={() => history.push('/')}>首页</Button>
+        <Button onClick={() => history.push('/form')}>form</Button> */}
         <Space align="center">
           当前时间：
           <LNumberRoll type="date" className={styles.numberStyle} value={value} />
@@ -51,4 +55,4 @@ const Welcome: React.FC = () => {
   );
 };
 
-export default Welcome;
+export default Dashboard;

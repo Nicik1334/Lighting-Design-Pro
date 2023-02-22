@@ -1,5 +1,7 @@
 // export const BASE_URL = 'xxxxxxxx' as const; //
 
+export const LOGIN_PATH = '/user/login';
+
 export const NOTIFICATION_TYPES = {
   success: '操作成功',
   info: '操作信息',
