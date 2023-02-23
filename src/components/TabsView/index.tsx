@@ -5,37 +5,7 @@ import { parse } from 'query-string';
 import React, { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import TabsMenu from './TabsMenu';
-
-export type TagsItemType = {
-  /**
-   * 标题
-   */
-  title?: string;
-  /**
-   * 图标
-   */
-  icon?: string | any;
-  /**
-   * 路由
-   */
-  path?: string;
-  /**
-   * 路由展示标识
-   */
-  active: boolean;
-  /**
-   * query参数
-   */
-  query?: any;
-  /**
-   * children
-   */
-  children?: React.ReactNode;
-  /**
-   * 刷新次数
-   */
-  refresh: number;
-};
+import type { TagsItemType } from './TabsMenu/data';
 
 interface TagViewProps {
   /**
@@ -122,7 +92,6 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
     const { currentMenu } = routeContext;
     if (tagList.length === 0) return initTags(routeContext); // 初始化
     let hasOpen = false; // 判断是否已打开过该页面
-    debugger;
     const tagsList = tagList.map((item) => {
       if (currentMenu?.path === item.path) {
         hasOpen = true;
