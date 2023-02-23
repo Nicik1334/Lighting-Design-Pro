@@ -8,7 +8,7 @@ import {
 import { useKeyPress } from 'ahooks';
 import type { TabsProps } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history } from 'umi';
@@ -60,54 +60,54 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
   useKeyPress('esc', () => {
     setIsFull(false);
   });
-  const DraggableTabs: React.FC<TabsProps> = (props) => {
-    const { items = [] } = props;
-    const [order, setOrder] = useState<React.Key[]>([]);
 
-    const moveTabNode = (dragKey: React.Key, hoverKey: React.Key) => {
-      const newOrder = order.slice();
-      items.forEach((item) => {
-        if (item.key && newOrder.indexOf(item.key) === -1) {
-          newOrder.push(item.key);
-        }
+  const DraggableTabs: React.FC<TabsProps> = useCallback(
+    (props: JSX.IntrinsicAttributes & TabsProps) => {
+      const { items = [] } = props;
+      const [order, setOrder] = useState<React.Key[]>([]);
+      const moveTabNode = (dragKey: React.Key, hoverKey: React.Key) => {
+        const newOrder = order.slice();
+        items.forEach((item) => {
+          if (item.key && newOrder.indexOf(item.key) === -1) {
+            newOrder.push(item.key);
+          }
+        });
+        const dragIndex = newOrder.indexOf(dragKey); // 移动的标签位置
+        const hoverIndex = newOrder.indexOf(hoverKey); // 移动后标签位置
+        newOrder.splice(dragIndex, 1); // 删除移动千标签
+        newOrder.splice(hoverIndex, 0, dragKey); // 添加移动后标签
+        setOrder(newOrder);
+      };
+
+      const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar: any) => {
+        return (
+          <DefaultTabBar {...tabBarProps}>
+            {(node: any) => (
+              <DraggableTabNode key={node.key} index={node.key!} moveNode={moveTabNode}>
+                {node}
+              </DraggableTabNode>
+            )}
+          </DefaultTabBar>
+        );
+      };
+      const orderItems = [...items].sort((a, b) => {
+        const orderA = order.indexOf(a.key!);
+        const orderB = order.indexOf(b.key!);
+        if (orderA !== -1 && orderB !== -1) return orderA - orderB;
+        if (orderA !== -1) return -1;
+        if (orderB !== -1) return 1;
+        const ia = items.indexOf(a);
+        const ib = items.indexOf(b);
+        return ia - ib;
       });
-
-      const dragIndex = newOrder.indexOf(dragKey); // 移动的标签位置
-      const hoverIndex = newOrder.indexOf(hoverKey); // 移动后标签位置
-
-      newOrder.splice(dragIndex, 1); // 删除移动千标签
-      newOrder.splice(hoverIndex, 0, dragKey); // 添加移动后标签
-
-      setOrder(newOrder);
-    };
-
-    const renderTabBar: TabsProps['renderTabBar'] = (tabBarProps, DefaultTabBar) => {
       return (
-        <DefaultTabBar {...tabBarProps}>
-          {(node) => (
-            <DraggableTabNode key={node.key} index={node.key!} moveNode={moveTabNode}>
-              <div>{node}</div>
-            </DraggableTabNode>
-          )}
-        </DefaultTabBar>
+        <DndProvider backend={HTML5Backend}>
+          <Tabs renderTabBar={renderTabBar} {...props} items={orderItems} />
+        </DndProvider>
       );
-    };
-    const orderItems = [...items].sort((a, b) => {
-      const orderA = order.indexOf(a.key!);
-      const orderB = order.indexOf(b.key!);
-      if (orderA !== -1 && orderB !== -1) return orderA - orderB;
-      if (orderA !== -1) return -1;
-      if (orderB !== -1) return 1;
-      const ia = items.indexOf(a);
-      const ib = items.indexOf(b);
-      return ia - ib;
-    });
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <Tabs renderTabBar={renderTabBar} {...props} items={orderItems} />
-      </DndProvider>
-    );
-  };
+    },
+    [],
+  );
 
   return (
     <div
@@ -144,16 +144,13 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
             </Space>
           ),
         }}
-        activeKey={activeKey}
-        size="small"
-        type="editable-card"
         onEdit={(targetKey, action) => {
           if (action === 'remove') {
             const tabItem = tagList.find((item) => item.path === targetKey);
             if (tabItem) closePage(tabItem);
           }
         }}
-        items={tagList.map((item) => {
+        items={tagList.map((item): any => {
           return {
             label: (
               <div>
@@ -233,8 +230,8 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
               >
                 <div
                   className={item.active ? 'animate__animated animate__fadeIn' : ''}
-                  // style={!item.active ? { contentVisibility: 'auto' } : {}}
                   style={{ animationDuration: '.8s' }}
+                  // style={!item.active ? { contentVisibility: 'auto' } : {}}
                 >
                   {item.children}
                 </div>
@@ -243,6 +240,9 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
             key: item.path,
           };
         })}
+        activeKey={activeKey}
+        size="small"
+        type="editable-card"
       />
     </div>
   );

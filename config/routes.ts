@@ -59,6 +59,23 @@ export default [
         ],
       },
       {
+        path: '/table',
+        icon: 'table',
+        name: '列表页',
+        routes: [
+          {
+            path: '/table',
+            redirect: '/table/basic-table',
+          },
+          {
+            name: '基础列表',
+            icon: 'smile',
+            path: '/table/basic-table',
+            component: './table/basic-table',
+          },
+        ],
+      },
+      {
         name: '个人页',
         icon: 'user',
         path: '/account',

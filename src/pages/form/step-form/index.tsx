@@ -83,7 +83,6 @@ const BasicForm: FC<Record<string, any>> = () => {
                     style={{ width: 342 }}
                     name="email"
                     required
-                    initialValue=""
                     placeholder="收款人账户"
                   />
                 </Space>
