@@ -1,6 +1,6 @@
 import './index.less';
 
-function CSIndex() {
+function Hamster() {
   return (
     <div
       className="wheel-and-hamster"
@@ -27,4 +27,4 @@ function CSIndex() {
   );
 }
 
-export default CSIndex;
+export default Hamster;
