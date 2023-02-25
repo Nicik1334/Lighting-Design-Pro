@@ -59,6 +59,30 @@ export default [
         ],
       },
       {
+        path: '/system',
+        icon: 'picLeft',
+        name: '系统管理',
+        routes: [
+          {
+            path: '/system',
+            redirect: '/system/dictionary',
+          },
+          {
+            name: '字典管理',
+            icon: 'smile',
+            path: '/system/dictionary',
+            component: './system/dictionary',
+          },
+          {
+            name: '人员管理',
+            icon: 'user',
+            path: '/system/user',
+            component: './system/user',
+          },
+        ],
+      },
+
+      {
         path: '/table',
         icon: 'table',
         name: '列表页',

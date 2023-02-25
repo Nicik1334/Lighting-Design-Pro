@@ -29,3 +29,21 @@ export const CODE_MESSAGE = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 } as const;
+
+/** 用户性别 */
+export const genderLabels: Record<number, string> = {
+  0: '女',
+  1: '男',
+};
+
+export const genderOptions: { value: '0' | '1' | null; label: string }[] = [
+  { value: '0', label: genderLabels['0'] },
+  { value: '1', label: genderLabels['1'] },
+];
+
+/** 用户状态 */
+export const userStatusLabels: Record<number, string> = {
+  1: '启用',
+  2: '禁用',
+  3: '冻结',
+};

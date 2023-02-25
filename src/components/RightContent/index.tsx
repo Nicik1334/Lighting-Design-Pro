@@ -28,7 +28,7 @@ const GlobalHeaderRight: React.FC = () => {
 
   return (
     <Space className={className}>
-      <TimeRoll className={`${styles.action}`} format="yyyy-MM-DD HH:mm" />
+      {/* <TimeRoll className={`${styles.action}`} format="yyyy-MM-DD HH:mm" /> */}
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="搜索"

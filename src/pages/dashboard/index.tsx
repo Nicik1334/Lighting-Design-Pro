@@ -1,10 +1,8 @@
 import { PageContainer } from '@ant-design/pro-components';
-import { Button, Card, Space } from 'antd';
-import { history } from 'umi';
-import { LNumberRoll, LTypeit } from 'lighting-design';
+import { Card } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import styles from './index.less';
+import CSIndex from '@/components/cs';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
@@ -23,12 +21,12 @@ const Dashboard: React.FC = () => {
         {/* <Button onClick={() => history.push('/404')}>404</Button>
         <Button onClick={() => history.push('/')}>首页</Button>
         <Button onClick={() => history.push('/form')}>form</Button> */}
-        <Space align="center">
+        {/* <Space align="center">
           当前时间：
           <LNumberRoll type="date" className={styles.numberStyle} value={value} />
-        </Space>
-        <br />
-        <div>
+        </Space> */}
+        {/* <br /> */}
+        {/* <div>
           <LTypeit
             style={{ fontFamily: 'cursive', fontSize: 26 }}
             options={{
@@ -49,7 +47,8 @@ const Dashboard: React.FC = () => {
               return instance;
             }}
           />
-        </div>
+        </div> */}
+        <CSIndex />
       </Card>
     </PageContainer>
   );

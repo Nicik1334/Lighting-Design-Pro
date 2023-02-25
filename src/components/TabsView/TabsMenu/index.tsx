@@ -74,7 +74,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
         });
         const dragIndex = newOrder.indexOf(dragKey); // 移动的标签位置
         const hoverIndex = newOrder.indexOf(hoverKey); // 移动后标签位置
-        newOrder.splice(dragIndex, 1); // 删除移动千标签
+        newOrder.splice(dragIndex, 1); // 删除移动前标签
         newOrder.splice(hoverIndex, 0, dragKey); // 添加移动后标签
         setOrder(newOrder);
       };
