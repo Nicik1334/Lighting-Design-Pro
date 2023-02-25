@@ -22,6 +22,8 @@ import {
   LFormItemTimePicker,
   LFormItemTreeSelect,
   LFormItemUpload,
+  LTrigger,
+  LTypeit,
 } from 'lighting-design';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -67,7 +69,21 @@ const BasicForm: FC<Record<string, any>> = () => {
   };
   return (
     <PageContainer
-      content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。"
+      content={
+        <LTypeit
+          options={{
+            afterComplete: (instance: { destroy: () => void }) => {
+              instance.destroy();
+            },
+            speed: 30,
+          }}
+          getBeforeInit={(instance) => {
+            return instance.type(
+              '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
+            );
+          }}
+        />
+      }
       waterMarkProps={{
         content: '超级管理员',
       }}
