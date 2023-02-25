@@ -44,6 +44,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   return (
     <ProLayout
       {...props}
+      title="Lighing Design Pro"
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom: React.ReactNode | any) => {
         if (

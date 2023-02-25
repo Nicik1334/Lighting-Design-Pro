@@ -1,4 +1,5 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-components';
+import logo from '@/assets/icons/logo.svg';
 
 const Settings: LayoutSettings & {
   pwa?: boolean;
@@ -13,7 +14,7 @@ const Settings: LayoutSettings & {
   colorWeak: false,
   title: 'Lighting Design Pro',
   pwa: false,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+  logo,
   iconfontUrl: '',
 };
 
