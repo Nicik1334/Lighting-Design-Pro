@@ -25,9 +25,7 @@ const BasicForm: FC<Record<string, any>> = () => {
       content={
         <LTypeit
           options={{
-            afterComplete: (instance: { destroy: () => void }) => {
-              instance.destroy();
-            },
+            cursor: false,
             speed: 30,
           }}
           getBeforeInit={(instance) => {

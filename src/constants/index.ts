@@ -1,6 +1,6 @@
 // export const BASE_URL = 'xxxxxxxx' as const; //
 
-export const LOGIN_PATH = '/user/login';
+export const LOGIN_PATH = '/user/login'; // 登录页路由
 
 export const NOTIFICATION_TYPES = {
   success: '操作成功',

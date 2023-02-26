@@ -25,7 +25,7 @@ import {
   LTrigger,
   LTypeit,
 } from 'lighting-design';
-import type { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { addressOptions, mockVal } from './service';
@@ -67,14 +67,16 @@ const BasicForm: FC<Record<string, any>> = () => {
   const onFinish = async (values: Record<string, any>) => {
     console.log(values);
   };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <PageContainer
       content={
         <LTypeit
           options={{
-            afterComplete: (instance: { destroy: () => void }) => {
-              instance.destroy();
-            },
+            cursor: false,
             speed: 30,
           }}
           getBeforeInit={(instance) => {

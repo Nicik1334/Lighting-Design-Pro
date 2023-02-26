@@ -1,6 +1,7 @@
+import { LOGIN_PATH } from '@/constants';
 import { outLogin } from '@/services/ant-design-pro/api';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Menu, Modal, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
@@ -8,6 +9,7 @@ import React, { useCallback } from 'react';
 import { history, useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+const { confirm } = Modal;
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -20,10 +22,9 @@ const loginOut = async () => {
   await outLogin();
   const { query = {}, search, pathname } = history.location;
   const { redirect } = query;
-  // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
+  if (window.location.pathname !== LOGIN_PATH && !redirect) {
     history.replace({
-      pathname: '/user/login',
+      pathname: LOGIN_PATH,
       search: stringify({
         redirect: pathname + search,
       }),
@@ -33,19 +34,6 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
-
-  const onMenuClick = useCallback(
-    (event: MenuInfo) => {
-      const { key } = event;
-      if (key === 'logout') {
-        setInitialState((s) => ({ ...s, currentUser: undefined }));
-        loginOut();
-        return;
-      }
-      history.push(`/account/${key}`);
-    },
-    [setInitialState],
-  );
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
@@ -85,13 +73,28 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: '退出登录',
+      label: (
+        <div
+          onClick={() =>
+            confirm({
+              title: '确定信息',
+              okText: '确定',
+              cancelText: '取消',
+              content: '确定注销当前登录状态？',
+              onOk() {
+                setInitialState((s) => ({ ...s, currentUser: undefined }));
+                loginOut();
+              },
+            })
+          }
+        >
+          退出登录
+        </div>
+      ),
     },
   ];
 
-  const menuHeaderDropdown = (
-    <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick} items={menuItems} />
-  );
+  const menuHeaderDropdown = <Menu className={styles.menu} selectedKeys={[]} items={menuItems} />;
 
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>

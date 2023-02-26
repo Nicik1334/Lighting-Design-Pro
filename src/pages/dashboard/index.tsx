@@ -3,7 +3,7 @@ import { Card } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Hamster from '@/components/hamster';
-import { LNumberRoll } from 'lighting-design';
+import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
 
 const Dashboard: React.FC = () => {
@@ -24,6 +24,17 @@ const Dashboard: React.FC = () => {
         <Button onClick={() => history.push('/form')}>form</Button> */}
         <Hamster />
         <LNumberRoll type="date" className={styles.numberStyle} value={value} />
+        <LTypeit
+          className={styles.typeit}
+          options={{
+            cursor: false,
+            speed: 60,
+            waitUntilVisible: true,
+          }}
+          getBeforeInit={(instance) => {
+            return instance.type('时间就像奔跑的仓鼠，它总是不知疲倦地奔跑，永不停息。');
+          }}
+        />
       </Card>
     </PageContainer>
   );

@@ -19,7 +19,8 @@ function getCurrentUse(req: Request, res: Response) {
   return res.json({
     data: {
       name: '胡图图',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      avatar:
+        'http://mms2.baidu.com/it/u=2802105847,948817052&fm=253&app=138&f=JPEG&fmt=auto&q=75?w=500&h=500',
       userid: '9999',
       email: '189xxxxxx@qq.com',
       profile:

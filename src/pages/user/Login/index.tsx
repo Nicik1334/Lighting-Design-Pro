@@ -22,6 +22,7 @@ import loginBoxBg from '@/assets/imgs/login/loginBoxBg.png';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import { useModel, history } from 'umi';
+import logo from '@/assets/icons/logo1.svg';
 
 const iconStyles: CSSProperties = {
   marginInlineStart: '16px',
@@ -186,7 +187,7 @@ const Login: React.FC = () => {
                 <Alert message="验证码错误！" showIcon closable type="error" />
               )))
           }
-          logo="https://github.githubassets.com/images/modules/logos_page/Octocat.png"
+          logo={logo}
           title="Lighting Design Pro"
           subTitle="Lighting Design Pro是基于Ant Design而开发的业务常用模板组件。"
           actions={

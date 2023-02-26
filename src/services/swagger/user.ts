@@ -35,10 +35,7 @@ export async function createUsersWithListInput(body: API.User[], options?: { [ke
 /** Logs user into the system GET /user/login */
 export async function loginUser(
   params: {
-    // query
-    /** The user name for login */
     username: string;
-    /** The password for login in clear text */
     password: string;
   },
   options?: { [key: string]: any },
