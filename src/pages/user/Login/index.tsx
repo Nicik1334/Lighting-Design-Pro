@@ -164,7 +164,7 @@ const Login: React.FC = () => {
     >
       <Col flex="1" className={style.login_col}>
         <div className={style.login_intro}>
-          <h1>Lighting Design Pro</h1>
+          <h1>Lighting Admin</h1>
           <div className={style.desc}>
             基于React、TypeScript、Ant Design、UmiJs、ahook等开发的后台模板组件。 lighting-design
             Pro 是基于 Ant Design UI
@@ -188,8 +188,8 @@ const Login: React.FC = () => {
               )))
           }
           logo={logo}
-          title="Lighting Design Pro"
-          subTitle="Lighting Design Pro是基于Ant Design而开发的业务常用模板组件。"
+          title="Lighting Admin"
+          subTitle="Lighting Admin是基于Ant Design而开发的业务常用模板组件。"
           actions={
             <Space>
               其他登录方式

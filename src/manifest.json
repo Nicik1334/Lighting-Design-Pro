@@ -1,6 +1,6 @@
 {
-  "name": "lighting Design Pro",
-  "short_name": "lighting Design Pro",
+  "name": "Lighting Admin",
+  "short_name": "Lighting Admin",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",
