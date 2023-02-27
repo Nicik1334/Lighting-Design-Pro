@@ -1,11 +1,10 @@
 import { LOGIN_PATH } from '@/constants';
 import { outLogin } from '@/services/ant-design-pro/api';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Modal, Spin } from 'antd';
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { Avatar, Modal, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { stringify } from 'querystring';
-import type { MenuInfo } from 'rc-menu/lib/interface';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { history, useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
@@ -47,15 +46,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     </span>
   );
 
-  if (!initialState) {
-    return loading;
-  }
+  if (!initialState) return loading;
 
   const { currentUser } = initialState;
 
-  if (!currentUser || !currentUser.name) {
-    return loading;
-  }
+  if (!currentUser || !currentUser.name) return loading;
 
   const menuItems: ItemType[] = [
     ...(menu
@@ -63,7 +58,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
           {
             key: 'settings',
             icon: <SettingOutlined />,
-            label: '个人设置',
+            label: <div onClick={() => history.push('/account/settings')}>个人设置</div>,
           },
           {
             type: 'divider' as const,
@@ -94,10 +89,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     },
   ];
 
-  const menuHeaderDropdown = <Menu className={styles.menu} selectedKeys={[]} items={menuItems} />;
-
   return (
-    <HeaderDropdown overlay={menuHeaderDropdown}>
+    <HeaderDropdown menu={{ items: menuItems }}>
       <span className={`${styles.action} ${styles.account}`}>
         <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
         <span className={`${styles.name} anticon`}>{currentUser.name}</span>

@@ -19,6 +19,13 @@ const Dashboard: React.FC = () => {
   return (
     <PageContainer breadcrumbRender={false}>
       <Card style={{ height: '100%' }}>
+        {/* <Button
+          onClick={() => {
+            Nprogress.start();
+          }}
+        >
+          开始
+        </Button> */}
         {/* <Button onClick={() => history.push('/404')}>404</Button>
         <Button onClick={() => history.push('/')}>首页</Button>
         <Button onClick={() => history.push('/form')}>form</Button> */}

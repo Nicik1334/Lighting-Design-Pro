@@ -3,9 +3,8 @@ import RightContent from '@/components/RightContent';
 import TabsView from '@/components/TabsView';
 import { LOGIN_PATH } from '@/constants';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { BasicLayoutProps } from '@ant-design/pro-components';
-import { SettingDrawer } from '@ant-design/pro-components';
-import ProLayout from '@ant-design/pro-layout';
+import type { ProLayoutProps } from '@ant-design/pro-components';
+import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
 import { ConfigProvider } from 'antd';
 import React from 'react';
 import { Link, history, useModel, Redirect } from 'umi';
@@ -29,7 +28,7 @@ const links = isDev
     ]
   : [];
 
-const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+const BasicLayout: React.FC<ProLayoutProps> = (props) => {
   const {
     children,
     location = {
@@ -44,7 +43,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   return (
     <ProLayout
       {...props}
-      title="Lighing Design Pro"
+      title="Lighting Admin"
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom: React.ReactNode | any) => {
         if (
@@ -79,7 +78,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      disableContentMargin={false}
       {...initialState?.settings}
     >
       <ConfigProvider>
@@ -89,8 +87,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             disableUrlParams
             enableDarkTheme
             settings={initialState?.settings}
-            onSettingChange={(settings: any) => {
-              setInitialState((preInitialState: any) => ({
+            onSettingChange={(settings) => {
+              setInitialState((preInitialState) => ({
                 ...preInitialState,
                 settings,
               }));

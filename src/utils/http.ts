@@ -1,12 +1,11 @@
 import type { Context, RequestMethod } from 'umi-request';
 import { extend } from 'umi-request';
 import _throttle from 'lodash/throttle';
-// import NProgress from 'nprogress';
+import NProgress from 'nprogress';
 import qs from 'qs';
 import { message } from 'antd';
 import { showNotification } from '@/utils';
 import { CODE_MESSAGE } from '@/constants';
-
 /**
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
@@ -37,7 +36,7 @@ const http: RequestMethod = extend({
 
 // 请求拦截
 http.use(async (ctx: Context, next: () => void) => {
-  // NProgress.start();
+  NProgress.start();
   const {
     req: {
       options: { headers },
@@ -54,7 +53,7 @@ http.use(async (ctx: Context, next: () => void) => {
 
 // 响应拦截
 http.interceptors.response.use(async (res: any) => {
-  // NProgress.done();
+  NProgress.done();
   const { status } = res;
   if (status === 401) {
     logout();
