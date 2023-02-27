@@ -81,7 +81,62 @@ export default [
           },
         ],
       },
-
+      {
+        icon: 'smile',
+        name: '多级菜单',
+        path: '/nested',
+        routes: [
+          {
+            path: '/nested',
+            redirect: '/nested/menu1/menu1-1',
+          },
+          {
+            name: '菜单1',
+            path: '/nested/menu1',
+            routes: [
+              {
+                path: '/nested/menu1',
+                redirect: '/nested/menu1/menu1-1',
+              },
+              {
+                name: '菜单1-1',
+                path: '/nested/menu1/menu1-1',
+                component: './nested/menu1/menu1-1',
+              },
+              {
+                name: '菜单1-2',
+                path: '/nested/menu1/menu1-2',
+                routes: [
+                  {
+                    path: '/nested/menu1/menu1-2',
+                    redirect: '/nested/menu1/menu1-2/menu1-2-1',
+                  },
+                  {
+                    name: '菜单1-2-1',
+                    path: '/nested/menu1/menu1-2/menu1-2-1',
+                    component: './nested/menu1/menu1-2/menu1-2-1',
+                  },
+                  {
+                    name: '菜单1-2-2',
+                    path: '/nested/menu1/menu1-2/menu1-2-2',
+                    component: './nested/menu1/menu1-2/menu1-2-2',
+                  },
+                ],
+              },
+              {
+                name: '菜单1-3',
+                path: '/nested/menu1/menu1-3',
+                component: './nested/menu1/menu1-3',
+              },
+            ],
+          },
+          {
+            name: '菜单2',
+            path: '/nested/menu2',
+            component: './nested/menu2',
+          },
+        ],
+      },
       {
         path: '/table',
         icon: 'table',
