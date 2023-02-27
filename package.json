@@ -47,14 +47,16 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@ant-design/pro-components": "1.1.25",
+    "@ant-design/pro-components": "2.3.57",
+    "@types/nprogress": "^0.2.0",
     "@umijs/route-utils": "^2.0.0",
     "ahooks": "^3.7.4",
-    "antd": "^4.20.0",
+    "antd": "^4.24.8",
     "classnames": "^2.3.0",
-    "lighting-design": "^0.0.1-alpha.6",
+    "lighting-design": "^0.0.1-alpha.8",
     "lodash": "^4.17.0",
     "moment": "^2.29.0",
+    "nprogress": "^0.2.0",
     "omit.js": "^2.0.2",
     "rc-menu": "^9.1.0",
     "rc-use-hooks": "^0.0.2",
@@ -67,7 +69,7 @@
     "react-dom": "^17.0.0",
     "react-helmet-async": "^1.2.0",
     "react-sortablejs": "^6.1.4",
-    "umi": "^3.5.0"
+    "umi": "^3.5.37"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.1.0",

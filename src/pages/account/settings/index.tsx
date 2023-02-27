@@ -6,8 +6,6 @@ import BaseView from './components/base';
 import SecurityView from './components/security';
 import styles from './style.less';
 
-const { Item } = Menu;
-
 type SettingsStateKeys = 'base' | 'security';
 type SettingsState = {
   mode: 'inline' | 'horizontal';
@@ -53,10 +51,6 @@ const Settings: React.FC = () => {
     };
   }, [dom.current]);
 
-  const getMenu = () => {
-    return Object.keys(menuMap).map((item) => <Item key={item}>{menuMap[item]}</Item>);
-  };
-
   const renderChildren = () => {
     const { selectKey } = initConfig;
     switch (selectKey) {
@@ -94,9 +88,10 @@ const Settings: React.FC = () => {
                   selectKey: key as SettingsStateKeys,
                 });
               }}
-            >
-              {getMenu()}
-            </Menu>
+              items={Object.keys(menuMap).map((item) => {
+                return { label: menuMap[item], key: item };
+              })}
+            />
           </div>
           <div className={styles.right}>
             <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>

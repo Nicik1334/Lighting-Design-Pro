@@ -1,7 +1,5 @@
 // https://umijs.org/config/
-import { isDev } from '@/layouts/BaseLayout';
 import { defineConfig } from 'umi';
-import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
 
@@ -20,7 +18,7 @@ export default defineConfig({
   //   ...defaultSettings,
   // },
   dynamicImport: {
-    loading: '@ant-design/pro-layout/es/PageLoading',
+    loading: '@/Loading',
   },
   targets: {
     ie: 11,

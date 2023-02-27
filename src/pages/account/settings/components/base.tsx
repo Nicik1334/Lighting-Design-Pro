@@ -85,7 +85,6 @@ const BaseView: React.FC = () => {
                 <Space>
                   <LFormItemSelect
                     name="phone1"
-                    initialValue="+086"
                     options={[
                       {
                         label: '+086',
