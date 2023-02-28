@@ -223,7 +223,7 @@ const BasicTable: FC = () => {
           formItems={formItems}
           formRef={formRef}
           columns={columns}
-          request={async (params, requestType) => {
+          request={async () => {
             const res: Record<string, any> = await apiGetUserList();
             return {
               success: true,

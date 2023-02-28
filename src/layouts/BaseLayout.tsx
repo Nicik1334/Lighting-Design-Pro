@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 import RightContent from '@/components/RightContent';
 import TabsView from '@/components/TabsView';
 import { LOGIN_PATH } from '@/constants';
@@ -29,12 +28,7 @@ const links = isDev
   : [];
 
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
-  const {
-    children,
-    location = {
-      pathname: '/',
-    },
-  } = props;
+  const { children } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
 
   // 路径为"/",则重定向到首页
@@ -53,11 +47,11 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
         ) {
           return defaultDom;
         }
-        return <Link to={menuItemProps.path} children={defaultDom} />;
+        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => [
         {
-          path: '/home',
+          path: '/dashboard',
           breadcrumbName: '首页',
         },
         ...routers,
@@ -69,11 +63,9 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
       }}
       rightContentRender={() => <RightContent />}
       links={links}
-      // itemRender={(route) => <>{route.breadcrumbName}</>}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={'/dashboard'}>{route.breadcrumbName}</Link>
+      itemRender={(route, _, routes) => {
+        return routes.indexOf(route) === 0 ? (
+          <Link to={'/dashboard'}>首页</Link>
         ) : (
           <span>{route.breadcrumbName}</span>
         );

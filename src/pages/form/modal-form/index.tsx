@@ -2,10 +2,10 @@ import type { FC } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import Demo1 from './components/demo1';
 import type { TabsProps } from 'antd';
-import { Card } from 'antd';
 import { Tabs } from 'antd';
 import Demo2 from './components/demo2';
 import { LTypeit } from 'lighting-design';
+import { ProCard } from '@ant-design/pro-components';
 
 const BasicForm: FC<Record<string, any>> = () => {
   const items: TabsProps['items'] = [
@@ -39,9 +39,9 @@ const BasicForm: FC<Record<string, any>> = () => {
         content: '超级管理员',
       }}
     >
-      <Card>
+      <ProCard>
         <Tabs items={items} />
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

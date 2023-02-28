@@ -1,5 +1,6 @@
 import { awaitTime } from '@/utils';
-import { Button, Card, message, Space } from 'antd';
+import { ProCard } from '@ant-design/pro-components';
+import { Button, message, Space } from 'antd';
 import { LDrawerForm, LFormItemSelect } from 'lighting-design';
 import { LForm, LFormItemInput } from 'lighting-design';
 import React, { useEffect, useState } from 'react';
@@ -21,7 +22,7 @@ const BaseModal: React.FC = () => {
     }
   }, [form, open1]);
   return (
-    <Card>
+    <ProCard>
       <Space>
         <Button type="primary" onClick={() => setOpen(true)}>
           新增
@@ -171,7 +172,7 @@ const BaseModal: React.FC = () => {
           ]}
         />
       </LDrawerForm>
-    </Card>
+    </ProCard>
   );
 };
 

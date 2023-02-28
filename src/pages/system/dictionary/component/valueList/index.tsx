@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Card, Divider, Popconfirm, Space, Tag, Button } from 'antd';
+import { Divider, Popconfirm, Space, Tag, Button } from 'antd';
 import type { FC } from 'react';
 import { useContext, useEffect } from 'react';
 import { useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import { awaitTime } from '@/utils';
 import { DicContext } from '../..';
 import ValueModal from './modal';
 import type { DicValueItemType } from '../../interface';
+import { ProCard } from '@ant-design/pro-components';
 
 const DetailList: FC = () => {
   const formRef = useRef<FormInstance>();
@@ -108,7 +109,7 @@ const DetailList: FC = () => {
   }, [record]);
 
   return (
-    <Card
+    <ProCard
       title={
         <Space>
           <strong>{record?.name}</strong>
@@ -168,7 +169,7 @@ const DetailList: FC = () => {
           tableRef.current?.onReload();
         }}
       />
-    </Card>
+    </ProCard>
   );
 };
 

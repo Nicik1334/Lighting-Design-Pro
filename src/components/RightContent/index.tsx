@@ -1,9 +1,11 @@
-import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { ExpandOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import React from 'react';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import HeaderSearch from '../HeaderSearch';
+import SwitchDark from '../SwitchDark';
+import TimeRoll from '../TimeRoll';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 
@@ -25,29 +27,34 @@ const GlobalHeaderRight: React.FC = () => {
 
   return (
     <Space className={className}>
-      {/* <TimeRoll className={`${styles.action}`} format="yyyy-MM-DD HH:mm" /> */}
+      <div className={`${styles.action} ${styles.hidden}`}>
+        <TimeRoll format="yyyy-MM-DD HH:mm" />
+      </div>
       <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="搜索"
         options={[]}
       />
       <div
-        className={`${styles.action} ${styles.fullscreen}`}
+        className={`${styles.action} ${styles.fullscreen}  ${styles.hidden}`}
         title={!isFullScreen ? '全屏' : '退出全屏'}
         onClick={() => {
           const doc = document as any;
           const isFull: boolean = doc?.webkitIsFullScreen;
-          setIsFullScreen(isFull);
+          setIsFullScreen(!isFull);
           isFull
             ? doc?.webkitExitFullscreen()
             : document.querySelector('html')?.requestFullscreen();
         }}
       >
         {isFullScreen ? (
-          <FullscreenOutlined style={{ fontSize: 16 }} />
-        ) : (
           <FullscreenExitOutlined style={{ fontSize: 16 }} />
+        ) : (
+          <ExpandOutlined style={{ fontSize: 16 }} />
         )}
+      </div>
+      <div className={`${styles.action} ${styles.search}`}>
+        <SwitchDark />
       </div>
       <Avatar menu />
     </Space>

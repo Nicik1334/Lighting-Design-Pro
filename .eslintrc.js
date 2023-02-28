@@ -17,5 +17,7 @@ module.exports = {
     'react/no-array-index-key': 0, // 可以使用index作为key, 但是只能是展示列表的时候使用
     semi: [2, 'always'], // 语句强制分号结尾
     'react-hooks/exhaustive-deps': 0,
+    '@typescript-eslint/no-unused-vars': 0,
+    '@typescript-eslint/no-empty-interface': 0,
   },
 };

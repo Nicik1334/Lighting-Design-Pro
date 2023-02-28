@@ -1,13 +1,12 @@
-import { PageContainer } from '@ant-design/pro-components';
-import { Card } from 'antd';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 
 const Index = () => {
   return (
     <PageContainer>
-      <Card>
+      <ProCard>
         <p>菜单menu1</p>
         <p style={{ textIndent: '2em' }}>菜单menu1-3</p>
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

@@ -8,7 +8,7 @@ import {
 import { useKeyPress } from 'ahooks';
 import type { TabsProps } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history } from 'umi';

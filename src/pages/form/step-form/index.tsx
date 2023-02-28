@@ -1,4 +1,5 @@
-import { LStepsFormActionRef, LTypeit } from 'lighting-design';
+import type { LStepsFormActionRef } from 'lighting-design';
+import { LTypeit } from 'lighting-design';
 import { LFormItemInput, LFormItemSelect, LStepsForm } from 'lighting-design';
 import type { FC } from 'react';
 import { useRef } from 'react';
@@ -7,7 +8,6 @@ import { awaitTime } from '@/utils';
 import {
   Alert,
   Button,
-  Card,
   Descriptions,
   Divider,
   Form,
@@ -16,6 +16,7 @@ import {
   Space,
   Statistic,
 } from 'antd';
+import { ProCard } from '@ant-design/pro-components';
 
 const BasicForm: FC<Record<string, any>> = () => {
   const actionRef = useRef<LStepsFormActionRef>();
@@ -37,12 +38,12 @@ const BasicForm: FC<Record<string, any>> = () => {
         content: '超级管理员',
       }}
     >
-      <Card>
+      <ProCard>
         <LStepsForm
           submitter={{ buttonAlign: 90 }}
           formProps={{ labelWidth: 90 }}
           submitStepNum={2}
-          onFinish={async (values) => {
+          onFinish={async (_values) => {
             await awaitTime('', 1000);
             actionRef.current!.next();
           }}
@@ -64,7 +65,7 @@ const BasicForm: FC<Record<string, any>> = () => {
               amount: 5000,
             }}
           >
-            <Card bordered={false}>
+            <ProCard bordered={false}>
               <LFormItemSelect
                 name="receiverAccount"
                 label="付款账户"
@@ -106,7 +107,7 @@ const BasicForm: FC<Record<string, any>> = () => {
                   prefix: '￥',
                 }}
               />
-            </Card>
+            </ProCard>
           </LStepsForm.StepForm>
           <LStepsForm.StepForm
             title="确认转账信息"
@@ -119,7 +120,7 @@ const BasicForm: FC<Record<string, any>> = () => {
               forceShowSubmit: true,
             }}
           >
-            <Card bordered={false}>
+            <ProCard bordered={false}>
               <Alert
                 closable
                 showIcon
@@ -153,7 +154,7 @@ const BasicForm: FC<Record<string, any>> = () => {
                 required={false}
                 rules={[{ required: true, message: '需要支付密码才能进行支付' }]}
               />
-            </Card>
+            </ProCard>
           </LStepsForm.StepForm>
           <LStepsForm.StepForm title="结果页" submitter={false}>
             <Result
@@ -185,7 +186,7 @@ const BasicForm: FC<Record<string, any>> = () => {
             如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
           </p>
         </div>
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

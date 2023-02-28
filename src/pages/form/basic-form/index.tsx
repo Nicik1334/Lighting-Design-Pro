@@ -1,5 +1,4 @@
 import type { TreeSelectProps } from 'antd';
-import { Card } from 'antd';
 import {
   LForm,
   LFormItemAddress,
@@ -22,14 +21,15 @@ import {
   LFormItemTimePicker,
   LFormItemTreeSelect,
   LFormItemUpload,
-  LTrigger,
   LTypeit,
 } from 'lighting-design';
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { addressOptions, mockVal } from './service';
 import type { DefaultOptionType } from 'antd/lib/select';
+import { ProCard } from '@ant-design/pro-components';
 
 const BasicForm: FC<Record<string, any>> = () => {
   const [form] = LForm.useForm();
@@ -90,7 +90,7 @@ const BasicForm: FC<Record<string, any>> = () => {
         content: '超级管理员',
       }}
     >
-      <Card bordered={false}>
+      <ProCard bordered={false}>
         <LForm
           labelWidth={90}
           submitter={{ buttonAlign: 90 }}
@@ -221,7 +221,7 @@ const BasicForm: FC<Record<string, any>> = () => {
           <LFormItemUpload name="LFormItemUpload3" label="图片上传" required uploadType="image" />
           <LFormItemUpload required uploadType="dragger" name="LFormItemUpload4" label="拖动上传" />
         </LForm>
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

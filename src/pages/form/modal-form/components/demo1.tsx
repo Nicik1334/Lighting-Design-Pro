@@ -1,7 +1,9 @@
 import { awaitTime } from '@/utils';
-import { Button, Card, message, Modal, Space } from 'antd';
-import { LFormItemSelect, LStepsFormActionRef } from 'lighting-design';
-import { LForm, LFormItemInput, LFormItemRadio, LModalForm, LStepsForm } from 'lighting-design';
+import { ProCard } from '@ant-design/pro-components';
+import { Button, message, Modal, Space } from 'antd';
+import type { LStepsFormActionRef } from 'lighting-design';
+import { LFormItemSelect } from 'lighting-design';
+import { LForm, LFormItemInput, LModalForm, LStepsForm } from 'lighting-design';
 import React, { useRef, useState, useEffect } from 'react';
 
 const BaseModal: React.FC = () => {
@@ -24,7 +26,7 @@ const BaseModal: React.FC = () => {
   }, [form, open1]);
   const actionRef = useRef<LStepsFormActionRef>();
   return (
-    <Card>
+    <ProCard>
       <Space>
         <Button type="primary" onClick={() => setOpen(true)}>
           新增
@@ -216,7 +218,7 @@ const BaseModal: React.FC = () => {
           />
         </LStepsForm.StepForm>
       </LStepsForm>
-    </Card>
+    </ProCard>
   );
 };
 

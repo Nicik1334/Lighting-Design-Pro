@@ -1,5 +1,4 @@
-import { PageContainer } from '@ant-design/pro-components';
-import { Card } from 'antd';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Hamster from '@/components/hamster';
@@ -18,7 +17,7 @@ const Dashboard: React.FC = () => {
   }, []);
   return (
     <PageContainer breadcrumbRender={false}>
-      <Card style={{ height: '100%' }}>
+      <ProCard>
         {/* <Button
           onClick={() => {
             Nprogress.start();
@@ -42,7 +41,7 @@ const Dashboard: React.FC = () => {
             return instance.type('时间就像奔跑的仓鼠，它总是不知疲倦地奔跑，永不停息。');
           }}
         />
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

@@ -1,5 +1,6 @@
-import { Divider, FormInstance, Popconfirm, Space, Table } from 'antd';
-import { Button, Card, Tag } from 'antd';
+import type { FormInstance } from 'antd';
+import { Divider, Popconfirm, Space, Table } from 'antd';
+import { Button, Tag } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -11,6 +12,7 @@ import { MockData } from './mock';
 import { awaitTime } from '@/utils';
 import { genderLabels, userStatusLabels } from '@/constants';
 import type { TableRowSelection } from 'antd/lib/table/interface';
+import { ProCard } from '@ant-design/pro-components';
 
 interface UserProps {}
 const User: FC<UserProps> = () => {
@@ -143,7 +145,7 @@ const User: FC<UserProps> = () => {
         content: '超级管理员',
       }}
     >
-      <Card bordered={false}>
+      <ProCard bordered={false}>
         <LTable
           tableLayout="fixed"
           isSort
@@ -188,7 +190,7 @@ const User: FC<UserProps> = () => {
           tableRef={tableRef}
           formRef={formRef}
           columns={columns}
-          request={async (params, requestType) => {
+          request={async () => {
             await awaitTime(1000);
             console.log(MockData.data);
 
@@ -208,7 +210,7 @@ const User: FC<UserProps> = () => {
             tableRef.current?.onReload();
           }}
         />
-      </Card>
+      </ProCard>
     </PageContainer>
   );
 };

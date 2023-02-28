@@ -1,5 +1,9 @@
+// --no ignore
 import { ProLayoutProps } from '@ant-design/pro-components';
 import logo from '@/assets/icons/logo.svg';
+
+// colorPrimary: '#1890ff',
+// primaryColor: '#21D2C5',
 /**
  * @name
  */
@@ -8,11 +12,10 @@ const Settings: ProLayoutProps & {
   logo?: string;
 } = {
   navTheme: 'light',
-  // colorPrimary: '#1890ff',
-  colorPrimary: '#21D2C5',
+  primaryColor: '#13C2C2',
   layout: 'mix',
   contentWidth: 'Fluid',
-  fixedHeader: false,
+  fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
   title: 'Lighting Admin',
