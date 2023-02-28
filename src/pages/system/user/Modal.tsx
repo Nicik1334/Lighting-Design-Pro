@@ -31,7 +31,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
       form={form}
       width={700}
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 20 }}
+      wrapperCol={{ span: 16 }}
       title={data ? '修改信息' : '新建用户'}
       onFinish={async (values) => {
         await awaitTime(); // 发起请求
@@ -62,7 +62,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
               },
               {
                 label: '女',
-                value: '2',
+                value: '0',
               },
             ]}
           />
@@ -88,6 +88,15 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
                 value: '3',
               },
             ]}
+          />
+        </Col>
+        <Col span={24}>
+          <LFormItemInput
+            name="address"
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 20 }}
+            required
+            label="地址"
           />
         </Col>
       </Row>

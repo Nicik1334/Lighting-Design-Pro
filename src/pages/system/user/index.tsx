@@ -62,6 +62,13 @@ const User: FC<UserProps> = () => {
       align: 'center',
     },
     {
+      title: '地址',
+      dataIndex: 'address',
+      key: 'address',
+      width: 230,
+      align: 'center',
+    },
+    {
       title: '状态',
       dataIndex: 'userStatus',
       key: 'userStatus',
@@ -183,6 +190,8 @@ const User: FC<UserProps> = () => {
           columns={columns}
           request={async (params, requestType) => {
             await awaitTime(1000);
+            console.log(MockData.data);
+
             return {
               success: true,
               data: MockData.data,
