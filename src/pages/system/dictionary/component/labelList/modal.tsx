@@ -1,4 +1,5 @@
 import { awaitTime } from '@/utils';
+import type { LModalFormProps } from 'lighting-design';
 import {
   LForm,
   LFormItemInput,
@@ -9,12 +10,12 @@ import {
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-interface LabelModalProps {
+interface BasicModalProps extends LModalFormProps {
   data: any;
   onChange: () => void;
   open: boolean;
 }
-const LabelModal: FC<LabelModalProps> = ({ data, onChange, open, ...restProps }) => {
+const LabelModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps }) => {
   const [form] = LForm.useForm();
 
   useEffect(() => {

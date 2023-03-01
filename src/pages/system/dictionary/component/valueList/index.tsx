@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import type { LTableInstance } from 'lighting-design';
 import { LTable } from 'lighting-design';
 import type { ColumnsType } from 'antd/lib/table';
-import { apiGetDetailList } from '../../service';
+import { getDetailList } from '../../service';
 import { awaitTime } from '@/utils';
 import { DicContext } from '../..';
 import ValueModal from './modal';
@@ -105,7 +105,7 @@ const DetailList: FC = () => {
   ];
 
   useEffect(() => {
-    tableRef.current?.onReload();
+    if (record?.id) tableRef.current?.onReload();
   }, [record]);
 
   return (
@@ -126,6 +126,8 @@ const DetailList: FC = () => {
         pagination={false}
         size="small"
         columns={columns}
+        request={getDetailList}
+        autoRequest={false}
         toolbarRight={
           record?.id && (
             <>
@@ -151,14 +153,6 @@ const DetailList: FC = () => {
           showDensity: false,
           showFullscreen: false,
           showReload: false,
-        }}
-        request={async () => {
-          const res: Record<string, any> = await apiGetDetailList(record?.id);
-          return {
-            success: true,
-            data: res.data,
-            total: res.total,
-          };
         }}
       />
       <ValueModal

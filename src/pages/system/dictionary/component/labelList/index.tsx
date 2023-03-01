@@ -9,7 +9,7 @@ import type { LTableInstance } from 'lighting-design';
 import { LFormItemInput, LFormItemSelect } from 'lighting-design';
 import { LTable } from 'lighting-design';
 import type { ColumnsType } from 'antd/lib/table';
-import { apiGetdictList } from '../../service';
+import { getdictList } from '../../service';
 import { awaitTime } from '@/utils';
 import { DicContext } from '../..';
 import type { DictionaryItemType } from '../../interface';
@@ -160,14 +160,7 @@ const LabelList: FC = () => {
         pagination={{
           pageSize: 6,
         }}
-        request={async (_params, _requestType) => {
-          const res: Record<string, any> = await apiGetdictList();
-          return {
-            success: true,
-            data: res.data,
-            total: res.total,
-          };
-        }}
+        request={getdictList}
       />
       <LabelModal
         open={open}

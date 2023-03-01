@@ -1,4 +1,5 @@
 import { awaitTime } from '@/utils';
+import type { LModalFormProps } from 'lighting-design';
 import {
   LForm,
   LFormItemInput,
@@ -9,7 +10,7 @@ import {
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-interface ValueModalProps {
+interface ValueModalProps extends LModalFormProps {
   data: any;
   onChange: () => void;
   open: boolean;

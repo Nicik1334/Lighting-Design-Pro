@@ -27,10 +27,10 @@ const Dictionary: FC = () => {
         }}
       >
         <Row gutter={[12, 12]}>
-          <Col span={10}>
+          <Col span={12}>
             <LabelList />
           </Col>
-          <Col span={14}>
+          <Col span={12}>
             <ValueList />
           </Col>
         </Row>

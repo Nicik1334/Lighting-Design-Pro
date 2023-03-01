@@ -5,7 +5,8 @@ import NProgress from 'nprogress';
 import qs from 'qs';
 import { message } from 'antd';
 import { showNotification } from '@/utils';
-import { CODE_MESSAGE } from '@/constants';
+import { CODE_MESSAGE, USER_TOKEN } from '@/constants';
+
 /**
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
@@ -15,6 +16,7 @@ import { CODE_MESSAGE } from '@/constants';
 const logout = _throttle(
   () => {
     message.error('登录已失效、请重新登录。');
+    // eslint-disable-next-line no-underscore-dangle
     // getDvaApp()._store.dispatch({
     //   type: 'authModel/logout',
     // });
@@ -45,9 +47,10 @@ http.use(async (ctx: Context, next: () => void) => {
   } = ctx;
   ctx.req.options.headers = {
     ...headers,
-    // ticket: sessionStorage.getItem(USER_TOKEN) as any,
+    ticket: sessionStorage.getItem(USER_TOKEN) as any,
   };
-  ctx.req.url = url.startsWith('/mock') || url.startsWith('/xxx') ? url : `${url}`;
+  ctx.req.url = ctx.req.url = url.startsWith('/mock') || url.startsWith('/xxx') ? url : `${url}`;
+  // ctx.req.url = `${GlobalConfig.Api}${url}`; // '/kg10000/xxx/xxx'
   await next();
 });
 

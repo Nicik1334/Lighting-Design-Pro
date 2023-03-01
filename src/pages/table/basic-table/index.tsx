@@ -16,7 +16,7 @@ import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import BasicModal from './BasicModal';
 import type { ColumnsItemType } from './service';
-import { apiGetUserList } from './service';
+import { getTableList } from './service';
 
 const BasicTable: FC = () => {
   const formRef = useRef<FormInstance>();
@@ -30,27 +30,48 @@ const BasicTable: FC = () => {
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      className: 'my-columns',
+    },
+    {
+      title: '电话',
+      dataIndex: 'phone',
+      key: 'phone',
+      align: 'center',
+    },
+    {
+      title: '年龄',
+      dataIndex: 'age',
+      key: 'age',
+      align: 'center',
     },
     {
       title: '人员类型',
       dataIndex: 'personType',
       key: 'personType',
       align: 'center',
+      render: (personType) => {
+        const renderTag = () => {
+          return personType.value === '1' ? (
+            <span color="green">{personType.label}</span>
+          ) : personType.value === '2' ? (
+            <span color="volcano">{personType.label}</span>
+          ) : null;
+        };
+        return renderTag();
+      },
     },
     {
       title: '类型',
-      dataIndex: 'typeName',
-      key: 'typeName',
+      dataIndex: 'mold',
+      key: 'mold',
       align: 'center',
-      render: (_, record) => {
+      render: (values) => {
         const renderTag = () => {
-          return record.type === '1' ? (
-            <Tag color="green">{record.typeName}</Tag>
-          ) : record.type === '2' ? (
-            <Tag color="volcano">{record.typeName}</Tag>
+          return values.value === '1' ? (
+            <Tag color="green">{values.label}</Tag>
+          ) : values.value === '2' ? (
+            <Tag color="volcano">{values.label}</Tag>
           ) : (
-            <Tag color="blue">{record.typeName}</Tag>
+            <Tag color="blue">{values.label}</Tag>
           );
         };
         return renderTag();
@@ -64,23 +85,35 @@ const BasicTable: FC = () => {
     },
     {
       title: '预约项目',
-      dataIndex: 'makeProjectName',
-      key: 'makeProjectName',
+      dataIndex: 'makeProject',
+      key: 'makeProject',
       align: 'center',
+      render: (makeProject) => {
+        const renderTag = () => {
+          return makeProject.value === '1' ? (
+            <span color="green">{makeProject.label}</span>
+          ) : makeProject.value === '2' ? (
+            <span color="volcano">{makeProject.label}</span>
+          ) : (
+            <span color="volcano">{makeProject.label}</span>
+          );
+        };
+        return renderTag();
+      },
     },
     {
       title: '来源',
-      dataIndex: 'makeSourceName',
-      key: 'makeSourceName',
+      dataIndex: 'makeSource',
+      key: 'makeSource',
       align: 'center',
-      render: (_, record) => {
+      render: (makeSource) => {
         const renderTag = () => {
-          return record.makeSource === '1' ? (
-            <Tag color="blue">{record.makeSourceName}</Tag>
-          ) : record.makeSource === '2' ? (
-            <Tag color="orange">{record.makeSourceName}</Tag>
+          return makeSource.value === '1' ? (
+            <Tag color="blue">{makeSource.label}</Tag>
+          ) : makeSource.value === '2' ? (
+            <Tag color="orange">{makeSource.label}</Tag>
           ) : (
-            <Tag color="green">{record.makeSourceName}</Tag>
+            <Tag color="green">{makeSource.label}</Tag>
           );
         };
         return renderTag();
@@ -93,7 +126,7 @@ const BasicTable: FC = () => {
     <LFormItemInput key="1" name="phone" type="phone" label="手机号码" />,
     <LFormItemSelect
       label="类型"
-      name="type"
+      name="mold"
       key="2"
       request={async () => {
         const result = await awaitTime([
@@ -178,7 +211,7 @@ const BasicTable: FC = () => {
           rowClassName="lightd-table-row"
           rootClassName="my-table-root"
           tableClassName="my-table"
-          rowKey="key"
+          rowKey="id"
           isSort
           loading={{ size: 'large', tip: '加载中...' }}
           tableRef={tableRef}
@@ -223,14 +256,7 @@ const BasicTable: FC = () => {
           formItems={formItems}
           formRef={formRef}
           columns={columns}
-          request={async () => {
-            const res: Record<string, any> = await apiGetUserList();
-            return {
-              success: true,
-              data: res.data,
-              total: res.total,
-            };
-          }}
+          request={getTableList}
         />
         <ConfigProvider
           getPopupContainer={() => tableRef.current?.rootRef.current || document.body}

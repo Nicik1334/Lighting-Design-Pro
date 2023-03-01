@@ -8,17 +8,18 @@ import type { ColumnsType } from 'antd/lib/table';
 import type { LTableInstance } from 'lighting-design';
 import { LFormItemInput, LTable } from 'lighting-design';
 import BasicModal from './Modal';
-import { MockData } from './mock';
 import { awaitTime } from '@/utils';
 import { genderLabels, userStatusLabels } from '@/constants';
 import type { TableRowSelection } from 'antd/lib/table/interface';
 import { ProCard } from '@ant-design/pro-components';
+import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { getUserList } from './server';
 
 interface UserProps {}
 const User: FC<UserProps> = () => {
   const formRef = useRef<FormInstance>();
   const tableRef = useRef<LTableInstance>();
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
   const [editableRecord, setEditablRecord] = useState<Record<string, any>>();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
@@ -181,25 +182,21 @@ const User: FC<UserProps> = () => {
             </>
           }
           toolbarRight={
-            <Button type="primary" onClick={() => tableRef.current?.onReset()}>
-              刷新数据
-            </Button>
+            <>
+              <Button type="default" icon={<DownloadOutlined />} onClick={() => {}}>
+                导入
+              </Button>
+              <Button icon={<UploadOutlined />} type="default" onClick={() => {}}>
+                导出
+              </Button>
+            </>
           }
           rowSelection={rowSelection}
           formItems={formItems}
           tableRef={tableRef}
           formRef={formRef}
           columns={columns}
-          request={async () => {
-            await awaitTime(1000);
-            console.log(MockData.data);
-
-            return {
-              success: true,
-              data: MockData.data,
-              total: 100,
-            };
-          }}
+          request={getUserList}
         />
 
         <BasicModal

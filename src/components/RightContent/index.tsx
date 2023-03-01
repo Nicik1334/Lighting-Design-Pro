@@ -27,7 +27,7 @@ const GlobalHeaderRight: React.FC = () => {
 
   return (
     <Space className={className}>
-      <div className={`${styles.action} ${styles.hidden}`}>
+      <div className={`${styles.action} ${styles.hidden}`} style={{ fontFamily: 'cursive' }}>
         <TimeRoll format="yyyy-MM-DD HH:mm" />
       </div>
       <HeaderSearch

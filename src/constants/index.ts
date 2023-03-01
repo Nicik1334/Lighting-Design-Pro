@@ -1,5 +1,7 @@
 // export const BASE_URL = 'xxxxxxxx' as const; //
 
+export const USER_TOKEN = `USER_TOKEN`;
+
 export const LOGIN_PATH = '/user/login'; // 登录页路由
 
 export const NOTIFICATION_TYPES = {

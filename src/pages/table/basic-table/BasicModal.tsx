@@ -1,4 +1,5 @@
 import { awaitTime } from '@/utils';
+import type { LModalFormProps } from 'lighting-design';
 import {
   LForm,
   LFormItemCheckbox,
@@ -11,7 +12,7 @@ import {
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-interface BasicModalProps {
+interface BasicModalProps extends LModalFormProps {
   data: any;
   onChange: () => void;
   open: boolean;
@@ -46,7 +47,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
       <LFormItemInput name="phone" required type="phone" label="手机号码" />
       <LFormItemSelect
         label="类型"
-        name="type"
+        name="mold"
         request={async () => {
           const result = await awaitTime([
             {

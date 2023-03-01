@@ -1,10 +1,4 @@
-import { request } from 'umi';
+import { get, post } from '@/utils/http';
 
-export async function fetchUserList() {
-  return request('/getAllUserList', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-}
+// 获取当前的用户
+export const getUserList = (param: any) => post('/api/getUserList', param);

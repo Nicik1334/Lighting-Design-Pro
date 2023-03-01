@@ -1,6 +1,6 @@
-import { userStatusLabels } from '@/constants';
 import { awaitTime } from '@/utils';
 import { Row, Col } from 'antd';
+import type { LModalFormProps } from 'lighting-design';
 import {
   LForm,
   LFormItemInput,
@@ -11,7 +11,7 @@ import {
 import type { FC } from 'react';
 import { useEffect } from 'react';
 
-interface BasicModalProps {
+interface BasicModalProps extends LModalFormProps {
   data: any;
   onChange: () => void;
   open: boolean;
