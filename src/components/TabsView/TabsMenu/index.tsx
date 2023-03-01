@@ -13,6 +13,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps } from './data';
+import NProgress from '@/components/NProgress';
 import styles from './index.less';
 
 const type = 'DraggableTabNode';
@@ -210,7 +211,13 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                   }}
                   trigger={['contextMenu']}
                 >
-                  <div onClick={() => history.push({ pathname: item.path, query: item.query })}>
+                  <div
+                    onClick={() => {
+                      NProgress.start();
+                      history.push({ pathname: item.path, query: item.query });
+                      setTimeout(() => NProgress.done(), 300);
+                    }}
+                  >
                     {item.title}
                     <div className={styles.drop_down_span} />
                   </div>

@@ -1,7 +1,7 @@
 import type { Context, RequestMethod } from 'umi-request';
 import { extend } from 'umi-request';
 import _throttle from 'lodash/throttle';
-import NProgress from 'nprogress';
+import NProgress from '@/components/NProgress';
 import qs from 'qs';
 import { message } from 'antd';
 import { showNotification } from '@/utils';
@@ -47,7 +47,7 @@ http.use(async (ctx: Context, next: () => void) => {
   } = ctx;
   ctx.req.options.headers = {
     ...headers,
-    ticket: sessionStorage.getItem(USER_TOKEN) as any,
+    ticket: sessionStorage.getItem(USER_TOKEN) as string,
   };
   ctx.req.url = ctx.req.url = url.startsWith('/mock') || url.startsWith('/xxx') ? url : `${url}`;
   // ctx.req.url = `${GlobalConfig.Api}${url}`; // '/kg10000/xxx/xxx'
@@ -71,7 +71,7 @@ http.interceptors.response.use(async (res: any) => {
   try {
     result = await res.clone().json();
     if (!result.success) {
-      message.error(result.msg || '系统错误');
+      // message.error(result.msg || '系统错误');
     }
   } catch (error) {
     console.warn(error);
