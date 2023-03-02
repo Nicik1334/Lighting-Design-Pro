@@ -83,7 +83,7 @@ const DetailList: FC = () => {
                 setOpen(true);
               }}
             >
-              编辑
+              修改
             </a>
             <Divider type="vertical" />
             <Popconfirm

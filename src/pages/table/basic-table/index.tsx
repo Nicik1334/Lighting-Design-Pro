@@ -244,7 +244,7 @@ const BasicTable: FC = () => {
                   setOpen(true);
                 }}
               >
-                编辑
+                修改
               </Button>
             </>
           }

@@ -104,7 +104,7 @@ const User: FC<UserProps> = () => {
                 setOpen(true);
               }}
             >
-              编辑
+              修改
             </a>
             <Divider type="vertical" />
             <Popconfirm

@@ -79,6 +79,12 @@ export default [
             path: '/system/user',
             component: './system/user',
           },
+          {
+            name: '角色管理',
+            icon: 'role',
+            path: '/system/role',
+            component: './system/role',
+          },
         ],
       },
       {

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { mock } from 'mockjs';
+import RoleMenuDatas from '../src/pages/system/role/treeSlider/mock';
 
 const UserListData = mock({
   'data|10': [
@@ -183,6 +184,23 @@ const dicData2 = [
   },
 ];
 
+const RoleData = [
+  {
+    roleId: 1,
+    roleName: '系统管理员',
+    roleDesc: '进行系统性的参数配置',
+    state: 1,
+    createTime: '2022-04-20 15:12:45',
+  },
+  {
+    roleId: 2,
+    roleName: '普通用户',
+    roleDesc: '普通用户',
+    state: 1,
+    createTime: '2022-11-03 16:36:27',
+  },
+];
+
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -216,6 +234,24 @@ export default {
       code: '200',
       success: true,
       data: dicData2,
+    });
+  },
+  'POST /api/pageRole': async (req: Request, res: Response) => {
+    await waitTime(2000);
+    res.send({
+      code: '200',
+      success: true,
+      data: RoleData,
+    });
+  },
+  'GET /api/getCheckedRoleTreeNode': async (req: Request, res: Response) => {
+    await waitTime(1000);
+    res.send({
+      code: '200',
+      success: true,
+      data: {
+        ...RoleMenuDatas,
+      },
     });
   },
 };

@@ -28,7 +28,7 @@ const BaseModal: React.FC = () => {
           新增
         </Button>
         <Button type="primary" onClick={() => setOpen1(true)}>
-          编辑
+          修改
         </Button>
       </Space>
 
@@ -108,7 +108,7 @@ const BaseModal: React.FC = () => {
         onOpenChange={setOpen1}
         labelCol={{ span: 4 }}
         form={form}
-        title="编辑"
+        title="修改"
         onFinish={async (values) => {
           console.log('onFinish-values ', values);
           await awaitTime();
