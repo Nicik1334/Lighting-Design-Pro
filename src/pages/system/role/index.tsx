@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Divider, Popconfirm, Space, Modal, Switch, Dropdown, Button } from 'antd';
+import { Divider, Popconfirm, Space, Modal, Switch, Button } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -15,7 +15,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
-  MoreOutlined,
+  MenuUnfoldOutlined,
 } from '@ant-design/icons';
 
 interface RoleProps {}
@@ -76,7 +76,8 @@ const Role: FC<RoleProps> = () => {
     {
       key: 'actions',
       title: '操作',
-      width: 220,
+      width: 280,
+      fixed: 'right',
       align: 'center',
       render: (_, record) => {
         return (
@@ -112,29 +113,18 @@ const Role: FC<RoleProps> = () => {
               </a>
             </Popconfirm>
             <Divider type="vertical" />
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: '1',
-                    label: (
-                      <a
-                        onClick={() => {
-                          setMenuRecord({ ...record });
-                          setVisible(true);
-                        }}
-                      >
-                        菜单权限
-                      </a>
-                    ),
-                  },
-                ],
-              }}
-            >
-              <a onClick={(e) => e.preventDefault()}>
-                <MoreOutlined />
-              </a>
-            </Dropdown>
+            <a>
+              <Space
+                size={4}
+                onClick={() => {
+                  setMenuRecord({ ...record });
+                  setVisible(true);
+                }}
+              >
+                <MenuUnfoldOutlined />
+                菜单权限
+              </Space>
+            </a>
           </Space>
         );
       },
@@ -185,6 +175,7 @@ const Role: FC<RoleProps> = () => {
               </Button>
             </>
           }
+          scroll={{ x: 1200 }}
           formItems={formItems}
           tableRef={tableRef}
           formRef={formRef}

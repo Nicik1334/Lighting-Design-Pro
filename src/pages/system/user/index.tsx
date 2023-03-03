@@ -1,4 +1,5 @@
 import type { FormInstance } from 'antd';
+import { Col, Row } from 'antd';
 import { Divider, Popconfirm, Space, Table } from 'antd';
 import { Button, Tag } from 'antd';
 import type { FC } from 'react';
@@ -13,7 +14,21 @@ import { genderLabels, userStatusLabels } from '@/constants';
 import type { TableRowSelection } from 'antd/lib/table/interface';
 import { ProCard } from '@ant-design/pro-components';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
-import { getUserList } from './server';
+import { getOrgChildren, getUserList } from './server';
+import TreeSlider from '@/components/treeSlider';
+import { useRequest } from 'ahooks';
+import type { DataNode } from 'antd/lib/tree';
+
+const onFormat = (nodes: any[]): DataNode[] => {
+  nodes.forEach((res) => {
+    res.key = res.value;
+    res.title = res.label;
+    if (res.children) {
+      onFormat(res.children);
+    }
+  });
+  return nodes;
+};
 
 interface UserProps {}
 const User: FC<UserProps> = () => {
@@ -23,6 +38,17 @@ const User: FC<UserProps> = () => {
   const [editableRecord, setEditablRecord] = useState<Record<string, any>>();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
+  const [theeData, setTheeData] = useState<DataNode[]>([]);
+
+  const { loading: loading1 } = useRequest(getOrgChildren, {
+    onSuccess: (result) => {
+      if (result.success) {
+        const { data } = result;
+        setTheeData(onFormat(data));
+      }
+    },
+  });
+
   const columns: ColumnsType<any> = [
     {
       title: '姓名',
@@ -92,6 +118,7 @@ const User: FC<UserProps> = () => {
       key: 'actions',
       title: '操作',
       align: 'center',
+      fixed: 'right',
       width: 140,
       render: (_, record) => {
         return (
@@ -147,57 +174,76 @@ const User: FC<UserProps> = () => {
       }}
     >
       <ProCard bordered={false}>
-        <LTable
-          tableLayout="fixed"
-          isSort
-          rowKey="id"
-          loading={{ size: 'large', tip: '加载中...' }}
-          toolbarLeft={
-            <>
-              <Button
-                type="primary"
-                onClick={() => {
-                  setEditablRecord(undefined);
-                  setOpen(true);
-                }}
-              >
-                新增
-              </Button>
-              <Button
-                type="primary"
-                danger
-                onClick={() => {
-                  setLoading(true);
-                  awaitTime(1000);
-                  setLoading(false);
-                }}
-                disabled={selectedRowKeys.length === 0}
-                loading={loading}
-              >
-                删除
-              </Button>
-              <span style={{ marginLeft: 8 }}>
-                {selectedRowKeys.length !== 0 ? `选中了 ${selectedRowKeys.length} 条数据` : ''}
-              </span>
-            </>
-          }
-          toolbarRight={
-            <>
-              <Button type="default" icon={<DownloadOutlined />} onClick={() => {}}>
-                导入
-              </Button>
-              <Button icon={<UploadOutlined />} type="default" onClick={() => {}}>
-                导出
-              </Button>
-            </>
-          }
-          rowSelection={rowSelection}
-          formItems={formItems}
-          tableRef={tableRef}
-          formRef={formRef}
-          columns={columns}
-          request={getUserList}
-        />
+        <Row gutter={16}>
+          <Col span={6}>
+            <TreeSlider
+              placeholder="筛选部门"
+              loading={loading1}
+              checkable={false}
+              treeList={theeData}
+              defaultSelectedKeys={['', 15, 16]}
+              titleRender={(item: any) => <div>{item.label}</div>}
+              onSelect={(_, item) => {
+                console.log(item.node);
+                tableRef.current?.onSearch();
+              }}
+            />
+          </Col>
+          <Col span={18}>
+            <LTable
+              tableLayout="fixed"
+              isSort
+              rowKey="id"
+              loading={{ size: 'large', tip: '加载中...' }}
+              scroll={{ x: 1200 }}
+              toolbarLeft={
+                <>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      setEditablRecord(undefined);
+                      setOpen(true);
+                    }}
+                  >
+                    新增
+                  </Button>
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={() => {
+                      setLoading(true);
+                      awaitTime(1000);
+                      setLoading(false);
+                    }}
+                    disabled={selectedRowKeys.length === 0}
+                    loading={loading}
+                  >
+                    删除
+                  </Button>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length !== 0 ? `选中了 ${selectedRowKeys.length} 条数据` : ''}
+                  </span>
+                </>
+              }
+              toolbarRight={
+                <>
+                  <Button type="default" icon={<DownloadOutlined />} onClick={() => {}}>
+                    导入
+                  </Button>
+                  <Button icon={<UploadOutlined />} type="default" onClick={() => {}}>
+                    导出
+                  </Button>
+                </>
+              }
+              rowSelection={rowSelection}
+              formItems={formItems}
+              tableRef={tableRef}
+              formRef={formRef}
+              columns={columns}
+              request={getUserList}
+            />
+          </Col>
+        </Row>
 
         <BasicModal
           open={open}

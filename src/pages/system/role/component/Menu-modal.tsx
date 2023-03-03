@@ -6,7 +6,8 @@ import { LForm, LFormItemInput, LFormItem, LDrawerForm } from 'lighting-design';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { getTreeNode } from '../server';
-import TreeSlider from './treeSlider';
+import TreeSlider from '@/components/treeSlider';
+import { Space, Tag } from 'antd';
 
 interface BasicModalProps extends LModalFormProps {
   data: any;
@@ -66,7 +67,25 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
       <LFormItemInput name="roleName" label="角色名称" disabled />
       <LFormItemInput name="roleDesc" label="角色描述" disabled />
       <LFormItem valuePropName="checkedKeys" trigger="onCheck" name="checkedIds" label="菜单列表">
-        <TreeSlider loading={loading} treeList={theeData} />
+        <TreeSlider
+          loading={loading}
+          treeList={theeData}
+          checkable
+          checkStrictly={false}
+          placeholder="菜单筛选"
+          titleRender={(item: any) => (
+            <Space>
+              {item.nodeData.menuType === 2 ? (
+                <>
+                  <Tag color="success">{item.nodeName}</Tag>
+                  <div style={{ color: '#848587' }}>{`${item.nodeData.menuDesc}`}</div>
+                </>
+              ) : (
+                <div>{item.nodeName}</div>
+              )}
+            </Space>
+          )}
+        />
       </LFormItem>
     </LDrawerForm>
   );

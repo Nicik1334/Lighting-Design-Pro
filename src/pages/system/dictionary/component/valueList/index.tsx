@@ -128,6 +128,7 @@ const DetailList: FC = () => {
         columns={columns}
         request={getDetailList}
         autoRequest={false}
+        scroll={{ x: 600 }}
         toolbarRight={
           record?.id && (
             <>

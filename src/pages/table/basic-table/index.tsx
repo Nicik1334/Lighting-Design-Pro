@@ -218,6 +218,7 @@ const BasicTable: FC = () => {
           queryFormProps={{
             showColsNumber: 3,
           }}
+          scroll={{ x: 1200 }}
           toolbarLeft={
             <>
               <Button

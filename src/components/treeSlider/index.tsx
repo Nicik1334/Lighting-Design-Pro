@@ -1,5 +1,6 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Checkbox, Input, Space, Spin, Tag, Tree } from 'antd';
+import type { TreeProps } from 'antd';
+import { Checkbox, Input, Spin, Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
@@ -31,12 +32,20 @@ const getParentKey = (key: React.Key, tree: DataNode[]): React.Key => {
   return parentKey!;
 };
 
-interface TreeSliderProps {
+interface TreeSliderProps extends TreeProps {
   loading: boolean;
-  treeList: any;
+  checkable: boolean;
+  placeholder: string;
+  treeList: any[];
 }
 
-const TreeSlider: React.FC<TreeSliderProps> = ({ loading, treeList, ...props }) => {
+const TreeSlider: React.FC<TreeSliderProps> = ({
+  loading,
+  treeList,
+  checkable = true,
+  placeholder,
+  ...props
+}) => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
 
@@ -54,7 +63,6 @@ const TreeSlider: React.FC<TreeSliderProps> = ({ loading, treeList, ...props }) 
     setExpandedKeys(newExpandedKeys);
     setAutoExpandParent(false);
   };
-
   // 过滤菜单
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -72,68 +80,59 @@ const TreeSlider: React.FC<TreeSliderProps> = ({ loading, treeList, ...props }) 
 
   return (
     <>
-      <Checkbox.Group style={{ margin: '6px 0px 0' }}>
-        <Checkbox
-          checked={checkbox1}
-          value="1"
-          onChange={(e) => {
-            if (!checkbox1) {
-              const list = dataList.map((item) => item.key);
-              setExpandedKeys(list as React.Key[]);
-            } else {
-              setExpandedKeys([]);
-            }
-            setAutoExpandParent(!checkbox1);
-            setCheckbox1(!checkbox1);
-          }}
-        >
-          展开/折叠
-        </Checkbox>
-        <Checkbox
-          checked={checkbox2}
-          value="2"
-          onClick={() => {
-            if (!checkbox2) {
-              const list = dataList.map((item) => item.key);
-              props?.onCheck(list);
-            } else {
-              props?.onCheck([]);
-            }
-            setCheckbox2(!checkbox2);
-          }}
-        >
-          全选/全不选
-        </Checkbox>
-      </Checkbox.Group>
+      {checkable && (
+        <Checkbox.Group style={{ margin: '6px 0px 0' }}>
+          <Checkbox
+            checked={checkbox1}
+            value="1"
+            onChange={(e) => {
+              if (!checkbox1) {
+                const list = dataList.map((item) => item.key);
+                setExpandedKeys(list as React.Key[]);
+              } else {
+                setExpandedKeys([]);
+              }
+              setAutoExpandParent(!checkbox1);
+              setCheckbox1(!checkbox1);
+            }}
+          >
+            展开/折叠
+          </Checkbox>
+          <Checkbox
+            checked={checkbox2}
+            value="2"
+            onClick={() => {
+              if (!checkbox2) {
+                const list = dataList.map((item) => item.key);
+                props?.onCheck(list);
+              } else {
+                props?.onCheck([]);
+              }
+              setCheckbox2(!checkbox2);
+            }}
+          >
+            全选/全不选
+          </Checkbox>
+        </Checkbox.Group>
+      )}
+
       <div className={styles.treeSlider}>
         {
           <Spin spinning={loading}>
             <Input
               style={{ marginBottom: 8 }}
               addonAfter={<SearchOutlined />}
-              placeholder="过滤菜单"
+              placeholder={placeholder}
               onChange={onChange}
             />
             <Tree
-              {...props}
-              checkable
               blockNode
+              checkable={checkable}
               onExpand={onExpand}
               expandedKeys={expandedKeys}
               autoExpandParent={autoExpandParent}
-              titleRender={(item: any) => (
-                <Space>
-                  {item.nodeData.menuType === 2 ? ( // 按钮和url权限
-                    <>
-                      <Tag color="success">{item.nodeName}</Tag>
-                      <div style={{ color: '#848587' }}>{`${item.nodeData.menuDesc}`}</div>
-                    </>
-                  ) : (
-                    <div>{item.nodeName}</div>
-                  )}
-                </Space>
-              )}
               treeData={treeList}
+              {...props}
             />
           </Spin>
         }

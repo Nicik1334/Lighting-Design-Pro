@@ -89,6 +89,7 @@ const LabelList: FC = () => {
       key: 'actions',
       title: '操作',
       align: 'center',
+      fixed: 'right',
       width: 140,
       render: (_, record) => {
         return (
@@ -128,6 +129,7 @@ const LabelList: FC = () => {
         rowClassName="lightd-table-row"
         loading={{ size: 'large', tip: '加载中...' }}
         tableRef={tableRef}
+        scroll={{ x: 800 }}
         toolbarLeft={
           <>
             <Button
