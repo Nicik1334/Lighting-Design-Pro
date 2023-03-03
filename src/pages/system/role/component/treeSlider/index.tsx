@@ -4,49 +4,6 @@ import type { DataNode } from 'antd/es/tree';
 import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 
-const treeData: DataNode[] = [
-  {
-    title: '系统管理',
-    key: '1001',
-    children: [
-      {
-        title: '角色配置',
-        key: '1001018',
-        children: [
-          { title: '查询列表', key: '1001018001' },
-          { title: '角色配置授权', key: '1001018002' },
-          { title: '角色配置', key: '1001018003' },
-        ],
-      },
-      {
-        title: '角色管理',
-        key: '1001002',
-        children: [
-          { title: '角色查询', key: '1001002001' },
-          { title: '角色编辑', key: '1001002003' },
-          { title: '菜单权限', key: '1001002004' },
-        ],
-      },
-      {
-        title: '人员权限修改日志',
-        key: '1001019',
-      },
-    ],
-  },
-  {
-    title: '配置管理',
-    key: '1004',
-    children: [
-      { title: '问题置顶配置', key: '1004012' },
-      { title: '待办中心', key: '1004014' },
-    ],
-  },
-  {
-    title: '数据管理',
-    key: '1004022',
-  },
-];
-
 const dataList: { key: React.Key; title: string }[] = [];
 const generateList = (data: DataNode[]) => {
   for (let i = 0; i < data.length; i++) {

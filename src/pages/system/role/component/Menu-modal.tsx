@@ -2,12 +2,10 @@ import { awaitTime } from '@/utils';
 import { useRequest } from 'ahooks';
 import type { DataNode } from 'antd/lib/tree';
 import type { LModalFormProps } from 'lighting-design';
-import { LFormItem } from 'lighting-design';
-import { LForm, LFormItemInput, LModalForm } from 'lighting-design';
+import { LForm, LFormItemInput, LFormItem, LDrawerForm } from 'lighting-design';
 import type { FC } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getTreeNode } from './server';
+import { useState, useEffect } from 'react';
+import { getTreeNode } from '../server';
 import TreeSlider from './treeSlider';
 
 interface BasicModalProps extends LModalFormProps {
@@ -52,13 +50,9 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
   }, [open, data, form]);
 
   return (
-    <LModalForm
+    <LDrawerForm
       open={open}
-      // open
       form={form}
-      width={1000}
-      labelCol={{ span: 7 }}
-      wrapperCol={{ span: 14 }}
       title={data ? '修改信息' : '新建角色'}
       onFinish={async (values) => {
         await awaitTime(); // 发起请求
@@ -66,21 +60,15 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
         onChange(); // 响应成功后，刷新表格
         return true;
       }}
+      isEnterSubmit={false}
       {...restProps}
     >
       <LFormItemInput name="roleName" label="角色名称" disabled />
       <LFormItemInput name="roleDesc" label="角色描述" disabled />
-      <LFormItem
-        valuePropName="checkedKeys"
-        trigger="onCheck"
-        name="checkedIds"
-        labelCol={{ span: 7 }}
-        wrapperCol={{ span: 14 }}
-        label="菜单列表"
-      >
+      <LFormItem valuePropName="checkedKeys" trigger="onCheck" name="checkedIds" label="菜单列表">
         <TreeSlider loading={loading} treeList={theeData} />
       </LFormItem>
-    </LModalForm>
+    </LDrawerForm>
   );
 };
 

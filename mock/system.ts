@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { mock } from 'mockjs';
-import RoleMenuDatas from '../src/pages/system/role/treeSlider/mock';
+import RoleMenuDatas from '../src/pages/system/role/component/treeSlider/mock';
 
 const UserListData = mock({
   'data|10': [
