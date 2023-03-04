@@ -1,3 +1,4 @@
+import { OrgList } from '../src/pages/system/org/mock';
 import { Request, Response } from 'express';
 import { mock } from 'mockjs';
 import RoleMenuDatas from '../src/pages/system/role/mock';
@@ -314,7 +315,15 @@ export default {
     res.send({
       code: '200',
       success: true,
-      data: OrgDatas,
+      data: OrgList,
+    });
+  },
+  'GET /api/OrgController/getOrgChildren': async (req: Request, res: Response) => {
+    await waitTime(1000);
+    res.send({
+      code: '200',
+      success: true,
+      data: OrgList,
     });
   },
 };

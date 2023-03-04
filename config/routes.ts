@@ -3,7 +3,6 @@
 // hideInMenu: 当前路由在菜单中不展现，默认 false。
 // hideChildrenInMenu: 当前路由的子级在菜单中不展现，默认 false。
 // hideInBreadcrumb: 当前路由在面包屑中不展现，默认 false。
-
 export default [
   {
     path: '/user',
@@ -84,6 +83,11 @@ export default [
             icon: 'role',
             path: '/system/role',
             component: './system/role',
+          },
+          {
+            name: '组织管理',
+            path: '/system/org',
+            component: './system/org',
           },
         ],
       },

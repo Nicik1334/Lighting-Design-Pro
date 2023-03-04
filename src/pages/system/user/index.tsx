@@ -1,7 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Col, Row } from 'antd';
-import { Divider, Popconfirm, Space, Table } from 'antd';
-import { Button, Tag } from 'antd';
+import { Divider, Popconfirm, Space, Table, Col, Row, Button, Tag } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -21,8 +19,8 @@ import type { DataNode } from 'antd/lib/tree';
 
 const onFormat = (nodes: any[]): DataNode[] => {
   nodes.forEach((res) => {
-    res.key = res.value;
-    res.title = res.label;
+    res.key = res.orgId;
+    res.title = res.orgName;
     if (res.children) {
       onFormat(res.children);
     }
@@ -181,8 +179,7 @@ const User: FC<UserProps> = () => {
               loading={loading1}
               checkable={false}
               treeList={theeData}
-              defaultSelectedKeys={['', 15, 16]}
-              titleRender={(item: any) => <div>{item.label}</div>}
+              titleRender={(item: any) => <div>{item.orgName}</div>}
               onSelect={(_, item) => {
                 console.log(item.node);
                 tableRef.current?.onSearch();
