@@ -20,7 +20,6 @@ const BaseView: React.FC = () => {
 
   const [form] = LForm.useForm();
   const handleFinish = async (e: any) => {
-    console.log(e);
     message.success('更新基本信息成功');
   };
 

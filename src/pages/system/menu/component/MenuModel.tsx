@@ -42,8 +42,6 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
     onSuccess: (result) => {
       if (result.success) {
         const { data: d } = result;
-        console.log(d);
-
         setTheeData(onFormat(d));
       }
     },
