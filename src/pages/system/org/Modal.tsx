@@ -47,7 +47,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
     }
   }, [open, data, form]);
 
-  const Doms = (...props: any[]) => {
+  const TriggerTree = (...props: any[]) => {
     return (
       <TreeSlider
         placeholder="筛选部门"
@@ -67,7 +67,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
     );
   };
 
-  const Dom = (...props: any[]) => {
+  const ItemTree = (...props: any[]) => {
     return (
       <LTrigger
         {...props[0]}
@@ -76,7 +76,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
         placement="bottomLeft"
         placeholder="请选择上级部门"
       >
-        <Doms />
+        <TriggerTree />
       </LTrigger>
     );
   };
@@ -104,11 +104,11 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
             required
             label="上级部门"
             initialValue={{
-              label: '顶级部门',
+              label: '全部公司',
               value: '9998',
             }}
           >
-            <Dom />
+            <ItemTree />
           </LFormItem>
         </Col>
         <Col span={12}>

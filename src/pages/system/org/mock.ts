@@ -2,7 +2,7 @@ export const OrgList = [
   {
     orgId: '9998',
     orgCode: '0001',
-    orgName: '顶级部门',
+    orgName: '全部公司',
     orgDesc: null,
     parentOrgId: '-1',
     sortId: 1,

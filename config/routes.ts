@@ -64,7 +64,12 @@ export default [
         routes: [
           {
             path: '/system',
-            redirect: '/system/dictionary',
+            redirect: '/system/meun',
+          },
+          {
+            name: '菜单管理',
+            path: '/system/menu',
+            component: './system/menu',
           },
           {
             name: '字典管理',

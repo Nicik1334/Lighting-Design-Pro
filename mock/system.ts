@@ -2,6 +2,7 @@ import { OrgList } from '../src/pages/system/org/mock';
 import { Request, Response } from 'express';
 import { mock } from 'mockjs';
 import RoleMenuDatas from '../src/pages/system/role/mock';
+import { MenuListDatas, MenuItem } from '../src/pages/system/menu/mock';
 
 const UserListData = mock({
   'data|10': [
@@ -202,61 +203,6 @@ const RoleData = [
   },
 ];
 
-const OrgDatas = [
-  {
-    id: 0,
-    parent_id: 0,
-    value: '',
-    label: '所有公司',
-  },
-  {
-    id: 58,
-    parent_id: 1,
-    value: 58,
-    label: '总公司',
-    children: [
-      {
-        id: 59,
-        parent_id: 58,
-        value: 59,
-        label: '重庆分公司',
-        children: [
-          {
-            id: 15,
-            parent_id: 15,
-            value: 15,
-            label: '渝北区分公司',
-          },
-          {
-            id: 16,
-            parent_id: 16,
-            value: 16,
-            label: '渝中区分公司',
-          },
-          {
-            id: 17,
-            parent_id: 17,
-            value: 17,
-            label: '九龙坡区分公司',
-          },
-        ],
-      },
-      {
-        id: 60,
-        parent_id: 60,
-        value: 60,
-        label: '杭州分公司',
-      },
-      {
-        id: 61,
-        parent_id: 61,
-        value: 61,
-        label: '上海分公司',
-      },
-    ],
-  },
-];
-
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -324,6 +270,22 @@ export default {
       code: '200',
       success: true,
       data: OrgList,
+    });
+  },
+  'GET /api/getMenuList': async (req: Request, res: Response) => {
+    await waitTime(1000);
+    res.send({
+      code: '200',
+      success: true,
+      data: MenuListDatas,
+    });
+  },
+  'GET /api/getMenuItem': async (req: Request, res: Response) => {
+    await waitTime(1000);
+    res.send({
+      code: '200',
+      success: true,
+      data: MenuItem,
     });
   },
 };
