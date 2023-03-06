@@ -1,45 +1,35 @@
-// https://umijs.org/config/
+import GlobalConfig from '../src/global';
 import { defineConfig } from 'umi';
 import proxy from './proxy';
 import routes from './routes';
 
 const { REACT_APP_ENV } = process.env;
-
+const isDev = process.env.NODE_ENV === 'development' ? {} : false;
 export default defineConfig({
+  title: GlobalConfig.AppName,
   hash: true,
-  antd: {},
+  antd: {
+    dark: GlobalConfig.IsDark, // 开启暗色主题
+  },
   dva: {
     hmr: true,
   },
-  // layout: {
-  //   // https://umijs.org/zh-CN/plugins/plugin-layout
-  //   locale: false,
-  //   siderWidth: 208,
-  //   ...defaultSettings,
-  // },
+  base: GlobalConfig.Context,
+  publicPath: GlobalConfig.Context,
   dynamicImport: {
     loading: '@/Loading',
   },
   targets: {
     ie: 11,
   },
-  // umi routes: https://umijs.org/docs/routing
   routes,
   access: {},
-  // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
-    // 如果不想要 configProvide 动态设置主题需要把这个设置为 default
-    // 只有设置为 variable， 才能使用 configProvide 动态设置主色调
-    // https://4x.ant.design/docs/react/customize-theme-variable-cn
     'root-entry-name': 'variable',
     'border-radius-base': '6px',
     'border-radius': '6px',
   },
-  // esbuild is father build tools
-  // https://umijs.org/plugins/plugin-esbuild
   esbuild: {},
-  title: false,
-  // favicon:'',
   /**
    * Umi 默认编译 node_modules 下的文件，带来一些收益的同时，也增加了额外的编译时间。
    * 如果不希望 node_modules 下的文件走 babel 编译，可通过以下配置减少 40% 到 60% 的编译时间。
@@ -49,9 +39,14 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  define: { 'process.env.AppName': GlobalConfig.AppName },
   // fastRefresh: {},
-  nodeModulesTransform: { type: 'none' },
-  mfsu: {},
-  webpack5: {},
+  nodeModulesTransform: {
+    type: 'none',
+    exclude: [],
+  },
+  hardSource: false,
+  mfsu: isDev,
+  webpack5: isDev,
   exportStatic: {},
 });

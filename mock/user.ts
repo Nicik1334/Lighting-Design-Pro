@@ -123,27 +123,42 @@ export default {
     await waitTime(2000);
     if (password === 'ant.design' && username === 'admin') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
+        code: 200,
+        success: true,
+        msg: '登录成功！',
+        data: {
+          currentAuthority: 'admin',
+          token: 'token',
+          type,
+        },
       });
       access = 'admin';
       return;
     }
     if (password === 'ant.design' && username === 'user') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
+        code: 200,
+        success: true,
+        msg: '登录成功！',
+        data: {
+          currentAuthority: 'user',
+          token: 'token',
+          type,
+        },
       });
       access = 'user';
       return;
     }
     if (type === 'mobile') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
+        code: 200,
+        success: true,
+        msg: '登录成功！',
+        data: {
+          currentAuthority: 'admin',
+          token: 'token',
+          type,
+        },
       });
       access = 'admin';
       return;
@@ -156,7 +171,8 @@ export default {
     });
     access = 'guest';
   },
-  'POST /api/login/outLogin': (req: Request, res: Response) => {
+  'POST /api/login/outLogin': async (req: Request, res: Response) => {
+    await waitTime(2000);
     access = '';
     res.send({ data: {}, success: true });
   },

@@ -5,7 +5,7 @@ import { Avatar, Modal, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { stringify } from 'querystring';
 import React from 'react';
-import { history, useModel } from 'umi';
+import { history, useModel, useDispatch } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 const { confirm } = Modal;
@@ -14,26 +14,9 @@ export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
 
-/**
- * 退出登录，并且将当前的 url 保存
- */
-const loginOut = async () => {
-  await outLogin();
-  const { query = {}, search, pathname } = history.location;
-  const { redirect } = query;
-  if (window.location.pathname !== LOGIN_PATH && !redirect) {
-    history.replace({
-      pathname: LOGIN_PATH,
-      search: stringify({
-        redirect: pathname + search,
-      }),
-    });
-  }
-};
-
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
-
+  const dispatch = useDispatch<any>();
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin
@@ -78,7 +61,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
               content: '确定注销当前登录状态？',
               onOk() {
                 setInitialState((s) => ({ ...s, currentUser: undefined }));
-                loginOut();
+                dispatch({ type: 'authModel/logout' });
               },
             })
           }

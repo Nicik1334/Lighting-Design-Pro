@@ -1,9 +1,8 @@
 // --no ignore
 import { ProLayoutProps } from '@ant-design/pro-components';
 import logo from '@/assets/icons/logo.svg';
+import GlobalConfig from '@/global';
 
-// colorPrimary: '#1890ff',
-// primaryColor: '#21D2C5',
 /**
  * @name
  */
@@ -18,10 +17,9 @@ const Settings: ProLayoutProps & {
   fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Lighting Admin',
+  title: GlobalConfig.AppName,
   pwa: false,
   logo,
-  iconfontUrl: '',
 };
 
 export default Settings;

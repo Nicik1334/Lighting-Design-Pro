@@ -19,10 +19,13 @@ import React from 'react';
 import style from './style.less';
 import loginBg from '@/assets/imgs/login/loginBg.png';
 import loginBoxBg from '@/assets/imgs/login/loginBoxBg.png';
-import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import { useModel, history } from 'umi';
 import logo from '@/assets/icons/logo1.svg';
+import { useRequest } from 'ahooks';
+import { login } from '@/services/ant-design-pro/api';
+import { getPageQuery } from '@/utils';
+import { USER_TOKEN } from '@/constants';
 
 const iconStyles: CSSProperties = {
   marginInlineStart: '16px',
@@ -32,9 +35,10 @@ const iconStyles: CSSProperties = {
   cursor: 'pointer',
 };
 
-const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
+interface LoginProps {}
+const Login: React.FC<LoginProps> = () => {
   const [type, setType] = useState<string>('account');
+  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const { initialState, setInitialState } = useModel('@@initialState');
   const [form] = Form.useForm();
 
@@ -48,24 +52,25 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
-    // 登录
-    const msg = await login({ ...values, type });
-    setUserLoginState(msg);
-    if (msg.status === 'ok') {
-      message.success('登录成功！');
-      await fetchUserInfo();
-      /** 此方法会跳转到 redirect 参数所在的位置 */
-      if (!history) return;
-      const { query } = history.location;
-      const { redirect } = query as { redirect: string };
-      history.push(redirect || '/');
-      return;
-    } else {
-      message.error('登录失败，请重试！');
-    }
-  };
-  const { status, type: loginType } = userLoginState;
+  const { loading, run: loginRun } = useRequest(login, {
+    manual: true,
+    onSuccess: (result) => {
+      if (result.success) {
+        const { data: d } = result as HttpResult;
+        sessionStorage.setItem(USER_TOKEN, d.token);
+        const params = getPageQuery();
+        const { redirect = '/' } = params as { redirect: string };
+        history.push(redirect);
+        setUserLoginState({
+          success: result.success,
+          type: d.type,
+        });
+        fetchUserInfo();
+      }
+    },
+  });
+
+  const { success, type: loginType } = userLoginState;
 
   // 账号密码登录
   const AccountDom = () => (
@@ -78,8 +83,9 @@ const Login: React.FC = () => {
         },
         submitText: '登录',
       }}
+      loading={loading}
       onFinish={async (values) => {
-        await handleSubmit({ ...values, type: 'account', autoLogin: true } as API.LoginParams);
+        loginRun({ ...values, type: 'account', autoLogin: true } as API.LoginParams);
       }}
     >
       <LFormItemInput
@@ -117,8 +123,9 @@ const Login: React.FC = () => {
         submitText: '登录',
       }}
       form={form}
-      onFinish={async (values) => {
-        await handleSubmit({ ...values, type: 'mobile', autoLogin: true } as API.LoginParams);
+      loading={loading}
+      onFinish={(values) => {
+        loginRun({ ...values, type });
       }}
     >
       <LFormItemInput
@@ -179,7 +186,7 @@ const Login: React.FC = () => {
       <Col style={{ minWidth: '36%' }} className={style.login_from_col}>
         <LLoginForm
           message={
-            status === 'error' &&
+            !success &&
             ((loginType === 'account' && (
               <Alert message="登录异常，请重试！" showIcon closable type="error" />
             )) ||

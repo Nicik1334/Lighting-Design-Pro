@@ -1,6 +1,5 @@
 import RightContent from '@/components/RightContent';
 import TabsView from '@/components/TabsView';
-import { LOGIN_PATH } from '@/constants';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { ProLayoutProps } from '@ant-design/pro-components';
 import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
@@ -57,9 +56,9 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
         ...routers,
       ]}
       onPageChange={() => {
-        if (!initialState?.currentUser && history.location.pathname !== LOGIN_PATH) {
-          history.replace(LOGIN_PATH); // 如果没有登录，重定向到 login
-        }
+        // if (!initialState?.currentUser && history.location.pathname !== LOGIN_PATH) {
+        //   history.replace(LOGIN_PATH); // 如果没有登录，重定向到 login
+        // }
       }}
       rightContentRender={() => <RightContent />}
       links={links}
