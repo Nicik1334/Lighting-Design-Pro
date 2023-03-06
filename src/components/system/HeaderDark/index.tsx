@@ -7,7 +7,7 @@ import styles from './index.less';
 
 export type SiderTheme = 'light' | 'dark';
 
-const SwitchDark: React.FC = () => {
+const HeaderDark: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [checked, setChecked] = useState(initialState?.settings?.navTheme === 'realDark');
   if (!initialState || !initialState.settings) {
@@ -46,4 +46,4 @@ const SwitchDark: React.FC = () => {
     />
   );
 };
-export default SwitchDark;
+export default HeaderDark;

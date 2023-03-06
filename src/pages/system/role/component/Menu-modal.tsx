@@ -6,7 +6,7 @@ import { LForm, LFormItemInput, LFormItem, LDrawerForm } from 'lighting-design';
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 import { getTreeNode } from '../server';
-import TreeSlider from '@/components/treeSlider';
+import TreeSlider from '@/components/common/TreeSlider';
 import { Space, Tag } from 'antd';
 
 interface BasicModalProps extends LModalFormProps {

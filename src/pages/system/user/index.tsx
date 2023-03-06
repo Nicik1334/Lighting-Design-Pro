@@ -13,7 +13,7 @@ import type { TableRowSelection } from 'antd/lib/table/interface';
 import { ProCard } from '@ant-design/pro-components';
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
 import { getOrgChildren, getUserList } from './server';
-import TreeSlider from '@/components/treeSlider';
+import TreeSlider from '@/components/common/TreeSlider';
 import { useRequest } from 'ahooks';
 import type { DataNode } from 'antd/lib/tree';
 

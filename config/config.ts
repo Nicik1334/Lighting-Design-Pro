@@ -17,7 +17,7 @@ export default defineConfig({
   base: GlobalConfig.Context,
   publicPath: GlobalConfig.Context,
   dynamicImport: {
-    loading: '@/Loading',
+    loading: '@/components/system/PageLoading',
   },
   targets: {
     ie: 11,

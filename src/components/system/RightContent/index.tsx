@@ -4,8 +4,8 @@ import React from 'react';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import HeaderSearch from '../HeaderSearch';
-import SwitchDark from '../SwitchDark';
-import TimeRoll from '../TimeRoll';
+import HeaderDark from '../HeaderDark';
+import TimeRoll from '../../common/TimeRoll';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 
@@ -54,7 +54,7 @@ const GlobalHeaderRight: React.FC = () => {
         )}
       </div>
       <div className={`${styles.action} ${styles.search}`}>
-        <SwitchDark />
+        <HeaderDark />
       </div>
       <Avatar menu />
     </Space>

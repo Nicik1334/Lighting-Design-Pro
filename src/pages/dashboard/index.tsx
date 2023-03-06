@@ -1,7 +1,7 @@
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import Hamster from '@/components/hamster';
+import Hamster from '@/components/common/Hamster';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
 

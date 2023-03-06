@@ -1,4 +1,4 @@
-import TreeSlider from '@/components/treeSlider';
+import TreeSlider from '@/components/common/TreeSlider';
 import { awaitTime } from '@/utils';
 import { useRequest } from 'ahooks';
 import type { DataNode } from 'antd/lib/tree';

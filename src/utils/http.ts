@@ -1,7 +1,7 @@
 import type { Context, RequestMethod } from 'umi-request';
 import { extend } from 'umi-request';
 import _throttle from 'lodash/throttle';
-import NProgress from '@/components/NProgress';
+import NProgress from '@/components/common/NProgress';
 import qs from 'qs';
 import { message } from 'antd';
 import { showNotification } from '@/utils';
@@ -44,7 +44,7 @@ http.use(async (ctx: Context, next: () => void) => {
   };
   ctx.req.url = ctx.req.url = url.startsWith('/mock') || url.startsWith('/xxx') ? url : `${url}`;
   // ctx.req.url = `${GlobalConfig.Api}${url}`; // '/kg10000/xxx/xxx'
-  next();
+  await next();
 });
 
 // 响应拦截

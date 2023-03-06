@@ -1,5 +1,5 @@
-import RightContent from '@/components/RightContent';
-import TabsView from '@/components/TabsView';
+import RightContent from '@/components/system/RightContent';
+import TabsView from '@/components/common/TabsView';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { ProLayoutProps } from '@ant-design/pro-components';
 import { ProLayout, SettingDrawer } from '@ant-design/pro-components';

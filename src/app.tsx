@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 import { LoadingOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-layout';

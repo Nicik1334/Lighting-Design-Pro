@@ -13,7 +13,7 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps } from './data';
-import NProgress from '@/components/NProgress';
+import NProgress from '@/components/common/NProgress';
 import styles from './index.less';
 
 const type = 'DraggableTabNode';
