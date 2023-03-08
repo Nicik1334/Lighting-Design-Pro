@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Button, Divider, Modal, Popconfirm, Space, Switch } from 'antd';
+import { Button, Popconfirm, Space, Switch } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -11,7 +11,8 @@ import { ProCard } from '@ant-design/pro-components';
 import { OrgController } from './server';
 import type { DataNode } from 'antd/lib/tree';
 import { awaitTime } from '@/utils';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import PopSwitchState from '@/components/system/PopSwitchState';
 
 const onFormat = (nodes: any[]): DataNode[] => {
   nodes.forEach((res) => {
@@ -55,23 +56,13 @@ const User: FC<UserProps> = () => {
       align: 'center',
       render: (state, record) => {
         return (
-          <Switch
+          <PopSwitchState
             checked={state === 1}
-            onChange={() => {
-              Modal.confirm({
-                title: '系统提示',
-                icon: <ExclamationCircleOutlined />,
-                content: `您确定 ${state === 1 ? '禁用' : '启用'} ${record.orgName} 吗？`,
-                okText: '确认',
-                cancelText: '取消',
-                onOk: () => {
-                  tableRef.current?.onSearch();
-                },
-                onCancel: () => {},
-              });
+            title={`您确定 ${state === 1 ? '禁用' : '启用'} ${record.orgName} 吗？`}
+            onConfirm={async () => {
+              await awaitTime(1000);
+              tableRef.current?.onSearch();
             }}
-            unCheckedChildren="禁用"
-            checkedChildren="启用"
           />
         );
       },
@@ -81,11 +72,13 @@ const User: FC<UserProps> = () => {
       title: '操作',
       align: 'center',
       fixed: 'right',
-      width: 140,
+      width: 160,
       render: (_, record) => {
         return (
-          <Space align="center">
-            <a
+          <Space className="action_bar">
+            <Button
+              type="link"
+              icon={<EditOutlined />}
               onClick={() => {
                 setEditablRecord({
                   ...record,
@@ -94,8 +87,7 @@ const User: FC<UserProps> = () => {
               }}
             >
               修改
-            </a>
-            <Divider type="vertical" />
+            </Button>
             <Popconfirm
               placement="topRight"
               title="确认删除?"
@@ -106,7 +98,9 @@ const User: FC<UserProps> = () => {
               okText="确定"
               cancelText="取消"
             >
-              <a>删除</a>
+              <Button type="link" danger icon={<DeleteOutlined />}>
+                删除
+              </Button>
             </Popconfirm>
           </Space>
         );

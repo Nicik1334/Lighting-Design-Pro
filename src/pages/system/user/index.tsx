@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Divider, Popconfirm, Space, Table, Col, Row, Button, Tag } from 'antd';
+import { Popconfirm, Space, Table, Col, Row, Button, Tag } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -11,7 +11,7 @@ import { awaitTime } from '@/utils';
 import { genderLabels, userStatusLabels } from '@/constants';
 import type { TableRowSelection } from 'antd/lib/table/interface';
 import { ProCard } from '@ant-design/pro-components';
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DownloadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { getOrgChildren, getUserList } from './server';
 import TreeSlider from '@/components/common/TreeSlider';
 import { useRequest } from 'ahooks';
@@ -117,21 +117,20 @@ const User: FC<UserProps> = () => {
       title: '操作',
       align: 'center',
       fixed: 'right',
-      width: 140,
+      width: 150,
       render: (_, record) => {
         return (
-          <Space align="center">
-            <a
+          <Space className="action_bar">
+            <Button
+              type="link"
+              icon={<EditOutlined />}
               onClick={() => {
-                setEditablRecord({
-                  ...record,
-                });
+                setEditablRecord({ ...record });
                 setOpen(true);
               }}
             >
               修改
-            </a>
-            <Divider type="vertical" />
+            </Button>
             <Popconfirm
               placement="topRight"
               title="确认删除?"
@@ -142,7 +141,9 @@ const User: FC<UserProps> = () => {
               okText="确定"
               cancelText="取消"
             >
-              <a>删除</a>
+              <Button type="link" danger icon={<DeleteOutlined />}>
+                删除
+              </Button>
             </Popconfirm>
           </Space>
         );
@@ -191,6 +192,7 @@ const User: FC<UserProps> = () => {
               tableLayout="fixed"
               isSort
               rowKey="id"
+              size="small"
               loading={{ size: 'large', tip: '加载中...' }}
               scroll={{ x: 1200 }}
               toolbarLeft={

@@ -22,6 +22,17 @@ body,
   margin: 0;
 }
 
+// 操作栏按钮样式
+.action_bar {
+  .ant-btn {
+    padding: 4px 6px;
+    & > span + .anticon,
+    & > .anticon + span {
+      margin-left: 4px;
+    }
+  }
+}
+
 canvas {
   display: block;
 }

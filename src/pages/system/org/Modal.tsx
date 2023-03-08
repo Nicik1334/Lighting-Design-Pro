@@ -8,8 +8,7 @@ import { LFormItem, LFormItemRadio, LFormItemTextArea } from 'lighting-design';
 import { LTrigger } from 'lighting-design';
 import { LForm, LFormItemInput, LModalForm } from 'lighting-design';
 import type { FC } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getOrgChildren } from '../user/server';
 
 interface BasicModalProps extends LModalFormProps {
@@ -126,15 +125,15 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
             options={[
               {
                 label: '启用',
-                value: '1',
+                value: 1,
               },
               {
                 label: '禁用',
-                value: '2',
+                value: 0,
               },
               {
                 label: '冻结',
-                value: '3',
+                value: 2,
               },
             ]}
           />

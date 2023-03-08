@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Divider, Popconfirm, Space, Tag, Button } from 'antd';
+import { Popconfirm, Space, Tag, Button } from 'antd';
 import type { FC } from 'react';
 import { useContext, useEffect } from 'react';
 import { useRef, useState } from 'react';
@@ -73,19 +73,19 @@ const DetailList: FC = () => {
       key: 'actions',
       title: '操作',
       align: 'center',
-      width: 140,
+      width: 150,
       render: (_, records) => {
         return (
-          <Space align="center">
-            <a
+          <Space className="action_bar">
+            <Button
+              type="link"
               onClick={() => {
                 setEditablRecord({ ...records });
                 setOpen(true);
               }}
             >
               修改
-            </a>
-            <Divider type="vertical" />
+            </Button>
             <Popconfirm
               placement="topRight"
               title="确认删除?"
@@ -96,7 +96,9 @@ const DetailList: FC = () => {
               okText="确定"
               cancelText="取消"
             >
-              <a>删除</a>
+              <Button type="link" danger>
+                删除
+              </Button>
             </Popconfirm>
           </Space>
         );

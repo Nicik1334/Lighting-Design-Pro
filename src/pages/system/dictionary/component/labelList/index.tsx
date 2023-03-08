@@ -14,6 +14,7 @@ import { awaitTime } from '@/utils';
 import { DicContext } from '../..';
 import type { DictionaryItemType } from '../../interface';
 import LabelModal from './modal';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const LabelList: FC = () => {
   const formRef = useRef<FormInstance>();
@@ -90,21 +91,20 @@ const LabelList: FC = () => {
       title: '操作',
       align: 'center',
       fixed: 'right',
-      width: 140,
+      width: 150,
       render: (_, record) => {
         return (
-          <Space align="center">
-            <a
+          <Space className="action_bar">
+            <Button
+              type="link"
+              icon={<EditOutlined />}
               onClick={() => {
-                setEditablRecord({
-                  ...record,
-                });
+                setEditablRecord({ ...record });
                 setOpen(true);
               }}
             >
               修改
-            </a>
-            <Divider type="vertical" />
+            </Button>
             <Popconfirm
               placement="topRight"
               title="确认删除?"
@@ -115,7 +115,9 @@ const LabelList: FC = () => {
               okText="确定"
               cancelText="取消"
             >
-              <a>删除</a>
+              <Button type="link" danger icon={<DeleteOutlined />}>
+                删除
+              </Button>
             </Popconfirm>
           </Space>
         );

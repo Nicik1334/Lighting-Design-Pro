@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Divider, Popconfirm, Space, Modal, Switch, Button } from 'antd';
+import { Popconfirm, Space, Switch, Button } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -11,12 +11,8 @@ import MenuModal from './component/Menu-modal';
 import { awaitTime } from '@/utils';
 import { ProCard } from '@ant-design/pro-components';
 import { getPageRole } from './server';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import PopSwitchState from '@/components/system/PopSwitchState';
 
 interface RoleProps {}
 const Role: FC<RoleProps> = () => {
@@ -46,23 +42,13 @@ const Role: FC<RoleProps> = () => {
       align: 'center',
       render: (state, record) => {
         return (
-          <Switch
+          <PopSwitchState
             checked={state === 1}
-            onChange={() => {
-              Modal.confirm({
-                title: '系统提示',
-                icon: <ExclamationCircleOutlined />,
-                content: `您确定 ${state === 1 ? '禁用' : '启用'} ${record.roleName} 吗？`,
-                okText: '确认',
-                cancelText: '取消',
-                onOk: () => {
-                  tableRef.current?.onSearch();
-                },
-                onCancel: () => {},
-              });
+            title={`您确定 ${state === 1 ? '禁用' : '启用'} ${record.roleName} 吗？`}
+            onConfirm={async () => {
+              await awaitTime(1000);
+              tableRef.current?.onSearch();
             }}
-            unCheckedChildren="禁用"
-            checkedChildren="启用"
           />
         );
       },
@@ -76,25 +62,32 @@ const Role: FC<RoleProps> = () => {
     {
       key: 'actions',
       title: '操作',
-      width: 280,
+      width: 260,
       fixed: 'right',
       align: 'center',
       render: (_, record) => {
         return (
-          <Space align="center">
-            <a>
-              <Space
-                size={2}
-                onClick={() => {
-                  setEditablRecord({ ...record });
-                  setOpen(true);
-                }}
-              >
-                <EditOutlined />
-                修改
-              </Space>
-            </a>
-            <Divider type="vertical" />
+          <Space className="action_bar">
+            <Button
+              onClick={() => {
+                setEditablRecord({ ...record });
+                setOpen(true);
+              }}
+              type="link"
+              icon={<EditOutlined />}
+            >
+              修改
+            </Button>
+            <Button
+              type="link"
+              icon={<MenuUnfoldOutlined />}
+              onClick={() => {
+                setMenuRecord({ ...record });
+                setVisible(true);
+              }}
+            >
+              菜单权限
+            </Button>
             <Popconfirm
               placement="topRight"
               title="确认删除?"
@@ -105,26 +98,10 @@ const Role: FC<RoleProps> = () => {
               okText="确定"
               cancelText="取消"
             >
-              <a>
-                <Space size={4}>
-                  <DeleteOutlined />
-                  删除
-                </Space>
-              </a>
+              <Button type="link" danger icon={<DeleteOutlined />}>
+                删除
+              </Button>
             </Popconfirm>
-            <Divider type="vertical" />
-            <a>
-              <Space
-                size={4}
-                onClick={() => {
-                  setMenuRecord({ ...record });
-                  setVisible(true);
-                }}
-              >
-                <MenuUnfoldOutlined />
-                菜单权限
-              </Space>
-            </a>
           </Space>
         );
       },

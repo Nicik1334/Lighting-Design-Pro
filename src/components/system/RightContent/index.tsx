@@ -27,7 +27,7 @@ const GlobalHeaderRight: React.FC = () => {
 
   return (
     <Space className={className}>
-      <div className={`${styles.action} ${styles.hidden}`} style={{ fontFamily: 'cursive' }}>
+      <div className={`${styles.action} ${styles.hidden}`} style={{ fontFamily: 'initial' }}>
         <TimeRoll format="yyyy-MM-DD HH:mm" />
       </div>
       <HeaderSearch
@@ -36,7 +36,8 @@ const GlobalHeaderRight: React.FC = () => {
         options={[]}
       />
       <div
-        className={`${styles.action} ${styles.fullscreen}  ${styles.hidden}`}
+        className={`${styles.action} ${styles.hidden}`}
+        style={{ fontFamily: 'inherit' }}
         title={!isFullScreen ? '全屏' : '退出全屏'}
         onClick={() => {
           const doc = document as any;
