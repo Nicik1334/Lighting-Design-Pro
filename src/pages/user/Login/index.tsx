@@ -173,10 +173,11 @@ const Login: React.FC<LoginProps> = () => {
         <div className={style.login_intro}>
           <h1>Lighting Admin</h1>
           <div className={style.desc}>
-            基于React、TypeScript、Ant Design、UmiJs、ahook等开发的后台模板组件。 lighting-design
-            Pro 是基于 Ant Design UI
-            而开发的业务常用模板组件，提供了更高级别的抽象支持，开箱即用。可以显著的提升制作 CRUD
-            页面的效率，更加专注于页面开发。
+            Ligthing Admin 是一套企业级的高颜值、高性能的通用型后台前端解决方案，
+            致力于在设计规范和基础组件的基础上，进一步提升企业级后台产品设计研发过程中的『用户』和『设计者』的体验。
+            在力求提供开箱即用的开发体验下，还提供了完整的脚手架,
+            涉及用户管理，权限管理，通用组件，工具包，网络请求等各个方面,
+            为后台管理系统中常见的方案提供了最佳实践来减少学习和开发成本。
           </div>
           <div className={style.login_bg}>
             <img src={loginBoxBg} alt="" />

@@ -1,11 +1,13 @@
 import RightContent from '@/components/system/RightContent';
 import TabsView from '@/components/common/TabsView';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { ProLayoutProps } from '@ant-design/pro-components';
+import { BookOutlined, LinkOutlined, createFromIconfontCN } from '@ant-design/icons';
+import type { MenuDataItem, ProLayoutProps } from '@ant-design/pro-components';
 import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
 import { ConfigProvider } from 'antd';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, history, useModel, Redirect } from 'umi';
+import GlobalConfig from '@/global';
+import { HOME_PAGE } from '@/constants';
 
 export const isDev = process.env.NODE_ENV === 'development';
 const links = isDev
@@ -26,31 +28,60 @@ const links = isDev
     ]
   : [];
 
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_3943750_gii3rp8y9ke.js',
+});
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
   const { children } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
 
   // 路径为"/",则重定向到首页
-  if (window.location.pathname === '/') return <Redirect to="/dashboard" />;
+  if (window.location.pathname === '/') return <Redirect to={HOME_PAGE} />;
 
+  const ItemChildren = useCallback((itemProps, defaultDom) => {
+    if (itemProps.isUrl || !itemProps.path || location.pathname === itemProps.path)
+      return <a>{defaultDom}</a>;
+    return <Link to={itemProps.path}>{defaultDom}</Link>;
+  }, []);
+
+  const IconChildren = (itemProps: MenuDataItem) => {
+    if (typeof itemProps.icon === 'object') {
+      if (itemProps.path === HOME_PAGE) return null;
+      return (
+        <>
+          {itemProps.icon}
+          <span style={{ width: 10 }} />
+        </>
+      );
+    }
+
+    if (typeof itemProps.icon === 'string')
+      return (
+        <>
+          {/* {'svg图标'} */}
+          {/* {itemProps.icon} */}
+          {/* <IconFont type="icon--astonished" /> */}
+          {/* <span style={{ width: 10 }} /> */}
+        </>
+      );
+    return null;
+  };
   return (
     <ProLayout
       {...props}
-      title="Lighting Admin"
+      title={GlobalConfig.AppName}
       onMenuHeaderClick={() => history.push('/')}
-      menuItemRender={(menuItemProps, defaultDom: React.ReactNode | any) => {
-        if (
-          menuItemProps.isUrl ||
-          !menuItemProps.path ||
-          location.pathname === menuItemProps.path
-        ) {
-          return defaultDom;
-        }
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+      menuItemRender={(itemProps, defaultDom: React.ReactNode | any, menuProps) => {
+        return (
+          <>
+            {IconChildren(itemProps)}
+            {ItemChildren(itemProps, defaultDom)}
+          </>
+        );
       }}
       breadcrumbRender={(routers = []) => [
         {
-          path: '/dashboard',
+          path: HOME_PAGE,
           breadcrumbName: '首页',
         },
         ...routers,
@@ -64,7 +95,7 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
       links={links}
       itemRender={(route, _, routes) => {
         return routes.indexOf(route) === 0 ? (
-          <Link to={'/dashboard'}>首页</Link>
+          <Link to={HOME_PAGE}>首页</Link>
         ) : (
           <span>{route.breadcrumbName}</span>
         );
@@ -72,7 +103,7 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
       {...initialState?.settings}
     >
       <ConfigProvider>
-        <TabsView home="/dashboard">{children}</TabsView>
+        <TabsView home={HOME_PAGE}>{children}</TabsView>
         {!props.location?.pathname?.includes('/login') && (
           <SettingDrawer
             disableUrlParams

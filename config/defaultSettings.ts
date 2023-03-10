@@ -16,7 +16,7 @@ const Settings: ProLayoutProps & {
   contentWidth: 'Fluid',
   fixedHeader: true,
   fixSiderbar: true,
-  colorWeak: false,
+  colorWeak: true,
   title: GlobalConfig.AppName,
   pwa: false,
   logo,

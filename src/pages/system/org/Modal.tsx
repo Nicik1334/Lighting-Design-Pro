@@ -53,7 +53,18 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
         loading={loading1}
         checkable={false}
         treeList={theeData}
-        titleRender={(item: any) => <div>{item.orgName}</div>}
+        titleRender={(item: any) => {
+          return (
+            <>
+              {item.orgName}
+              {item?.children && item?.children.length > 0 && (
+                <span
+                  style={{ color: '#BDBDBD', letterSpacing: 1 }}
+                >{` (${item?.children.length})`}</span>
+              )}
+            </>
+          );
+        }}
         onSelect={(_, item: any) => {
           props[0].onChange({
             label: item.node.orgName,

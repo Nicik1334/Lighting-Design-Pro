@@ -1,13 +1,11 @@
-import { LOGIN_PATH } from '@/constants';
-import { outLogin } from '@/services/ant-design-pro/api';
-import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SafetyCertificateOutlined, SettingOutlined } from '@ant-design/icons';
 import { Avatar, Modal, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
-import { stringify } from 'querystring';
-import React from 'react';
+import React, { useState } from 'react';
 import { history, useModel, useDispatch } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import Password from './Password';
 const { confirm } = Modal;
 
 export type GlobalHeaderRightProps = {
@@ -17,6 +15,8 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const dispatch = useDispatch<any>();
+  const [open, setOpen] = useState(false);
+
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin
@@ -42,6 +42,19 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
             key: 'settings',
             icon: <SettingOutlined />,
             label: <div onClick={() => history.push('/account/settings')}>个人设置</div>,
+          },
+          {
+            key: 'password',
+            label: (
+              <a
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                密码修改
+              </a>
+            ),
+            icon: <SafetyCertificateOutlined />,
           },
           {
             type: 'divider' as const,
@@ -73,12 +86,15 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   ];
 
   return (
-    <HeaderDropdown menu={{ items: menuItems }}>
-      <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span>
-      </span>
-    </HeaderDropdown>
+    <div>
+      <HeaderDropdown menu={{ items: menuItems }}>
+        <span className={`${styles.action} ${styles.account}`}>
+          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+        </span>
+      </HeaderDropdown>
+      <Password open={open} onOpenChange={setOpen} onChange={() => {}} />
+    </div>
   );
 };
 

@@ -68,6 +68,7 @@ export default [
           },
           {
             name: '菜单管理',
+            icon: 'smile',
             path: '/system/menu',
             component: './system/menu',
           },
@@ -91,6 +92,7 @@ export default [
           },
           {
             name: '组织管理',
+            icon: 'org',
             path: '/system/org',
             component: './system/org',
           },

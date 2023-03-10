@@ -3,6 +3,7 @@
 export const USER_TOKEN = `USER_TOKEN`;
 
 export const LOGIN_PATH = '/user/login'; // 登录页路由
+export const HOME_PAGE = '/dashboard'; // 首页路由
 
 export const NOTIFICATION_TYPES = {
   success: '操作成功',

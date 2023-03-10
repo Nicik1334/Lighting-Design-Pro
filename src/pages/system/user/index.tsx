@@ -14,7 +14,7 @@ import { ProCard } from '@ant-design/pro-components';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { getOrgChildren, getUserList } from './server';
 import TreeSlider from '@/components/common/TreeSlider';
-import { useRequest } from 'ahooks';
+import { useRequest, useThrottleFn } from 'ahooks';
 import type { DataNode } from 'antd/lib/tree';
 
 const onFormat = (nodes: any[]): DataNode[] => {
@@ -38,6 +38,13 @@ const User: FC<UserProps> = () => {
   const [loading, setLoading] = useState(false);
   const [theeData, setTheeData] = useState<DataNode[]>([]);
 
+  const { run } = useThrottleFn(
+    (_, item) => {
+      console.log(item.node);
+      tableRef.current?.onSearch();
+    },
+    { wait: 1000 },
+  );
   const { loading: loading1 } = useRequest(getOrgChildren, {
     onSuccess: (result) => {
       if (result.success) {
@@ -180,11 +187,19 @@ const User: FC<UserProps> = () => {
               loading={loading1}
               checkable={false}
               treeList={theeData}
-              titleRender={(item: any) => <div>{item.orgName}</div>}
-              onSelect={(_, item) => {
-                console.log(item.node);
-                tableRef.current?.onSearch();
+              titleRender={(item: any) => {
+                return (
+                  <>
+                    {item.orgName}
+                    {item?.children && item?.children.length > 0 && (
+                      <span
+                        style={{ color: '#BDBDBD', letterSpacing: 1 }}
+                      >{` (${item?.children.length})`}</span>
+                    )}
+                  </>
+                );
               }}
+              onSelect={run}
             />
           </Col>
           <Col span={18}>

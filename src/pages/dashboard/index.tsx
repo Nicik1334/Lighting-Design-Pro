@@ -1,30 +1,19 @@
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Hamster from '@/components/common/Hamster';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
+import { useRafInterval } from 'ahooks';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  useRafInterval(() => {
+    setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
+  }, 1000);
   return (
     <PageContainer breadcrumbRender={false}>
       <ProCard>
-        {/* <Button
-          onClick={() => {
-            Nprogress.start();
-          }}
-        >
-          开始
-        </Button> */}
         {/* <Button onClick={() => history.push('/404')}>404</Button>
         <Button onClick={() => history.push('/')}>首页</Button>
         <Button onClick={() => history.push('/form')}>form</Button> */}

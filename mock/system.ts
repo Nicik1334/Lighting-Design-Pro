@@ -213,7 +213,7 @@ const waitTime = (time: number = 100) => {
 
 export default {
   'POST /api/getUserList': async (req: Request, res: Response) => {
-    await waitTime(2000);
+    await waitTime(1000);
     res.send({
       code: '200',
       success: true,
@@ -222,7 +222,7 @@ export default {
     });
   },
   'POST /api/getdictList': async (req: Request, res: Response) => {
-    await waitTime(2000);
+    await waitTime(1000);
     res.send({
       code: '200',
       success: true,
@@ -231,7 +231,7 @@ export default {
     });
   },
   'GET /api/getDetailList': async (req: Request, res: Response) => {
-    await waitTime(2000);
+    await waitTime(1000);
     res.send({
       code: '200',
       success: true,
@@ -239,7 +239,7 @@ export default {
     });
   },
   'POST /api/pageRole': async (req: Request, res: Response) => {
-    await waitTime(2000);
+    await waitTime(1000);
     res.send({
       code: '200',
       success: true,

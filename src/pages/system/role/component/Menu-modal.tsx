@@ -81,7 +81,14 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
                   <div style={{ color: '#848587' }}>{`${item.nodeData.menuDesc}`}</div>
                 </>
               ) : (
-                <div>{item.nodeName}</div>
+                <div>
+                  {item.nodeName}
+                  {item?.children && item?.children.length > 0 && (
+                    <span
+                      style={{ color: '#BDBDBD', letterSpacing: 1 }}
+                    >{` (${item?.children.length})`}</span>
+                  )}
+                </div>
               )}
             </Space>
           )}

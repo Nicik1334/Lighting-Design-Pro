@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Button, Popconfirm, Space, Switch, Table, Tag } from 'antd';
+import { Button, Popconfirm, Space, Table, Tag } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -63,7 +63,7 @@ const Menu: FC = () => {
       align: 'center',
     },
     {
-      title: '菜单链接',
+      title: '路由地址',
       dataIndex: 'menuUrl',
       align: 'center',
     },

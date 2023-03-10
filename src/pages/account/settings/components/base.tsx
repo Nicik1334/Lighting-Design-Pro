@@ -39,7 +39,6 @@ const BaseView: React.FC = () => {
             <LForm
               labelWidth={90}
               form={form}
-              name="lform-demo"
               layout="horizontal"
               onFinish={handleFinish}
               submitter={{

@@ -1,4 +1,6 @@
 @import '~antd/es/style/variable.less';
+@import '../src//assets/css/nprogress.less';
+@import '../src//assets/css/animate.less';
 
 html,
 body,
@@ -6,30 +8,23 @@ body,
   height: 100%;
 }
 
-.colorWeak {
-  filter: invert(80%);
-}
+html,
+body,
+div {
+  &::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+  }
 
-.ant-layout {
-  min-height: 100vh;
-}
+  &::-webkit-scrollbar-thumb {
+    background-color: #90939970;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    border-radius: 7px;
+  }
 
-.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
-  left: unset;
-}
-
-.ant-layout-content {
-  margin: 0;
-}
-
-// 操作栏按钮样式
-.action_bar {
-  .ant-btn {
-    padding: 4px 6px;
-    & > span + .anticon,
-    & > .anticon + span {
-      margin-left: 4px;
-    }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
 }
 
@@ -67,87 +62,32 @@ ol {
   }
 }
 
-/* ----------nprogress start--------------- */
-#nprogress {
-  pointer-events: none;
+.colorWeak {
+  filter: invert(80%);
 }
 
-#nprogress .bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1031;
-  width: 100%;
-  height: 2px !important;
-  background: @primary-color !important;
-  border-radius: 50px;
+.ant-layout {
+  min-height: 100vh;
 }
 
-/* Fancy blur effect */
-#nprogress .peg {
-  position: absolute;
-  right: 0;
-  display: block;
-  width: 100;
-  height: 100%;
-  box-shadow: 0 0 10px @primary-color, 0 0 5px @primary-color !important;
-  -webkit-transform: rotate(3deg) translate(0, -4px);
-  -ms-transform: rotate(3deg) translate(0, -4px);
-  transform: rotate(3deg) translate(0, -4px);
-  opacity: 1;
+.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: unset;
 }
 
-#nprogress .spinner {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 1031;
-  display: block;
+.ant-layout-content {
+  margin: 0;
 }
 
-#nprogress .spinner-icon {
-  box-sizing: border-box;
-  width: 18px;
-  height: 18px;
-  border: solid 2px transparent;
-  border-top-color: @primary-color !important;
-  border-left-color: @primary-color !important;
-  border-radius: 50%;
-  -webkit-animation: nprogress-spinner 400ms linear infinite;
-  animation: nprogress-spinner 400ms linear infinite;
-}
-
-.nprogress-custom-parent {
-  position: relative;
-  overflow: hidden;
-}
-
-.nprogress-custom-parent #nprogress .spinner,
-.nprogress-custom-parent #nprogress .bar {
-  position: absolute;
-}
-
-@-webkit-keyframes nprogress-spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
+// 操作栏按钮样式
+.action_bar {
+  .ant-btn {
+    padding: 4px 6px;
+    & > span + .anticon,
+    & > .anticon + span {
+      margin-left: 4px;
+    }
   }
 }
-
-@keyframes nprogress-spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* ---------nprogress end---------------- */
 
 // Compatible with IE11
 @media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {

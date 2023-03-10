@@ -1,13 +1,9 @@
 import type { FormInstance } from 'antd';
-import { Divider, Popconfirm, Space } from 'antd';
-import { Tag } from 'antd';
-import { Button } from 'antd';
+import { Popconfirm, Space, Button, Tag } from 'antd';
 import type { FC } from 'react';
-import { useContext } from 'react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import type { LTableInstance } from 'lighting-design';
-import { LFormItemInput, LFormItemSelect } from 'lighting-design';
-import { LTable } from 'lighting-design';
+import { LFormItemInput, LFormItemSelect, LTable } from 'lighting-design';
 import type { ColumnsType } from 'antd/lib/table';
 import { getdictList } from '../../service';
 import { awaitTime } from '@/utils';
@@ -15,14 +11,15 @@ import { DicContext } from '../..';
 import type { DictionaryItemType } from '../../interface';
 import LabelModal from './modal';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useThrottleFn } from 'ahooks';
 
 const LabelList: FC = () => {
   const formRef = useRef<FormInstance>();
   const tableRef = useRef<LTableInstance>();
   const [open, setOpen] = useState(false);
   const [editableRecord, setEditablRecord] = useState<Record<string, any>>();
-
   const { setRecord } = useContext(DicContext);
+  const { run } = useThrottleFn((record) => setRecord({ ...record }), { wait: 500 });
 
   const formItems = [
     <LFormItemInput key="0" name="name" label="字典名称" />,
@@ -163,6 +160,12 @@ const LabelList: FC = () => {
         columns={columns}
         pagination={{
           pageSize: 6,
+        }}
+        onRow={(record) => {
+          return {
+            style: { cursor: 'pointer' },
+            onClick: () => run({ ...record }),
+          };
         }}
         request={getdictList}
       />
