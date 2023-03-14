@@ -1,8 +1,9 @@
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, setTwoToneColor } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-layout';
 import { Spin } from 'antd';
 import { history } from 'umi';
+import type { SettingsTypes } from '../config/defaultSettings';
 import defaultSettings from '../config/defaultSettings';
 import { LOGIN_PATH } from './constants';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
@@ -24,7 +25,7 @@ const fetchUserInfo = async () => {
 };
 
 export async function getInitialState(): Promise<{
-  settings?: Partial<LayoutSettings>;
+  settings?: Partial<LayoutSettings & SettingsTypes>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
@@ -45,3 +46,4 @@ export async function getInitialState(): Promise<{
 }
 
 Spin.setDefaultIndicator(<LoadingOutlined spin />);
+setTwoToneColor(defaultSettings.primaryColor as string);

@@ -1,19 +1,25 @@
 import TreeSlider from '@/components/common/TreeSlider';
+import IconModal, { IconFont } from '@/components/system/IconModal';
 import { awaitTime } from '@/utils';
-import { ToolFilled } from '@ant-design/icons';
+import Icon, * as antIcons from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Col, Row } from 'antd';
 import type { DataNode } from 'antd/lib/tree';
 import type { LModalFormProps } from 'lighting-design';
-import { LDrawerForm } from 'lighting-design';
-import { LFormItem, LFormItemRadio, LFormItemTextArea } from 'lighting-design';
-import { LTrigger } from 'lighting-design';
-import { LForm, LFormItemInput } from 'lighting-design';
+import {
+  LDrawerForm,
+  LFormItem,
+  LFormItemRadio,
+  LFormItemTextArea,
+  LTrigger,
+  LForm,
+  LFormItemInput,
+} from 'lighting-design';
 import type { FC } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getMenuItem } from '../server';
 
+const iconStyle = { fontSize: 20, color: '#10101090', verticalAlign: 'middle' };
 interface BasicModalProps extends LModalFormProps {
   data: any;
   onChange: () => void;
@@ -34,7 +40,9 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
   const [form] = LForm.useForm();
   const [theeData, setTheeData] = useState<DataNode[]>([]);
   const [menuType, setMenuType] = useState<number>(1);
-  const { loading: loading1 } = useRequest(getMenuItem, {
+  const [visible, setVisible] = useState<boolean>(false);
+  const [iconItem, setIconItem] = useState<string>('');
+  const { loading } = useRequest(getMenuItem, {
     onSuccess: (result) => {
       if (result.success) {
         const { data: d } = result;
@@ -52,6 +60,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
           value: data.nodeId,
         },
       });
+      setIconItem(data.icon || '');
     }
   }, [open, data, form]);
 
@@ -59,7 +68,7 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
     return (
       <TreeSlider
         placeholder="筛选菜单"
-        loading={loading1}
+        loading={loading}
         checkable={false}
         treeList={theeData}
         titleRender={(item: any) => {
@@ -167,7 +176,25 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
           />
         </Col>
         <Col span={12}>
-          <LFormItemInput name="icon" label="菜单图标" contentAfter={<ToolFilled />} />
+          <LFormItemInput
+            name="icon"
+            label="菜单图标"
+            style={{ cursor: 'pointer' }}
+            contentAfter={
+              iconItem &&
+              (antIcons[iconItem] ? (
+                <Icon style={iconStyle} component={antIcons[iconItem]} />
+              ) : (
+                <IconFont type={iconItem} style={iconStyle} />
+              ))
+            }
+            inputProps={{
+              onClick: () => setVisible(true),
+              onChange: (e) => {
+                if (!e) setIconItem('');
+              },
+            }}
+          />
         </Col>
         <Col span={12}>
           <LFormItemRadio
@@ -208,7 +235,16 @@ const BasicModal: FC<BasicModalProps> = ({ data, onChange, open, ...restProps })
           />
         </>
       )}
-      <LFormItemTextArea name="menuDesc" label={`菜单描述`} />
+      <LFormItemTextArea name="menuDesc" label="菜单描述" />
+      <IconModal
+        open={visible}
+        onChange={(key) => {
+          setVisible(false);
+          form.setFieldValue('icon', key);
+          setIconItem(key);
+        }}
+        cancel={setVisible}
+      />
     </LDrawerForm>
   );
 };

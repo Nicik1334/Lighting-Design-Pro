@@ -138,7 +138,7 @@ const Menu: FC = () => {
         content: '超级管理员',
       }}
     >
-      <ProCard bordered={false}>
+      <ProCard>
         <LTable
           rowKey="nodeId"
           loading={{ size: 'large', tip: '加载中...' }}

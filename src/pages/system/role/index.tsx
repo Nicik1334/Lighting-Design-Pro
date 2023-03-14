@@ -133,7 +133,7 @@ const Role: FC<RoleProps> = () => {
         content: '超级管理员',
       }}
     >
-      <ProCard bordered={false}>
+      <ProCard>
         <LTable
           tableLayout="fixed"
           isSort

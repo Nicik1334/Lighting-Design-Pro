@@ -1,6 +1,6 @@
 import RightContent from '@/components/system/RightContent';
 import TabsView from '@/components/common/TabsView';
-import { BookOutlined, LinkOutlined, createFromIconfontCN } from '@ant-design/icons';
+import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { MenuDataItem, ProLayoutProps } from '@ant-design/pro-components';
 import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
 import { ConfigProvider } from 'antd';
@@ -8,6 +8,7 @@ import React, { useCallback } from 'react';
 import { Link, history, useModel, Redirect } from 'umi';
 import GlobalConfig from '@/global';
 import { HOME_PAGE } from '@/constants';
+import { IconFont } from '@/components/system/IconModal';
 
 export const isDev = process.env.NODE_ENV === 'development';
 const links = isDev
@@ -28,9 +29,6 @@ const links = isDev
     ]
   : [];
 
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3943750_gii3rp8y9ke.js',
-});
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
   const { children } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -39,12 +37,14 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
   if (window.location.pathname === '/') return <Redirect to={HOME_PAGE} />;
 
   const ItemChildren = useCallback((itemProps, defaultDom) => {
+    if (!itemProps) return null;
     if (itemProps.isUrl || !itemProps.path || location.pathname === itemProps.path)
       return <a>{defaultDom}</a>;
     return <Link to={itemProps.path}>{defaultDom}</Link>;
   }, []);
 
   const IconChildren = (itemProps: MenuDataItem) => {
+    if (!itemProps) return null;
     if (typeof itemProps.icon === 'object') {
       if (itemProps.path === HOME_PAGE) return null;
       return (
@@ -54,14 +54,11 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
         </>
       );
     }
-
-    if (typeof itemProps.icon === 'string')
+    if (typeof itemProps.icon === 'string' && itemProps.icon.includes('icon'))
       return (
         <>
-          {/* {'svg图标'} */}
-          {/* {itemProps.icon} */}
-          {/* <IconFont type="icon--astonished" /> */}
-          {/* <span style={{ width: 10 }} /> */}
+          <IconFont type={itemProps.icon} />
+          <span style={{ width: 10 }} />
         </>
       );
     return null;
@@ -71,7 +68,7 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
       {...props}
       title={GlobalConfig.AppName}
       onMenuHeaderClick={() => history.push('/')}
-      menuItemRender={(itemProps, defaultDom: React.ReactNode | any, menuProps) => {
+      menuItemRender={(itemProps, defaultDom: React.ReactNode | any) => {
         return (
           <>
             {IconChildren(itemProps)}

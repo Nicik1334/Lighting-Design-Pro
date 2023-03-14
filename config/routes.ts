@@ -24,13 +24,13 @@ export default [
     routes: [
       {
         name: '首页',
-        icon: 'smile',
+        icon: 'SmileOutlined',
         path: '/dashboard',
         component: './dashboard',
       },
       {
         path: '/form',
-        icon: 'form',
+        icon: 'FormOutlined',
         name: '表单页',
         routes: [
           {
@@ -39,19 +39,16 @@ export default [
           },
           {
             name: '基础表单',
-            icon: 'smile',
             path: '/form/basic-form',
             component: './form/basic-form',
           },
           {
             name: '弹窗表单',
-            icon: 'calendar',
             path: '/form/modal-form',
             component: './form/modal-form',
           },
           {
             name: '分步表单',
-            icon: 'calendar',
             path: '/form/step-form',
             component: './form/step-form',
           },
@@ -59,7 +56,7 @@ export default [
       },
       {
         path: '/system',
-        icon: 'picLeft',
+        icon: 'SettingOutlined',
         name: '系统管理',
         routes: [
           {
@@ -68,38 +65,38 @@ export default [
           },
           {
             name: '菜单管理',
-            icon: 'smile',
+            icon: 'MenuFoldOutlined',
             path: '/system/menu',
             component: './system/menu',
           },
           {
             name: '字典管理',
-            icon: 'smile',
+            icon: 'TagsOutlined',
             path: '/system/dictionary',
             component: './system/dictionary',
           },
           {
             name: '人员管理',
-            icon: 'user',
+            icon: 'TeamOutlined',
             path: '/system/user',
             component: './system/user',
           },
           {
             name: '角色管理',
-            icon: 'role',
+            icon: 'UserSwitchOutlined',
             path: '/system/role',
             component: './system/role',
           },
           {
             name: '组织管理',
-            icon: 'org',
+            icon: 'BranchesOutlined',
             path: '/system/org',
             component: './system/org',
           },
         ],
       },
       {
-        icon: 'smile',
+        icon: 'PicRightOutlined',
         name: '多级菜单',
         path: '/nested',
         routes: [
@@ -165,7 +162,6 @@ export default [
           },
           {
             name: '基础列表',
-            icon: 'smile',
             path: '/table/basic-table',
             component: './table/basic-table',
           },
@@ -173,7 +169,7 @@ export default [
       },
       {
         name: '个人页',
-        icon: 'user',
+        icon: 'icon--cool-',
         path: '/account',
         routes: [
           {
@@ -182,7 +178,7 @@ export default [
           },
           {
             name: '个人设置',
-            icon: 'smile',
+            icon: 'icon-huangguan',
             path: '/account/settings',
             component: './account/settings',
           },

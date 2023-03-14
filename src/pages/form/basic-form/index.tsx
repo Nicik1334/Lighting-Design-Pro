@@ -90,7 +90,7 @@ const BasicForm: FC<Record<string, any>> = () => {
         content: '超级管理员',
       }}
     >
-      <ProCard bordered={false}>
+      <ProCard>
         <LForm
           labelWidth={90}
           submitter={{ buttonAlign: 90 }}

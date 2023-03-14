@@ -114,7 +114,7 @@ const User: FC<UserProps> = () => {
         content: '超级管理员',
       }}
     >
-      <ProCard bordered={false}>
+      <ProCard>
         <LTable
           rowKey="orgId"
           loading={{ size: 'large', tip: '加载中...' }}

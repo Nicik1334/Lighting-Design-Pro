@@ -11,13 +11,20 @@ import { Dropdown, Space, Tabs } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps } from './data';
 import NProgress from '@/components/common/NProgress';
 import styles from './index.less';
+import { IconFont } from '@/components/system/IconModal';
 
 const type = 'DraggableTabNode';
 
+const tabIconStyle = {
+  display: 'inline-block',
+  verticalAlign: 'middle',
+  transition: 'width .2s',
+  overflow: 'hidden',
+};
 const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ isOver, dropClassName }, drop] = useDrop({
@@ -56,6 +63,8 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
   closeOtherPage,
   refreshPage,
 }) => {
+  const { initialState } = useModel('@@initialState');
+
   const fullRef = useRef(null);
   const [isFull, setIsFull] = useState<boolean>(false);
   useKeyPress('esc', () => {
@@ -218,6 +227,15 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                       setTimeout(() => NProgress.done(), 300);
                     }}
                   >
+                    {initialState?.settings?.tabIcon && (
+                      <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
+                        {typeof item.icon === 'string' && item.icon.includes('icon') ? (
+                          <IconFont type={item.icon} />
+                        ) : (
+                          item.icon
+                        )}
+                      </div>
+                    )}
                     {item.title}
                     <div className={styles.drop_down_span} />
                   </div>
@@ -238,7 +256,6 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 <div
                   className={item.active ? 'animate__animated animate__fadeIn' : ''}
                   style={{ animationDuration: '.8s' }}
-                  // style={!item.active ? { contentVisibility: 'auto' } : {}}
                 >
                   {item.children}
                 </div>

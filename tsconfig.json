@@ -37,7 +37,8 @@
     ".prettierrc.js",
     "jest.config.js",
     "mock/*",
-    "commitlint.config.js"
+    "commitlint.config.js",
+    "public/fontIcon.js"
   ],
   "exclude": ["node_modules", "build", "dist", "scripts", "src/.umi/*", "webpack", "jest"]
 }

@@ -65,7 +65,7 @@ const BasicForm: FC<Record<string, any>> = () => {
               amount: 5000,
             }}
           >
-            <ProCard bordered={false}>
+            <ProCard>
               <LFormItemSelect
                 name="receiverAccount"
                 label="付款账户"
@@ -120,7 +120,7 @@ const BasicForm: FC<Record<string, any>> = () => {
               forceShowSubmit: true,
             }}
           >
-            <ProCard bordered={false}>
+            <ProCard>
               <Alert
                 closable
                 showIcon

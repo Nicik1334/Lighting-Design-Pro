@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Popconfirm, Space, Table, Col, Row, Button, Tag } from 'antd';
+import { Popconfirm, Space, Table, Button, Tag } from 'antd';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -179,95 +179,92 @@ const User: FC<UserProps> = () => {
         content: '超级管理员',
       }}
     >
-      <ProCard bordered={false}>
-        <Row gutter={16}>
-          <Col span={6}>
-            <TreeSlider
-              placeholder="筛选部门"
-              loading={loading1}
-              checkable={false}
-              treeList={theeData}
-              titleRender={(item: any) => {
-                return (
-                  <>
-                    {item.orgName}
-                    {item?.children && item?.children.length > 0 && (
-                      <span
-                        style={{ color: '#BDBDBD', letterSpacing: 1 }}
-                      >{` (${item?.children.length})`}</span>
-                    )}
-                  </>
-                );
-              }}
-              onSelect={run}
-            />
-          </Col>
-          <Col span={18}>
-            <LTable
-              tableLayout="fixed"
-              isSort
-              rowKey="id"
-              size="small"
-              loading={{ size: 'large', tip: '加载中...' }}
-              scroll={{ x: 1200 }}
-              toolbarLeft={
+      <ProCard>
+        <ProCard colSpan={6} ghost={true}>
+          <TreeSlider
+            placeholder="筛选部门"
+            loading={loading1}
+            checkable={false}
+            treeList={theeData}
+            titleRender={(item: any) => {
+              return (
                 <>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setEditablRecord(undefined);
-                      setOpen(true);
-                    }}
-                  >
-                    新增
-                  </Button>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      setLoading(true);
-                      awaitTime(1000);
-                      setLoading(false);
-                    }}
-                    disabled={selectedRowKeys.length === 0}
-                    loading={loading}
-                  >
-                    删除
-                  </Button>
-                  <span style={{ marginLeft: 8 }}>
-                    {selectedRowKeys.length !== 0 ? `选中了 ${selectedRowKeys.length} 条数据` : ''}
-                  </span>
+                  {item.orgName}
+                  {item?.children && item?.children.length > 0 && (
+                    <span
+                      style={{ color: '#BDBDBD', letterSpacing: 1 }}
+                    >{` (${item?.children.length})`}</span>
+                  )}
                 </>
-              }
-              toolbarRight={
-                <>
-                  <Button type="default" icon={<DownloadOutlined />} onClick={() => {}}>
-                    导入
-                  </Button>
-                  <Button icon={<UploadOutlined />} type="default" onClick={() => {}}>
-                    导出
-                  </Button>
-                </>
-              }
-              rowSelection={rowSelection}
-              formItems={formItems}
-              tableRef={tableRef}
-              formRef={formRef}
-              columns={columns}
-              request={getUserList}
-            />
-          </Col>
-        </Row>
-
-        <BasicModal
-          open={open}
-          onOpenChange={setOpen}
-          data={editableRecord}
-          onChange={() => {
-            tableRef.current?.onReload();
-          }}
-        />
+              );
+            }}
+            onSelect={run}
+          />
+        </ProCard>
+        <ProCard colSpan={18}>
+          <LTable
+            tableLayout="fixed"
+            isSort
+            rowKey="id"
+            size="small"
+            loading={{ size: 'large', tip: '加载中...' }}
+            scroll={{ x: 1200 }}
+            toolbarLeft={
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setEditablRecord(undefined);
+                    setOpen(true);
+                  }}
+                >
+                  新增
+                </Button>
+                <Button
+                  type="primary"
+                  danger
+                  onClick={() => {
+                    setLoading(true);
+                    awaitTime(1000);
+                    setLoading(false);
+                  }}
+                  disabled={selectedRowKeys.length === 0}
+                  loading={loading}
+                >
+                  删除
+                </Button>
+                <span style={{ marginLeft: 8 }}>
+                  {selectedRowKeys.length !== 0 ? `选中了 ${selectedRowKeys.length} 条数据` : ''}
+                </span>
+              </>
+            }
+            toolbarRight={
+              <>
+                <Button type="default" icon={<DownloadOutlined />} onClick={() => {}}>
+                  导入
+                </Button>
+                <Button icon={<UploadOutlined />} type="default" onClick={() => {}}>
+                  导出
+                </Button>
+              </>
+            }
+            rowSelection={rowSelection}
+            formItems={formItems}
+            tableRef={tableRef}
+            formRef={formRef}
+            columns={columns}
+            request={getUserList}
+          />
+        </ProCard>
       </ProCard>
+      <BasicModal
+        open={open}
+        onOpenChange={setOpen}
+        data={editableRecord}
+        onChange={() => {
+          tableRef.current?.onReload();
+        }}
+      />
     </PageContainer>
   );
 };
