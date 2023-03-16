@@ -45,5 +45,5 @@ export async function getInitialState(): Promise<{
   };
 }
 
-Spin.setDefaultIndicator(<LoadingOutlined spin />);
-setTwoToneColor(defaultSettings.primaryColor as string);
+Spin.setDefaultIndicator(<LoadingOutlined spin />); // 设置全局loading样式
+setTwoToneColor(defaultSettings.primaryColor as string); // 设置全局twoTone图标颜色

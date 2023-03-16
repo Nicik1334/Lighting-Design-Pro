@@ -2,7 +2,7 @@ import type { RouteContextType } from '@ant-design/pro-layout';
 import { RouteContext } from '@ant-design/pro-layout';
 import type { MenuDataItem } from '@umijs/route-utils';
 import { parse } from 'query-string';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import TabsMenu from './TabsMenu';
 import type { TagsItemType } from './TabsMenu/data';
@@ -13,6 +13,43 @@ interface TagViewProps {
    */
   home: string;
 }
+interface TagViewContextProps {
+  /**
+   * 关闭所有标签
+   */
+  handleCloseAll: () => void;
+  /**
+   * 关闭其他标签
+   */
+  handleCloseOther: () => void;
+  /**
+   * 关闭当前标签
+   */
+  handleClosePage: (
+    tag:
+      | {
+          path?: string;
+        }
+      | ((t: TagsItemType) => TagsItemType),
+  ) => void;
+  /**
+   * 刷新选择的标签
+   */
+  handleRefreshPage: (
+    tag:
+      | {
+          path?: string;
+        }
+      | ((t: TagsItemType) => TagsItemType),
+  ) => void;
+}
+
+export const TagViewContext = createContext<TagViewContextProps>({
+  handleCloseAll: () => {},
+  handleClosePage: () => {},
+  handleCloseOther: () => {},
+  handleRefreshPage: () => {},
+});
 
 /**
  * @component TagView 标签页组件
@@ -20,7 +57,7 @@ interface TagViewProps {
 const TagView: React.FC<TagViewProps> = ({ children, home }) => {
   const [tagList, setTagList] = useState<TagsItemType[]>([]);
   const [_, setCurrentPath] = useState<any>();
-  const [pathKey, setPathKey] = useState<any>('');
+  const [pathKey, setPathKey] = useState<string>();
   const routeContextRef = useRef<RouteContextType>();
 
   //递归获取重定向路由
@@ -44,12 +81,12 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
       const ItemData = currentData(redirect, menuData.reverse(), [])[0];
       setTagList([
         {
-          title: ItemData?.name,
+          title: ItemData.name,
           path: redirect,
           children,
           refresh: 0,
           active: true,
-          icon: ItemData?.icon,
+          icon: ItemData.icon,
         },
       ]);
     } else {
@@ -70,7 +107,6 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
           break;
         default:
           // 正常跳转
-          // history.push({ pathname: path, query });
           setPathKey(path);
           setTagList([
             {
@@ -190,7 +226,7 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
           children: <div className="animate__animated animate__fadeIn">{children}</div>,
         };
       }
-      return { ...item, title: item.title, active: false };
+      return { ...item, active: false };
     });
     setTagList(tagsList);
   };
@@ -201,14 +237,37 @@ const TagView: React.FC<TagViewProps> = ({ children, home }) => {
 
   return (
     <>
-      <TabsMenu
-        tagList={tagList}
-        closePage={handleClosePage}
-        closeAllPage={handleCloseAll}
-        closeOtherPage={handleCloseOther}
-        refreshPage={handleRefreshPage}
-        activeKey={pathKey}
-      />
+      <TagViewContext.Provider
+        value={{
+          handleCloseAll,
+          handleCloseOther,
+          handleClosePage: (close) => {
+            const currentTag = tagList.find(
+              (item) => item.path === history.location.pathname,
+            ) as TagsItemType;
+            handleClosePage(
+              typeof close === 'function' ? close(currentTag) : (close as TagsItemType),
+            );
+          },
+          handleRefreshPage: (refresh) => {
+            const currentTag = tagList.find(
+              (item) => item.path === history.location.pathname,
+            ) as TagsItemType;
+            handleRefreshPage(
+              typeof refresh === 'function' ? refresh(currentTag) : (refresh as TagsItemType),
+            );
+          },
+        }}
+      >
+        <TabsMenu
+          tagList={tagList}
+          closePage={handleClosePage}
+          closeAllPage={handleCloseAll}
+          closeOtherPage={handleCloseOther}
+          refreshPage={handleRefreshPage}
+          activeKey={pathKey as string}
+        />
+      </TagViewContext.Provider>
       <RouteContext.Consumer>
         {(value: RouteContextType) => {
           setTimeout(() => {

@@ -253,10 +253,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                       }
                 }
               >
-                <div
-                  className={item.active ? 'animate__animated animate__fadeIn' : ''}
-                  style={{ animationDuration: '.8s' }}
-                >
+                <div className={item.active ? 'animate__animated animate__fadeIn' : ''}>
                   {item.children}
                 </div>
               </div>

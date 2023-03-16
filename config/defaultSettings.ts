@@ -7,6 +7,10 @@ export interface SettingsTypes {
   pwa?: boolean;
   logo?: string;
   /**
+   * 展示tab栏
+   */
+  tabView: boolean;
+  /**
    * 展示路由Tab图标
    */
   tabIcon: boolean;
@@ -26,6 +30,7 @@ const Settings: ProLayoutProps & SettingsTypes = {
   pwa: false,
   logo,
   tabIcon: true,
+  tabView: true,
 };
 
 export default Settings;

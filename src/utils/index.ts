@@ -252,7 +252,7 @@ function formartDate(val: any, type: 'date' | 'datetime' = 'datetime') {
 
 /**
  * file类型转base地址
- * @param file
+ * @param {File} file
  * @returns
  */
 const getImgBase64Url = (file: File) => {

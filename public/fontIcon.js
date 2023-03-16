@@ -11,7 +11,7 @@
         i,
         F,
         M = function (c, l) {
-          l.parentNode.insertBefore(c, l);
+          l.parentNode?.insertBefore(c, l);
         };
       if (l && !a.__iconfont__svg__cssinject__) {
         a.__iconfont__svg__cssinject__ = !0;

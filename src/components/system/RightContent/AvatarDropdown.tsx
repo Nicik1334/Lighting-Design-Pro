@@ -1,13 +1,18 @@
-import { LogoutOutlined, SafetyCertificateOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Modal, Spin } from 'antd';
+import {
+  CopyOutlined,
+  LogoutOutlined,
+  SafetyCertificateOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { Avatar, message, Modal, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React, { useState } from 'react';
 import { history, useModel, useDispatch } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import Password from './Password';
-const { confirm } = Modal;
 
+const { confirm } = Modal;
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -55,6 +60,19 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
               </a>
             ),
             icon: <SafetyCertificateOutlined />,
+          },
+          {
+            key: 'copy',
+            icon: <CopyOutlined />,
+            label: (
+              <div
+                onClick={() => {
+                  message.success('复制成功');
+                }}
+              >
+                复制Token
+              </div>
+            ),
           },
           {
             type: 'divider' as const,

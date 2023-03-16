@@ -1,22 +1,34 @@
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Hamster from '@/components/common/Hamster';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
 import { useRafInterval } from 'ahooks';
+import { TagViewContext } from '@/components/common/TabsView';
+import { Button } from 'antd';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   useRafInterval(() => {
     setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   }, 1000);
+
+  const { handleRefreshPage } = useContext(TagViewContext);
+
   return (
     <PageContainer breadcrumbRender={false}>
       <ProCard>
         {/* <Button onClick={() => history.push('/404')}>404</Button>
         <Button onClick={() => history.push('/')}>首页</Button>
         <Button onClick={() => history.push('/form')}>form</Button> */}
+        <Button
+          onClick={() => {
+            handleRefreshPage((tag) => ({ ...tag, path: '/dashboard' }));
+          }}
+        >
+          刷新
+        </Button>
         <Hamster />
         <LNumberRoll type="date" className={styles.numberStyle} value={value} />
         <LTypeit

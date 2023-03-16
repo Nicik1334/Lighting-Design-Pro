@@ -81,7 +81,13 @@ const Index: FC<IconModalProps> = ({ onChange, cancel, open, ...restProps }) => 
       />
       <ul className={styles.iconList}>
         {list.map((item) => (
-          <Tooltip placement="top" title={item} key={item} mouseEnterDelay={0.5}>
+          <Tooltip
+            placement="top"
+            destroyTooltipOnHide
+            title={item}
+            key={item}
+            mouseEnterDelay={0.5}
+          >
             <li className={styles.itemIcon} onClick={() => onChange(item)}>
               {key !== 'DIY' ? <Icon component={antIcons[item]} /> : <IconFont type={item} />}
             </li>

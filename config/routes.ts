@@ -29,6 +29,17 @@ export default [
         component: './dashboard',
       },
       {
+        name: '大屏幕',
+        path: '/dataScreen',
+        component: './dataScreen',
+        // 不展示顶栏
+        headerRender: false,
+        // 不展示页脚
+        footerRender: false,
+        // 不展示菜单
+        menuRender: false,
+      },
+      {
         path: '/form',
         icon: 'FormOutlined',
         name: '表单页',
