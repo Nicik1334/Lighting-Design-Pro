@@ -58,7 +58,7 @@ const User: FC<UserProps> = () => {
         return (
           <PopSwitchState
             checked={state === 1}
-            title={`您确定 ${state === 1 ? '禁用' : '启用'} ${record.orgName} 吗？`}
+            valueName={record.orgName}
             onConfirm={async () => {
               await awaitTime(1000);
               tableRef.current?.onSearch();

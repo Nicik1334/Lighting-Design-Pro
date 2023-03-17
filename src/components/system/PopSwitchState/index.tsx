@@ -1,28 +1,56 @@
 import type { PopconfirmProps, SwitchProps } from 'antd';
-import { Popconfirm, Switch } from 'antd';
+import { Popconfirm, Switch, Tag } from 'antd';
 import type { FC } from 'react';
 
 interface PopStateType {
-  title: PopconfirmProps['title'];
   checked: SwitchProps['checked'];
   onConfirm: PopconfirmProps['onConfirm'];
+  loading?: boolean;
   popconfirmProps?: PopconfirmProps;
   SwitchProps?: SwitchProps;
+  valueName: string;
+  checkedTitle?: string;
+  unCheckedTitle?: string;
 }
-const Index: FC<PopStateType> = ({ popconfirmProps, SwitchProps, title, checked, onConfirm }) => {
+const Index: FC<PopStateType> = ({
+  popconfirmProps,
+  valueName,
+  SwitchProps,
+  checked,
+  loading,
+  checkedTitle = '启用',
+  unCheckedTitle = '禁用',
+  onConfirm,
+}) => {
   return (
     <div>
       <Popconfirm
         placement="topRight"
         okText="确定"
         cancelText="取消"
+        title={
+          <>
+            您确定
+            {checked ? (
+              <Tag color="red" style={{ marginLeft: 8 }}>
+                {unCheckedTitle}
+              </Tag>
+            ) : (
+              <Tag color="success" style={{ marginLeft: 8 }}>
+                {checkedTitle}
+              </Tag>
+            )}
+            <Tag color="default">{valueName}</Tag>
+            吗？
+          </>
+        }
         {...popconfirmProps}
-        title={title}
         onConfirm={onConfirm}
       >
         <Switch
-          unCheckedChildren="禁用"
-          checkedChildren="启用"
+          unCheckedChildren={unCheckedTitle}
+          checkedChildren={checkedTitle}
+          loading={loading}
           {...SwitchProps}
           checked={checked}
         />
