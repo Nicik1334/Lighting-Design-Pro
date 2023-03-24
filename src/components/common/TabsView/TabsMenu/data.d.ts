@@ -33,7 +33,7 @@ export interface TabsMenuProps {
   /**
    * 菜单列表
    */
-  tagList: TagsItemType[];
+  tabList: TagsItemType[];
   /**
    * 选中key
    */

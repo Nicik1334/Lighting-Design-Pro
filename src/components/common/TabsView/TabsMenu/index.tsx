@@ -5,6 +5,8 @@ import {
   ReloadOutlined,
   TagOutlined,
 } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
+import * as antIcons from '@ant-design/icons';
 import { useKeyPress } from 'ahooks';
 import type { TabsProps } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
@@ -13,9 +15,10 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history, useModel } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps } from './data';
-import NProgress from '@/components/common/NProgress';
 import styles from './index.less';
 import { IconFont } from '@/components/system/IconModal';
+import NotPage from '@/pages/404';
+import { NOT_PATH } from '@/constants';
 
 const type = 'DraggableTabNode';
 
@@ -56,7 +59,7 @@ const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) 
 };
 
 const TabsMenu: React.FC<TabsMenuProps> = ({
-  tagList,
+  tabList,
   activeKey,
   closePage,
   closeAllPage,
@@ -156,11 +159,11 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
         }}
         onEdit={(targetKey, action) => {
           if (action === 'remove') {
-            const tabItem = tagList.find((item) => item.path === targetKey);
+            const tabItem = tabList.find((item) => item.path === targetKey);
             if (tabItem) closePage(tabItem);
           }
         }}
-        items={tagList.map((item): any => {
+        items={tabList.map((item): any => {
           return {
             label: (
               <div>
@@ -222,20 +225,20 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 >
                   <div
                     onClick={() => {
-                      NProgress.start();
-                      history.push({ pathname: item.path, query: item.query });
-                      setTimeout(() => NProgress.done(), 300);
+                      if (window.location.pathname !== item.path)
+                        history.push({ pathname: item.path, query: item.query });
                     }}
                   >
-                    {initialState?.settings?.tabIcon && (
-                      <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
-                        {typeof item.icon === 'string' && item.icon.includes('icon') ? (
-                          <IconFont type={item.icon} />
-                        ) : (
-                          item.icon
-                        )}
-                      </div>
-                    )}
+                    {initialState?.settings?.tabView &&
+                      initialState?.settings?.tabView?.tabIcon && (
+                        <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
+                          {typeof item.icon === 'string' && item.icon.includes('icon') ? (
+                            <IconFont type={item.icon} />
+                          ) : (
+                            <Icon component={antIcons[item.icon]} />
+                          )}
+                        </div>
+                      )}
                     {item.title}
                     <div className={styles.drop_down_span} />
                   </div>
@@ -254,7 +257,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 }
               >
                 <div className={item.active ? 'animate__animated animate__fadeIn' : ''}>
-                  {item.children}
+                  {item.path === NOT_PATH ? <NotPage /> : item.children}
                 </div>
               </div>
             ),
