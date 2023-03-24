@@ -47,16 +47,22 @@ const Menu: FC = () => {
     },
     {
       title: '菜单类型',
+      dataIndex: 'menuType',
       align: 'center',
-      render(record) {
+      render(menuType) {
         return (
           <>
-            {record.menuType === 2 ? <Tag color="success">按钮</Tag> : <Tag color="blue">菜单</Tag>}
+            {menuType === 2 ? (
+              <Tag color="success">按钮</Tag>
+            ) : menuType === 1 ? (
+              <Tag color="blue">菜单</Tag>
+            ) : (
+              <Tag color="magenta">目录</Tag>
+            )}
           </>
         );
       },
     },
-
     {
       title: '菜单描述',
       dataIndex: 'menuDesc',

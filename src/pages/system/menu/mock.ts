@@ -691,7 +691,7 @@ const MenuListDatas = [
     menuName: '个人页',
     menuDesc: '个人页',
     menuUrl: '/account',
-    menuType: 1,
+    menuType: 0,
     buttonUrlId: 0,
     parentMenuCode: '1',
     createTime: '2022-09-27 10:26:30',

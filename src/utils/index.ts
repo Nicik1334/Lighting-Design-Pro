@@ -283,6 +283,24 @@ function usechangeLocation(pathname: string, callBack: (location: any) => void) 
 }
 
 /**
+ * 铺平按钮权限
+ * @param authList
+ * @param newList
+ * @returns
+ */
+const onTreeNodes = (authList: MenuType[], newList: string[] = []) => {
+  authList.forEach((item) => {
+    if (item.nodeData.menuType === 2 && item.nodeData.menuUrl) {
+      newList.push(item.nodeData.menuUrl);
+    }
+    if (item.children) {
+      onTreeNodes(item.children, newList);
+    }
+  });
+  return new Set([...newList]);
+};
+
+/**
  *  模拟请求
  * @param time
  * @param data

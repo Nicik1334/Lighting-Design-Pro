@@ -35,6 +35,11 @@ const iconStyles: CSSProperties = {
   cursor: 'pointer',
 };
 
+export interface FormDataType {
+  username: string;
+  password: string;
+}
+
 interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const [type, setType] = useState<string>('account');
@@ -47,16 +52,20 @@ const Login: React.FC<LoginProps> = () => {
     if (userInfo) {
       await setInitialState((s) => ({
         ...s,
-        currentUser: userInfo,
+        currentUser: {
+          ...userInfo,
+          authButton: [],
+          authUrl: [],
+        },
       }));
     }
   };
 
-  const { loading, run: loginRun } = useRequest(login, {
+  const { loading, run: loginRun } = useRequest<HttpResult<any>, API.LoginParams[]>(login, {
     manual: true,
     onSuccess: (result) => {
       if (result.success) {
-        const { data: d } = result as HttpResult;
+        const { data: d } = result;
         sessionStorage.setItem(USER_TOKEN, d.token);
         const params = getPageQuery();
         const { redirect = '/' } = params as { redirect: string };

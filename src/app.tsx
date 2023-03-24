@@ -5,7 +5,8 @@ import { Spin } from 'antd';
 import { history } from 'umi';
 import type { SettingsTypes } from '../config/defaultSettings';
 import defaultSettings from '../config/defaultSettings';
-import { LOGIN_PATH } from './constants';
+import type { ThemeType } from './components/system/HeaderDark';
+import { LOGIN_PATH, THEME_DARK } from './constants';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -35,8 +36,15 @@ export async function getInitialState(): Promise<{
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
-      currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>,
+      currentUser: {
+        ...currentUser,
+        authButton: [],
+        authUrl: [],
+      },
+      settings: {
+        ...defaultSettings,
+        navTheme: sessionStorage.getItem(THEME_DARK) || ('light' as ThemeType),
+      } as Partial<LayoutSettings>,
     };
   }
   return {

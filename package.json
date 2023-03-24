@@ -49,6 +49,7 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "1.1.25",
     "@types/nprogress": "^0.2.0",
+    "@types/react-sticky": "^6.0.4",
     "@umijs/route-utils": "^2.0.0",
     "ahooks": "^3.7.4",
     "antd": "^4.24.8",

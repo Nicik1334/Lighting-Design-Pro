@@ -30,10 +30,6 @@ export default defineConfig({
     'border-radius': '6px',
   },
   esbuild: {},
-  /**
-   * Umi 默认编译 node_modules 下的文件，带来一些收益的同时，也增加了额外的编译时间。
-   * 如果不希望 node_modules 下的文件走 babel 编译，可通过以下配置减少 40% 到 60% 的编译时间。
-   */
   ignoreMomentLocale: true, //忽略 moment 的 locale 文件，用于减少尺寸。
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {

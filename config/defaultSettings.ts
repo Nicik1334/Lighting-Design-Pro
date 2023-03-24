@@ -6,14 +6,18 @@ import GlobalConfig from '@/global';
 export interface SettingsTypes {
   pwa?: boolean;
   logo?: string;
-  /**
-   * 展示tab栏
-   */
-  tabView: boolean;
-  /**
-   * 展示路由Tab图标
-   */
-  tabIcon: boolean;
+  tabView:
+    | {
+        /**
+         * 展示路由Tab图标
+         */
+        tabIcon: boolean;
+        /**
+         * 展示路由Tab图标
+         */
+        cacheTabView: boolean;
+      }
+    | false;
 }
 /**
  * @name
@@ -29,8 +33,10 @@ const Settings: ProLayoutProps & SettingsTypes = {
   title: GlobalConfig.AppName,
   pwa: false,
   logo,
-  tabIcon: true,
-  tabView: true,
+  tabView: {
+    tabIcon: true,
+    cacheTabView: true,
+  },
 };
 
 export default Settings;

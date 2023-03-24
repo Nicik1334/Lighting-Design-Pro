@@ -3,6 +3,13 @@
 // hideInMenu: 当前路由在菜单中不展现，默认 false。
 // hideChildrenInMenu: 当前路由的子级在菜单中不展现，默认 false。
 // hideInBreadcrumb: 当前路由在面包屑中不展现，默认 false。
+// hideInMenu: 展示顶栏，默认 true
+// footerRender: 展示页脚 ，默认 true
+// menuRender: 展示菜单，默认 true
+
+// access: 权限标识
+// catalogue: (自定义属性)当前路由是否为目录类型
+
 export default [
   {
     path: '/user',
@@ -24,14 +31,17 @@ export default [
     routes: [
       {
         name: '首页',
-        icon: 'SmileOutlined',
+        icon: 'icon-tianqi',
         path: '/dashboard',
         component: './dashboard',
+        catalogue: true,
       },
       {
         name: '大屏幕',
+        icon: 'icon-jiazai',
         path: '/dataScreen',
         component: './dataScreen',
+        catalogue: true,
         // 不展示顶栏
         headerRender: false,
         // 不展示页脚
@@ -194,6 +204,12 @@ export default [
             component: './account/settings',
           },
         ],
+      },
+      {
+        name: '百度',
+        icon: 'icon-dianzan',
+        path: 'http://www.baidu.com',
+        catalogue: true,
       },
       {
         component: './404',

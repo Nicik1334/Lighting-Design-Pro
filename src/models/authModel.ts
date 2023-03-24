@@ -2,7 +2,7 @@ import { history } from 'umi';
 import { stringify } from 'qs';
 import type { Reducer } from 'redux';
 import type { Effect } from 'umi';
-import { LOGIN_PATH, USER_TOKEN } from '@/constants';
+import { HOME_PATH, LOGIN_PATH, NOT_PATH, USER_TOKEN } from '@/constants';
 import { outLogin } from '@/services/ant-design-pro/api';
 
 export interface AuthModelState {}
@@ -33,7 +33,7 @@ const LoginModel: AuthModelType = {
       ) {
         history.replace({
           pathname: LOGIN_PATH,
-          search: stringify({ redirect }),
+          search: stringify({ redirect: redirect === NOT_PATH ? HOME_PATH : redirect }),
         });
         const response = yield call(outLogin, payload);
         if (response.success) sessionStorage.removeItem(USER_TOKEN);

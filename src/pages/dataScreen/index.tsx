@@ -13,12 +13,10 @@ const Index = () => {
       <div
         className={styles.home_button}
         onClick={async () => {
+          handleClosePage({
+            path: '/dataScreen',
+          });
           history.replace('/dashboard');
-          setTimeout(() => {
-            handleClosePage({
-              path: '/dataScreen',
-            });
-          }, 100);
         }}
       />
     </div>

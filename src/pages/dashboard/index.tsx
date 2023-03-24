@@ -6,7 +6,8 @@ import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
 import { useRafInterval } from 'ahooks';
 import { TagViewContext } from '@/components/common/TabsView';
-import { Button } from 'antd';
+import { Button, Space, Tooltip } from 'antd';
+import { history } from 'umi';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
@@ -14,21 +15,59 @@ const Dashboard: React.FC = () => {
     setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   }, 1000);
 
-  const { handleRefreshPage } = useContext(TagViewContext);
+  const { handleRefreshPage, handleClosePage, handleCloseAll, handleCloseOther } =
+    useContext(TagViewContext);
 
   return (
     <PageContainer breadcrumbRender={false}>
       <ProCard>
-        {/* <Button onClick={() => history.push('/404')}>404</Button>
-        <Button onClick={() => history.push('/')}>首页</Button>
-        <Button onClick={() => history.push('/form')}>form</Button> */}
-        <Button
-          onClick={() => {
-            handleRefreshPage((tag) => ({ ...tag, path: '/dashboard' }));
-          }}
-        >
-          刷新
-        </Button>
+        <Space>
+          <Tooltip title="/">
+            <Button onClick={() => history.push('/')}>刷新页面</Button>
+          </Tooltip>
+          <Tooltip title="/form">
+            <Button onClick={() => history.push('/form')}>重定向</Button>
+          </Tooltip>
+          <Tooltip title="/system/meun">
+            <Button onClick={() => history.push('/system/meun')}>无权限</Button>
+          </Tooltip>
+          <Tooltip title="/404">
+            <Button onClick={() => history.push('/404')}>404</Button>
+          </Tooltip>
+          <Button
+            onClick={() => {
+              handleRefreshPage((tag) => ({ ...tag, path: '/dashboard' }));
+            }}
+          >
+            刷新当前页面
+          </Button>
+          <Button
+            onClick={() => {
+              handleClosePage((tag) => {
+                return {
+                  ...tag,
+                };
+              });
+            }}
+          >
+            关闭当前页面
+          </Button>
+          <Button
+            onClick={() => {
+              handleCloseOther();
+            }}
+          >
+            关闭其他页面
+          </Button>
+          <Button
+            onClick={() => {
+              handleCloseAll();
+            }}
+          >
+            关闭所有页面
+          </Button>
+        </Space>
+
         <Hamster />
         <LNumberRoll type="date" className={styles.numberStyle} value={value} />
         <LTypeit

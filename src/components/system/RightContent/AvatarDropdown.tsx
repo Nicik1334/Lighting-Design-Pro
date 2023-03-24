@@ -1,3 +1,4 @@
+import { USER_TOKEN } from '@/constants';
 import {
   CopyOutlined,
   LogoutOutlined,
@@ -9,6 +10,7 @@ import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React, { useState } from 'react';
 import { history, useModel, useDispatch } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
+import copy from 'copy-to-clipboard';
 import styles from './index.less';
 import Password from './Password';
 
@@ -67,6 +69,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
             label: (
               <div
                 onClick={() => {
+                  copy(sessionStorage.getItem(USER_TOKEN) as string);
                   message.success('复制成功');
                 }}
               >
