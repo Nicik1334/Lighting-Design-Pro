@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
     useContext(TagViewContext);
 
   return (
-    <PageContainer breadcrumbRender={false}>
+    <PageContainer>
       <ProCard>
         <Space>
           <Tooltip title="/">

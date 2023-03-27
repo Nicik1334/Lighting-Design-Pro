@@ -234,8 +234,10 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                         <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
                           {typeof item.icon === 'string' && item.icon.includes('icon') ? (
                             <IconFont type={item.icon} />
-                          ) : (
+                          ) : item.icon ? (
                             <Icon component={antIcons[item.icon]} />
+                          ) : (
+                            <></>
                           )}
                         </div>
                       )}

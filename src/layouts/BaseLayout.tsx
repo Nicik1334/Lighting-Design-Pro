@@ -91,13 +91,16 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
           <ItemChildren itemProps={itemProps} defaultDom={defaultDom} />
         </>
       )}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: HOME_PATH,
-          breadcrumbName: '首页',
-        },
-        ...routers,
-      ]}
+      breadcrumbRender={(routers = []) => {
+        if (routers.length === 1 && routers[0].path === HOME_PATH) return [...routers];
+        return [
+          {
+            path: HOME_PATH,
+            breadcrumbName: '首页',
+          },
+          ...routers,
+        ];
+      }}
       onPageChange={() => {
         NProgress.start();
         if (
