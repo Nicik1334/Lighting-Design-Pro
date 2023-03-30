@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { LOGIN_PATH, NOT_PATH, TABS_LIST } from '@/constants';
 import type { RouteContextType } from '@ant-design/pro-layout';
 import { RouteContext } from '@ant-design/pro-layout';
 import type { MenuDataItem } from '@umijs/route-utils';
-import React, { createContext, memo, useEffect, useState } from 'react';
+import React, { createContext, memo, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
-import { history, useAccess, useModel } from 'umi';
+import { history, useAccess, useModel, KeepAlive } from 'umi';
 import TabsMenu from './TabsMenu';
 import type { TagsItemType } from './TabsMenu/data';
 
@@ -28,7 +29,7 @@ interface TagViewContextProps {
    * 关闭当前标签
    */
   handleClosePage: (
-    tag:
+    tag?:
       | {
           path?: string;
         }
@@ -38,12 +39,12 @@ interface TagViewContextProps {
    * 刷新选择的标签
    */
   handleRefreshPage: (
-    tag:
+    tag?:
       | {
           path?: string;
         }
       | ((t: TagsItemType) => TagsItemType),
-  ) => void;
+  ) => void | any;
 }
 
 export const TagViewContext = createContext<TagViewContextProps>({
@@ -65,6 +66,7 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
   });
   const [pathKey, setPathKey] = useState<string>();
   const routeContext = useContext(RouteContext);
+  const currPath = useRef<any>();
 
   // 递归获取重定向路由
   const currentRoute = (
@@ -171,12 +173,16 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
           ...item,
           refresh: item.refresh + 1,
           active: true,
-          children,
+          // 右键刷新tab时,重新覆盖当前路由的children,并增加动画
+          children: <div className="animate__animated animate__fadeIn">{children}</div>,
         };
       }
       return { ...item, active: false };
     });
-    setTabList(tagsList);
+    setTimeout(() => {
+      document.documentElement.scrollTo({ left: 0, top: 0 });
+    }, 100);
+    setTabList([...tagsList]);
   };
 
   // 校验并跳转到404
@@ -264,8 +270,7 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
             ...item,
             title: item.path === NOT_PATH ? item.path : item.title,
             active: true,
-            // 右键刷新tab时,重新覆盖当前路由的children,并增加动画
-            children: <div className="animate__animated animate__fadeIn">{children}</div>,
+            children,
           };
         } else {
           return { ...item, active: false };
@@ -292,7 +297,11 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
   };
 
   useEffect(() => {
-    if (routeContext) handleOnChange(routeContext);
+    // if (routeContext && currPath.current !== window.location.pathname) {
+    if (routeContext && currPath.current !== window.location.pathname) {
+      currPath.current = routeContext?.currentMenu?.path;
+      handleOnChange(routeContext);
+    }
   }, [routeContext]);
 
   return (
@@ -306,7 +315,11 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
               (item) => item.path === window.location.pathname,
             ) as TagsItemType;
             handleClosePage(
-              typeof close === 'function' ? close(currentTag) : (close as TagsItemType),
+              typeof close === 'function'
+                ? close(currentTag)
+                : close?.path
+                ? (close as TagsItemType)
+                : currentTag,
             );
           },
           handleRefreshPage: (refresh) => {
@@ -314,7 +327,11 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
               (item) => item.path === window.location.pathname,
             ) as TagsItemType;
             handleRefreshPage(
-              typeof refresh === 'function' ? refresh(currentTag) : (refresh as TagsItemType),
+              typeof refresh === 'function'
+                ? refresh(currentTag)
+                : refresh?.path
+                ? (refresh as TagsItemType)
+                : currentTag,
             );
           },
         }}

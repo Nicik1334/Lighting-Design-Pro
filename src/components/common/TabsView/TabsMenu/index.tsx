@@ -8,9 +8,9 @@ import {
 import Icon from '@ant-design/icons';
 import * as antIcons from '@ant-design/icons';
 import { useKeyPress } from 'ahooks';
-import type { TabsProps } from 'antd';
+import { Button, TabsProps, Tooltip } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { history, useModel } from 'umi';
@@ -19,6 +19,7 @@ import styles from './index.less';
 import { IconFont } from '@/components/system/IconModal';
 import NotPage from '@/pages/404';
 import { NOT_PATH } from '@/constants';
+import { TagViewContext } from '..';
 
 const type = 'DraggableTabNode';
 
@@ -67,7 +68,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
   refreshPage,
 }) => {
   const { initialState } = useModel('@@initialState');
-
+  const { handleRefreshPage } = useContext(TagViewContext);
   const fullRef = useRef(null);
   const [isFull, setIsFull] = useState<boolean>(false);
   useKeyPress('esc', () => {
@@ -132,8 +133,16 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
         hideAdd
         tabBarExtraContent={{
           right: (
-            <Space style={{ marginRight: 24 }}>
-              <Dropdown
+            <Space style={{ marginRight: 24, display: 'flex', alignItems: 'center' }}>
+              <Tooltip title="重新加载" placement="bottom">
+                <Button type="text" style={{ display: 'flex', alignItems: 'center' }}>
+                  <ReloadOutlined
+                    onClick={() => handleRefreshPage()}
+                    style={{ fontSize: 18, fontWeight: 800, cursor: 'pointer' }}
+                  />
+                </Button>
+              </Tooltip>
+              {/* <Dropdown
                 menu={{
                   items: [
                     {
@@ -153,7 +162,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                     <DownOutlined size={12} />
                   </Space>
                 </a>
-              </Dropdown>
+              </Dropdown> */}
             </Space>
           ),
         }}

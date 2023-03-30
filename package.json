@@ -70,7 +70,8 @@
     "react-dom": "^17.0.0",
     "react-helmet-async": "^1.2.0",
     "react-sortablejs": "^6.1.4",
-    "umi": "^3.5.37"
+    "umi": "^3.5.37",
+    "umi-plugin-keep-alive": "^0.0.1-beta.35"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.1.0",

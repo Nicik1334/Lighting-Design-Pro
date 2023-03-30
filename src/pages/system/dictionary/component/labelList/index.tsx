@@ -155,6 +155,7 @@ const LabelList: FC = () => {
             },
           },
         }}
+        size="middle"
         formItems={formItems}
         formRef={formRef}
         columns={columns}

@@ -36,18 +36,16 @@ const Dashboard: React.FC = () => {
           </Tooltip>
           <Button
             onClick={() => {
-              handleRefreshPage((tag) => ({ ...tag, path: '/dashboard' }));
+              handleRefreshPage();
+              // handleRefreshPage((tag: any) => ({ ...tag, path: '/dashboard' }));
             }}
           >
             刷新当前页面
           </Button>
           <Button
             onClick={() => {
-              handleClosePage((tag) => {
-                return {
-                  ...tag,
-                };
-              });
+              handleClosePage();
+              // handleClosePage((tag) => ({ ...tag }));
             }}
           >
             关闭当前页面
