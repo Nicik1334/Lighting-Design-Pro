@@ -2,10 +2,10 @@ import screenBg from '@/assets/bg.png';
 import styles from './index.less';
 import { history } from 'umi';
 import { useContext } from 'react';
-import { TagViewContext } from '@/components/common/TabsView';
+import { BaseTabsContext } from '@/layouts/BaseTabs';
 
 const Index = () => {
-  const { handleClosePage } = useContext(TagViewContext);
+  const { handleClosePage } = useContext(BaseTabsContext);
 
   return (
     <div className={styles.data_screen}>

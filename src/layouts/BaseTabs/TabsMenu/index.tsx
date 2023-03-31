@@ -1,14 +1,10 @@
-import {
-  DownOutlined,
-  FullscreenOutlined,
-  HomeOutlined,
-  ReloadOutlined,
-  TagOutlined,
-} from '@ant-design/icons';
+import { FullscreenOutlined, HomeOutlined, ReloadOutlined, TagOutlined } from '@ant-design/icons';
 import Icon from '@ant-design/icons';
 import * as antIcons from '@ant-design/icons';
 import { useKeyPress } from 'ahooks';
-import { Button, TabsProps, Tooltip } from 'antd';
+import _ from 'lodash';
+import type { TabsProps } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
@@ -17,9 +13,7 @@ import { history, useModel } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps } from './data';
 import styles from './index.less';
 import { IconFont } from '@/components/system/IconModal';
-import NotPage from '@/pages/404';
-import { NOT_PATH } from '@/constants';
-import { TagViewContext } from '..';
+import { BaseTabsContext } from '..';
 
 const type = 'DraggableTabNode';
 
@@ -60,6 +54,7 @@ const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) 
 };
 
 const TabsMenu: React.FC<TabsMenuProps> = ({
+  children,
   tabList,
   activeKey,
   closePage,
@@ -68,7 +63,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
   refreshPage,
 }) => {
   const { initialState } = useModel('@@initialState');
-  const { handleRefreshPage } = useContext(TagViewContext);
+  const { handleRefreshPage } = useContext(BaseTabsContext);
   const fullRef = useRef(null);
   const [isFull, setIsFull] = useState<boolean>(false);
   useKeyPress('esc', () => {
@@ -123,6 +118,14 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
     [],
   );
 
+  // 刷新节流
+  const refresh = useCallback(
+    _.throttle(() => handleRefreshPage(), 1000, {
+      trailing: true,
+    }),
+    [],
+  );
+
   return (
     <div
       className={`${styles.tags_wrapper} ${isFull ? styles.tabs_full : ''}`}
@@ -137,7 +140,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
               <Tooltip title="重新加载" placement="bottom">
                 <Button type="text" style={{ display: 'flex', alignItems: 'center' }}>
                   <ReloadOutlined
-                    onClick={() => handleRefreshPage()}
+                    onClick={refresh}
                     style={{ fontSize: 18, fontWeight: 800, cursor: 'pointer' }}
                   />
                 </Button>
@@ -256,22 +259,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 </Dropdown>
               </div>
             ),
-            children: (
-              <div
-                style={
-                  !isFull
-                    ? { margin: '0 24px 24px' }
-                    : {
-                        background: '#fff',
-                        margin: '0 24px 24px',
-                      }
-                }
-              >
-                <div className={item.active ? 'animate__animated animate__fadeIn' : ''}>
-                  {item.path === NOT_PATH ? <NotPage /> : item.children}
-                </div>
-              </div>
-            ),
+
             key: item.path,
           };
         })}
@@ -279,6 +267,18 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
         size="small"
         type="editable-card"
       />
+      <div
+        style={
+          !isFull
+            ? { margin: '0 24px 24px' }
+            : {
+                background: '#fff',
+                margin: '0 24px 24px',
+              }
+        }
+      >
+        {children}
+      </div>
     </div>
   );
 };

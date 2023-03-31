@@ -71,12 +71,14 @@
     "react-helmet-async": "^1.2.0",
     "react-sortablejs": "^6.1.4",
     "umi": "^3.5.37",
-    "umi-plugin-keep-alive": "^0.0.1-beta.35"
+    "umi-plugin-keep-alive": "^0.0.1-beta.35",
+    "react-transition-group":"^4.4.5"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.1.0",
     "@playwright/test": "^1.17.0",
     "@types/classnames": "^2.3.1",
+    "@types/react-transition-group":"^4.4.5",
     "@types/express": "^4.17.0",
     "@types/history": "^4.7.0",
     "@types/jest": "^26.0.0",

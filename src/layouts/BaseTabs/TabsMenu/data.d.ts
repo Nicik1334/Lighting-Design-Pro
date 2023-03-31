@@ -37,7 +37,7 @@ export interface TabsMenuProps {
   /**
    * 选中key
    */
-  activeKey: string;
+  activeKey?: string;
   /**
    * 关闭当前标签
    */

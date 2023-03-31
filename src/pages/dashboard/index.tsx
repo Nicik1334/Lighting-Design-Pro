@@ -5,25 +5,34 @@ import Hamster from '@/components/common/Hamster';
 import { LNumberRoll, LTypeit } from 'lighting-design';
 import styles from './index.less';
 import { useRafInterval } from 'ahooks';
-import { TagViewContext } from '@/components/common/TabsView';
+import { BaseTabsContext } from '@/layouts/BaseTabs';
 import { Button, Space, Tooltip } from 'antd';
-import { history } from 'umi';
+import { history, useActivate, useUnactivate } from 'umi';
+import type { TagsItemType } from '@/layouts/BaseTabs/TabsMenu/data';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
+  const [refreshNumber, setNumber] = useState(0);
   useRafInterval(() => {
     setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   }, 1000);
 
   const { handleRefreshPage, handleClosePage, handleCloseAll, handleCloseOther } =
-    useContext(TagViewContext);
+    useContext(BaseTabsContext);
 
+  useActivate(() => {
+    // console.log('我被激活了');
+  });
+
+  useUnactivate(() => {
+    // console.log('我被缓存了');
+  });
   return (
     <PageContainer>
       <ProCard>
         <Space>
           <Tooltip title="/">
-            <Button onClick={() => history.push('/')}>刷新页面</Button>
+            <Button onClick={() => history.push('/')}>刷新系统</Button>
           </Tooltip>
           <Tooltip title="/form">
             <Button onClick={() => history.push('/form')}>重定向</Button>
@@ -36,11 +45,14 @@ const Dashboard: React.FC = () => {
           </Tooltip>
           <Button
             onClick={() => {
-              handleRefreshPage();
-              // handleRefreshPage((tag: any) => ({ ...tag, path: '/dashboard' }));
+              // handleRefreshPage();
+              handleRefreshPage((tag: TagsItemType) => {
+                setNumber(tag.refresh);
+                return { ...tag, path: '/dashboard' };
+              });
             }}
           >
-            刷新当前页面
+            刷新当前页面 ({refreshNumber})
           </Button>
           <Button
             onClick={() => {

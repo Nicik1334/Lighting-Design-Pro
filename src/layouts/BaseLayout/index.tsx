@@ -1,5 +1,5 @@
 import RightContent from '@/components/system/RightContent';
-import TabsView from '@/components/common/TabsView';
+import BaseTabs from '@/layouts/BaseTabs';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { MenuDataItem, ProLayoutProps } from '@ant-design/pro-components';
 import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
@@ -74,7 +74,7 @@ const IconChildren = ({ itemProps }: { itemProps: MenuDataItem }) => {
 };
 
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
-  const { children } = props;
+  const { children, location } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
 
   // 路径为"/",则重定向到首页
@@ -126,7 +126,9 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
     >
       <ConfigProvider>
         {initialState?.settings?.tabView ? (
-          <TabsView home={HOME_PATH}>{children}</TabsView>
+          <BaseTabs home={HOME_PATH} aliveKey={location?.pathname as string}>
+            {children}
+          </BaseTabs>
         ) : (
           <div>{children}</div>
         )}

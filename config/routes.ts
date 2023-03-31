@@ -62,6 +62,9 @@ export default [
             name: '基础表单',
             path: '/form/basic-form',
             component: './form/basic-form',
+            meta: {
+              keepAlive: true, // 需要缓存页签
+            },
           },
           {
             name: '弹窗表单',

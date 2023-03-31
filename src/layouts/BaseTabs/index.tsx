@@ -5,18 +5,24 @@ import { RouteContext } from '@ant-design/pro-layout';
 import type { MenuDataItem } from '@umijs/route-utils';
 import React, { createContext, memo, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
-import { history, useAccess, useModel, KeepAlive } from 'umi';
+import { history, KeepAlive, useAccess, useAliveController, useModel } from 'umi';
 import TabsMenu from './TabsMenu';
 import type { TagsItemType } from './TabsMenu/data';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useUnmount } from 'ahooks';
 
-interface TagViewProps {
+interface BaseTabsProps {
   /**
    * 首页路由
    */
   home: string;
+  /**
+   * 缓存key
+   */
+  aliveKey: string;
 }
 
-interface TagViewContextProps {
+interface BaseTabsContextProps {
   /**
    * 关闭所有标签
    */
@@ -47,7 +53,7 @@ interface TagViewContextProps {
   ) => void | any;
 }
 
-export const TagViewContext = createContext<TagViewContextProps>({
+export const BaseTabsContext = createContext<BaseTabsContextProps>({
   handleCloseAll: () => {},
   handleClosePage: () => {},
   handleCloseOther: () => {},
@@ -56,17 +62,20 @@ export const TagViewContext = createContext<TagViewContextProps>({
 
 let hasOpen = false; // 判断是否已打开过该页面
 /**
- * @component TagView 标签页组件
+ * @component BaseTabs 标签页组件
  */
-const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
+const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) => {
   const access = useAccess();
   const { initialState } = useModel('@@initialState');
   const [tabList, setTabList] = useState<TagsItemType[]>(() => {
     return JSON.parse(sessionStorage.getItem(TABS_LIST) || '[]');
   });
   const [pathKey, setPathKey] = useState<string>();
+  const currPath = useRef<string>();
   const routeContext = useContext(RouteContext);
-  const currPath = useRef<any>();
+  const { dropScope, refreshScope, clear, getCachingNodes } = useAliveController();
+  // 获取缓存列表
+  const cachingNodes = getCachingNodes();
 
   // 递归获取重定向路由
   const currentRoute = (
@@ -96,7 +105,6 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
       const tagsList = list.map((item) => {
         return {
           ...item,
-          children: null,
           icon:
             typeof item.icon === 'string' ? item.icon : item.icon?.type.render.name || item.icon,
         };
@@ -109,13 +117,14 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
 
   // 关闭所有标签
   const handleCloseAll = () => {
+    clear();
     history.push(home);
     setPathKey(home);
     const tabItem = tabList.find((el) => el.path === home);
     let homeData = [];
     //判断路由栏是否有首页标签
     if (tabItem) {
-      homeData = [{ ...tabItem, children, refresh: 0, active: true }];
+      homeData = [{ ...tabItem, refresh: 0, active: true }];
     } else {
       const menuData = routeContext.menuData || [];
       const homeItem = currentRoute(home, menuData)[0];
@@ -123,7 +132,6 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
         {
           title: homeItem.name,
           path: home,
-          children,
           refresh: 0,
           active: true,
         },
@@ -152,10 +160,12 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
     const newList = tagsList.filter((el) => el.path !== tag.path);
     setTagStorage(newList);
     setTabList(newList);
+    dropScope(tag.path as string);
   };
 
   // 关闭其他标签
   const handleCloseOther = () => {
+    clear();
     const tabItem = tabList.find((el) => el.active);
     if (tabItem) {
       setTagStorage([tabItem]);
@@ -173,36 +183,32 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
           ...item,
           refresh: item.refresh + 1,
           active: true,
-          // 右键刷新tab时,重新覆盖当前路由的children,并增加动画
-          children: <div className="animate__animated animate__fadeIn">{children}</div>,
         };
       }
       return { ...item, active: false };
     });
-    setTimeout(() => {
-      document.documentElement.scrollTo({ left: 0, top: 0 });
-    }, 100);
     setTabList([...tagsList]);
+    setTagStorage(tagsList);
+    refreshScope(pathname as string);
   };
 
   // 校验并跳转到404
   const toAuth = (to?: boolean) => {
     const { pathname } = window.location;
     if (!to && pathname !== NOT_PATH) history.push({ pathname: NOT_PATH });
-    const newTabList = [...tabList];
+    const newTabList = [...tabList].map((item) => ({ ...item, active: item.path === NOT_PATH }));
 
     // 判断当前tabList是否存在404路由，没有则push
     if (!newTabList.find((item) => item.path === NOT_PATH)) {
       newTabList.push({
         title: NOT_PATH,
         path: NOT_PATH,
-        children,
         refresh: 0,
         active: true,
       });
     }
 
-    // 判断当前tabList是否存在无权限路由，有则splice
+    // 判断当前tabList是否存在无权限路由，有则splice删除
     if (newTabList.find((item) => item.path !== NOT_PATH && item.path === pathname)) {
       newTabList.splice(
         newTabList.findIndex((item) => item.path === pathname),
@@ -233,8 +239,8 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
   const handleOnChange = (route: RouteContextType) => {
     const { menuData = [], currentMenu } = route;
     if (!routeDecide(menuData)) return;
-
     const { pathname } = window.location;
+
     const { path, redirect } = currentMenu as MenuDataItem;
     // 有redirect则跳转重定向
     if (redirect) {
@@ -248,7 +254,6 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
             {
               title: itemData.name,
               path: redirect,
-              children,
               refresh: 0,
               active: true,
               icon: itemData.icon,
@@ -270,7 +275,6 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
             ...item,
             title: item.path === NOT_PATH ? item.path : item.title,
             active: true,
-            children,
           };
         } else {
           return { ...item, active: false };
@@ -280,7 +284,6 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
         tabNewList.push({
           title: pathname === NOT_PATH ? pathname : currentMenu?.name,
           path,
-          children,
           refresh: 0,
           active: true,
           icon: currentMenu?.icon,
@@ -291,62 +294,91 @@ const TagView: React.FC<TagViewProps> = memo(({ children, home }) => {
       setTabList(tabNewList);
       return;
     }
-
     // 否则跳转404
     return toAuth();
   };
 
   useEffect(() => {
-    // if (routeContext && currPath.current !== window.location.pathname) {
     if (routeContext && currPath.current !== window.location.pathname) {
       currPath.current = routeContext?.currentMenu?.path;
       handleOnChange(routeContext);
     }
   }, [routeContext]);
 
+  useEffect(() => {
+    // console.log(cachingNodes);
+  }, [cachingNodes]);
+
+  useUnmount(() => {
+    clear();
+  });
+
   return (
-    <>
-      <TagViewContext.Provider
-        value={{
-          handleCloseAll,
-          handleCloseOther,
-          handleClosePage: (close) => {
-            const currentTag = tabList.find(
-              (item) => item.path === window.location.pathname,
-            ) as TagsItemType;
-            handleClosePage(
-              typeof close === 'function'
-                ? close(currentTag)
-                : close?.path
-                ? (close as TagsItemType)
-                : currentTag,
-            );
-          },
-          handleRefreshPage: (refresh) => {
-            const currentTag = tabList.find(
-              (item) => item.path === window.location.pathname,
-            ) as TagsItemType;
-            handleRefreshPage(
-              typeof refresh === 'function'
-                ? refresh(currentTag)
-                : refresh?.path
-                ? (refresh as TagsItemType)
-                : currentTag,
-            );
-          },
+    <BaseTabsContext.Provider
+      value={{
+        handleCloseAll,
+        handleCloseOther,
+        handleClosePage: (close) => {
+          const currentTag = tabList.find(
+            (item) => item.path === window.location.pathname,
+          ) as TagsItemType;
+          handleClosePage(
+            typeof close === 'function'
+              ? close(currentTag)
+              : close?.path
+              ? (close as TagsItemType)
+              : currentTag,
+          );
+        },
+        handleRefreshPage: (refresh) => {
+          const currentTag = tabList.find(
+            (item) => item.path === window.location.pathname,
+          ) as TagsItemType;
+          handleRefreshPage(
+            typeof refresh === 'function'
+              ? refresh(currentTag)
+              : refresh?.path
+              ? (refresh as TagsItemType)
+              : currentTag,
+          );
+        },
+      }}
+    >
+      <TabsMenu
+        {...{
+          tabList,
+          closePage: handleClosePage,
+          closeAllPage: handleCloseAll,
+          closeOtherPage: handleCloseOther,
+          refreshPage: handleRefreshPage,
+          activeKey: pathKey,
         }}
       >
-        <TabsMenu
-          tabList={tabList}
-          closePage={handleClosePage}
-          closeAllPage={handleCloseAll}
-          closeOtherPage={handleCloseOther}
-          refreshPage={handleRefreshPage}
-          activeKey={pathKey as string}
-        />
-      </TagViewContext.Provider>
-    </>
+        {pathKey && (
+          <TransitionGroup>
+            <CSSTransition
+              key={pathKey}
+              classNames={{
+                enter: 'animate__animated',
+                enterActive: 'animate__fadeIn',
+                exit: 'animate__animated',
+                exitActive: 'animate__fadeOut',
+              }}
+              timeout={1000}
+              mountOnEnter
+              unmountOnExit
+              exit={false}
+            >
+              {/* @ts-ignore  */}
+              <KeepAlive when id={aliveKey} name={aliveKey}>
+                {children}
+              </KeepAlive>
+            </CSSTransition>
+          </TransitionGroup>
+        )}
+      </TabsMenu>
+    </BaseTabsContext.Provider>
   );
 });
 
-export default TagView;
+export default BaseTabs;
