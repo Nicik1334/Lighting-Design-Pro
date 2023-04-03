@@ -23,10 +23,6 @@ export type TagsItemType = {
    * children
    */
   children?: React.ReactNode;
-  /**
-   * 刷新次数
-   */
-  refresh: number;
 };
 
 export interface TabsMenuProps {
@@ -35,9 +31,13 @@ export interface TabsMenuProps {
    */
   tabList: TagsItemType[];
   /**
+   * 缓存key
+   */
+  cacheKeyMap: Record<string, any>;
+  /**
    * 选中key
    */
-  activeKey?: string;
+  activeKey: string;
   /**
    * 关闭当前标签
    */

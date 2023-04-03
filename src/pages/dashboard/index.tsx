@@ -7,12 +7,11 @@ import styles from './index.less';
 import { useRafInterval } from 'ahooks';
 import { BaseTabsContext } from '@/layouts/BaseTabs';
 import { Button, Space, Tooltip } from 'antd';
-import { history, useActivate, useUnactivate } from 'umi';
+import { history } from 'umi';
 import type { TagsItemType } from '@/layouts/BaseTabs/TabsMenu/data';
 
 const Dashboard: React.FC = () => {
   const [value, setValue] = useState<string>(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
-  const [refreshNumber, setNumber] = useState(0);
   useRafInterval(() => {
     setValue(moment(new Date()).format('yyyy-MM-DD HH:mm:ss'));
   }, 1000);
@@ -20,13 +19,6 @@ const Dashboard: React.FC = () => {
   const { handleRefreshPage, handleClosePage, handleCloseAll, handleCloseOther } =
     useContext(BaseTabsContext);
 
-  useActivate(() => {
-    // console.log('我被激活了');
-  });
-
-  useUnactivate(() => {
-    // console.log('我被缓存了');
-  });
   return (
     <PageContainer>
       <ProCard>
@@ -45,14 +37,13 @@ const Dashboard: React.FC = () => {
           </Tooltip>
           <Button
             onClick={() => {
-              // handleRefreshPage();
-              handleRefreshPage((tag: TagsItemType) => {
-                setNumber(tag.refresh);
-                return { ...tag, path: '/dashboard' };
-              });
+              handleRefreshPage();
+              // handleRefreshPage((tag: TagsItemType) => {
+              //   return { ...tag, path: '/dashboard' };
+              // });
             }}
           >
-            刷新当前页面 ({refreshNumber})
+            刷新当前页面
           </Button>
           <Button
             onClick={() => {

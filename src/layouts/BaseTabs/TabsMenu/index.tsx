@@ -14,6 +14,8 @@ import type { DraggableTabPaneProps, TabsMenuProps } from './data';
 import styles from './index.less';
 import { IconFont } from '@/components/system/IconModal';
 import { BaseTabsContext } from '..';
+import { NOT_PATH } from '@/constants';
+import NotPage from '@/pages/404';
 
 const type = 'DraggableTabNode';
 
@@ -54,7 +56,7 @@ const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) 
 };
 
 const TabsMenu: React.FC<TabsMenuProps> = ({
-  children,
+  cacheKeyMap,
   tabList,
   activeKey,
   closePage,
@@ -65,6 +67,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
   const { initialState } = useModel('@@initialState');
   const { handleRefreshPage } = useContext(BaseTabsContext);
   const fullRef = useRef(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isFull, setIsFull] = useState<boolean>(false);
   useKeyPress('esc', () => {
     setIsFull(false);
@@ -118,13 +121,14 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
     [],
   );
 
-  // 刷新节流
-  const refresh = useCallback(
-    _.throttle(() => handleRefreshPage(), 1000, {
-      trailing: true,
-    }),
-    [],
-  );
+  const refresh = () => {
+    if (loading) return;
+    setLoading(true);
+    handleRefreshPage();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
     <div
@@ -140,6 +144,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
               <Tooltip title="重新加载" placement="bottom">
                 <Button type="text" style={{ display: 'flex', alignItems: 'center' }}>
                   <ReloadOutlined
+                    spin={loading}
                     onClick={refresh}
                     style={{ fontSize: 18, fontWeight: 800, cursor: 'pointer' }}
                   />
@@ -169,9 +174,11 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
             </Space>
           ),
         }}
-        onEdit={(targetKey, action) => {
+        onEdit={(targetKey = '', action) => {
           if (action === 'remove') {
-            const tabItem = tabList.find((item) => item.path === targetKey);
+            const tabItem = tabList.find(
+              (item) => item.path === (targetKey as string).split(':')[0],
+            );
             if (tabItem) closePage(tabItem);
           }
         }}
@@ -259,26 +266,30 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 </Dropdown>
               </div>
             ),
-
-            key: item.path,
+            children: (
+              <div
+                style={
+                  !isFull
+                    ? { margin: '0 24px 24px' }
+                    : {
+                        background: '#fff',
+                        margin: '0 24px 24px',
+                      }
+                }
+                key={item.path}
+              >
+                <div className={item.active ? 'animate__animated animate__fadeIn' : ''}>
+                  {item.path === NOT_PATH ? <NotPage /> : item.children}
+                </div>
+              </div>
+            ),
+            key: `${item.path}:${cacheKeyMap[item.path as string] || '_'}`,
           };
         })}
-        activeKey={activeKey}
+        activeKey={`${activeKey}:${cacheKeyMap[activeKey] || '_'}`}
         size="small"
         type="editable-card"
       />
-      <div
-        style={
-          !isFull
-            ? { margin: '0 24px 24px' }
-            : {
-                background: '#fff',
-                margin: '0 24px 24px',
-              }
-        }
-      >
-        {children}
-      </div>
     </div>
   );
 };

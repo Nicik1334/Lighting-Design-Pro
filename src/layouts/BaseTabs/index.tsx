@@ -3,12 +3,10 @@ import { LOGIN_PATH, NOT_PATH, TABS_LIST } from '@/constants';
 import type { RouteContextType } from '@ant-design/pro-layout';
 import { RouteContext } from '@ant-design/pro-layout';
 import type { MenuDataItem } from '@umijs/route-utils';
-import React, { createContext, memo, useEffect, useRef, useState } from 'react';
-import { useContext } from 'react';
-import { history, KeepAlive, useAccess, useAliveController, useModel } from 'umi';
+import React, { createContext, memo, useEffect, useRef, useState, useContext } from 'react';
+import { history, useAccess, useModel } from 'umi';
 import TabsMenu from './TabsMenu';
 import type { TagsItemType } from './TabsMenu/data';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useUnmount } from 'ahooks';
 
 interface BaseTabsProps {
@@ -64,18 +62,17 @@ let hasOpen = false; // 判断是否已打开过该页面
 /**
  * @component BaseTabs 标签页组件
  */
-const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) => {
+const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home }) => {
   const access = useAccess();
   const { initialState } = useModel('@@initialState');
   const [tabList, setTabList] = useState<TagsItemType[]>(() => {
     return JSON.parse(sessionStorage.getItem(TABS_LIST) || '[]');
   });
-  const [pathKey, setPathKey] = useState<string>();
+  const [pathKey, setPathKey] = useState<string>('');
   const currPath = useRef<string>();
   const routeContext = useContext(RouteContext);
-  const { dropScope, refreshScope, clear, getCachingNodes } = useAliveController();
-  // 获取缓存列表
-  const cachingNodes = getCachingNodes();
+
+  const [cacheKeyMap, setCacheKeyMap] = useState<Record<string, any>>({});
 
   // 递归获取重定向路由
   const currentRoute = (
@@ -105,6 +102,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
       const tagsList = list.map((item) => {
         return {
           ...item,
+          children: null,
           icon:
             typeof item.icon === 'string' ? item.icon : item.icon?.type.render.name || item.icon,
         };
@@ -117,14 +115,13 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
 
   // 关闭所有标签
   const handleCloseAll = () => {
-    clear();
     history.push(home);
     setPathKey(home);
     const tabItem = tabList.find((el) => el.path === home);
     let homeData = [];
     //判断路由栏是否有首页标签
     if (tabItem) {
-      homeData = [{ ...tabItem, refresh: 0, active: true }];
+      homeData = [{ ...tabItem, children, active: true }];
     } else {
       const menuData = routeContext.menuData || [];
       const homeItem = currentRoute(home, menuData)[0];
@@ -132,7 +129,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
         {
           title: homeItem.name,
           path: home,
-          refresh: 0,
+          children,
           active: true,
         },
       ];
@@ -160,12 +157,10 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
     const newList = tagsList.filter((el) => el.path !== tag.path);
     setTagStorage(newList);
     setTabList(newList);
-    dropScope(tag.path as string);
   };
 
   // 关闭其他标签
   const handleCloseOther = () => {
-    clear();
     const tabItem = tabList.find((el) => el.active);
     if (tabItem) {
       setTagStorage([tabItem]);
@@ -175,21 +170,25 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
 
   // 刷新选择的标签
   const handleRefreshPage = (tag: TagsItemType) => {
+    console.log(tag);
     const { path: pathname, query } = tag;
     const tagsList = tabList.map((item) => {
       if (item.path === tag.path) {
         history.push({ pathname, query });
         return {
           ...item,
-          refresh: item.refresh + 1,
+          children,
           active: true,
         };
       }
       return { ...item, active: false };
     });
-    setTabList([...tagsList]);
+    setCacheKeyMap((key: any) => ({
+      ...key,
+      [pathname as string]: Math.random(),
+    }));
+    setTabList(tagsList);
     setTagStorage(tagsList);
-    refreshScope(pathname as string);
   };
 
   // 校验并跳转到404
@@ -203,7 +202,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
       newTabList.push({
         title: NOT_PATH,
         path: NOT_PATH,
-        refresh: 0,
+        children,
         active: true,
       });
     }
@@ -254,7 +253,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
             {
               title: itemData.name,
               path: redirect,
-              refresh: 0,
+              children,
               active: true,
               icon: itemData.icon,
             },
@@ -275,6 +274,8 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
             ...item,
             title: item.path === NOT_PATH ? item.path : item.title,
             active: true,
+            // 右键刷新tab时,重新覆盖当前路由的children,并增加动画
+            children: <div className="animate__animated animate__fadeIn">{children}</div>,
           };
         } else {
           return { ...item, active: false };
@@ -284,7 +285,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
         tabNewList.push({
           title: pathname === NOT_PATH ? pathname : currentMenu?.name,
           path,
-          refresh: 0,
+          children,
           active: true,
           icon: currentMenu?.icon,
         });
@@ -304,14 +305,6 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
       handleOnChange(routeContext);
     }
   }, [routeContext]);
-
-  useEffect(() => {
-    // console.log(cachingNodes);
-  }, [cachingNodes]);
-
-  useUnmount(() => {
-    clear();
-  });
 
   return (
     <BaseTabsContext.Provider
@@ -347,6 +340,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
       <TabsMenu
         {...{
           tabList,
+          cacheKeyMap,
           closePage: handleClosePage,
           closeAllPage: handleCloseAll,
           closeOtherPage: handleCloseOther,
@@ -354,28 +348,7 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home, aliveKey }) =>
           activeKey: pathKey,
         }}
       >
-        {pathKey && (
-          <TransitionGroup>
-            <CSSTransition
-              key={pathKey}
-              classNames={{
-                enter: 'animate__animated',
-                enterActive: 'animate__fadeIn',
-                exit: 'animate__animated',
-                exitActive: 'animate__fadeOut',
-              }}
-              timeout={1000}
-              mountOnEnter
-              unmountOnExit
-              exit={false}
-            >
-              {/* @ts-ignore  */}
-              <KeepAlive when id={aliveKey} name={aliveKey}>
-                {children}
-              </KeepAlive>
-            </CSSTransition>
-          </TransitionGroup>
-        )}
+        {pathKey && { children }}
       </TabsMenu>
     </BaseTabsContext.Provider>
   );

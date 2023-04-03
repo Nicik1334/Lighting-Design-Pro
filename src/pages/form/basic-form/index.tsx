@@ -24,12 +24,11 @@ import {
   LTypeit,
 } from 'lighting-design';
 import type { FC } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { PageContainer } from '@ant-design/pro-layout';
+import { useEffect, useState } from 'react';
+import {} from 'react';
 import { addressOptions, mockVal } from './service';
 import type { DefaultOptionType } from 'antd/lib/select';
-import { ProCard } from '@ant-design/pro-components';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 
 const BasicForm: FC<Record<string, any>> = () => {
   const [form] = LForm.useForm();
@@ -73,19 +72,6 @@ const BasicForm: FC<Record<string, any>> = () => {
   }, []);
   return (
     <PageContainer
-      content={
-        <LTypeit
-          options={{
-            cursor: false,
-            speed: 30,
-          }}
-          getBeforeInit={(instance) => {
-            return instance.type(
-              '表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。',
-            );
-          }}
-        />
-      }
       waterMarkProps={{
         content: '超级管理员',
       }}
