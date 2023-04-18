@@ -1,0 +1,137 @@
+@import '~antd/es/style/variable.less';
+.search {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(transparent 1px, rgb(0 0 0 / 30%) 1px);
+  background-size: 4px 4px;
+  visibility: hidden;
+  opacity: 0;
+  backdrop-filter: saturate(50%) blur(4px);
+  transition: all 0.2s;
+}
+
+.searchBox {
+  :global {
+    .ant-input-affix-wrapper {
+      display: flex;
+      align-items: center;
+      height: 50px;
+      font-size: 16px;
+      line-height: 50px;
+    }
+    .ant-input-prefix {
+      margin-right: 10px;
+    }
+  }
+}
+
+.searching {
+  visibility: visible;
+  opacity: 1;
+
+  .searchContainer {
+    width: 50vw;
+    margin: 20px auto;
+    transform: initial;
+    filter: initial;
+
+    .searchBox {
+      margin: 50px 20px 20px;
+
+      .tips {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        padding-top: 20px;
+        font-weight: bold;
+
+        .tip {
+          display: flex;
+          align-items: center;
+          :global {
+            .ant-tag {
+              padding: 10px 14px;
+              color: #909399;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+
+    .menuList {
+      position: relative;
+      height: 500px;
+      margin: 0 20px 50px;
+      overflow: auto;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 0 1px #cdd0d670;
+
+      .listItem {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        border-bottom: 1px solid #f8f8f8;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &.actived {
+          background-color: #f2f3f5;
+
+          .icon {
+            color: @primary-color;
+            transform: scale(1.2);
+          }
+
+          .info {
+            border-left-color: #dcdfe6;
+
+            .title {
+              color: @primary-color;
+            }
+
+            .path {
+              color: @primary-color;
+            }
+          }
+        }
+
+        .icon {
+          flex: 0 0 66px;
+          font-size: 20px;
+          text-align: center;
+          transition: all 0.3s;
+        }
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 70px;
+          padding: 5px 10px 7px;
+          border-left: 1px solid #dcdfe6;
+          transition: all 0.3s;
+
+          .title {
+            color: #606266;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 22px;
+          }
+
+          .path {
+            color: #909399;
+            font-size: 12px;
+            line-height: 22px;
+            transition: all 0.3s;
+          }
+        }
+      }
+    }
+  }
+}

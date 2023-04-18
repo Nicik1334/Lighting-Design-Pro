@@ -21,8 +21,9 @@ declare namespace API {
     };
     address?: string;
     phone?: string;
-    authButton: string[];
-    authUrl: string[];
+    routes: any[];
+    authButton: Set<string>;
+    authUrl: Set<string>;
   };
 
   type LoginResult = {

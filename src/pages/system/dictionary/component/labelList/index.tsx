@@ -26,6 +26,7 @@ const LabelList: FC = () => {
     <LFormItemSelect
       label="状态"
       name="status"
+      style={{ width: 200 }}
       key="3"
       options={[
         {
@@ -125,8 +126,6 @@ const LabelList: FC = () => {
     <>
       <LTable
         rowKey="id"
-        rowClassName="lightd-table-row"
-        loading={{ size: 'large', tip: '加载中...' }}
         tableRef={tableRef}
         scroll={{ x: 800 }}
         toolbarLeft={
@@ -149,6 +148,7 @@ const LabelList: FC = () => {
           showReload: false,
         }}
         queryFormProps={{
+          isSpace: true,
           submitter: {
             onReset() {
               setRecord(undefined);

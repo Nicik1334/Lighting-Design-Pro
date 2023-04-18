@@ -26,6 +26,7 @@ import { useRequest } from 'ahooks';
 import { login } from '@/services/ant-design-pro/api';
 import { getPageQuery } from '@/utils';
 import { USER_TOKEN } from '@/constants';
+import { AUTHURL, ROUTES } from '../../../../mock/mock';
 
 const iconStyles: CSSProperties = {
   marginInlineStart: '16px',
@@ -47,26 +48,22 @@ const Login: React.FC<LoginProps> = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [form] = Form.useForm();
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      await setInitialState((s) => ({
-        ...s,
-        currentUser: {
-          ...userInfo,
-          authButton: [],
-          authUrl: [],
-        },
-      }));
-    }
-  };
-
   const { loading, run: loginRun } = useRequest<HttpResult<any>, API.LoginParams[]>(login, {
     manual: true,
     onSuccess: (result) => {
       if (result.success) {
         const { data: d } = result;
         sessionStorage.setItem(USER_TOKEN, d.token);
+        console.log(d);
+        setInitialState((s) => ({
+          ...s,
+          currentUser: {
+            ...d,
+            authButton: new Set([]),
+            authUrl: new Set(AUTHURL),
+            routes: ROUTES,
+          },
+        }));
         const params = getPageQuery();
         const { redirect = '/' } = params as { redirect: string };
         history.push(redirect);
@@ -74,7 +71,6 @@ const Login: React.FC<LoginProps> = () => {
           success: result.success,
           type: d.type,
         });
-        fetchUserInfo();
       }
     },
   });
@@ -215,7 +211,7 @@ const Login: React.FC<LoginProps> = () => {
               <WeiboCircleOutlined style={iconStyles} />
             </Space>
           }
-          style={{ background: '#fff' }}
+          style={{ background: '#ffffff' }}
         >
           <Tabs
             centered

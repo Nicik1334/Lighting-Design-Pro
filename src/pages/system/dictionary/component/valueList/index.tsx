@@ -107,7 +107,11 @@ const DetailList: FC = () => {
   ];
 
   useEffect(() => {
-    if (record?.id) tableRef.current?.onReload();
+    if (record?.id) {
+      tableRef.current?.onSearch();
+    } else {
+      tableRef.current?.onReset();
+    }
   }, [record]);
 
   return (

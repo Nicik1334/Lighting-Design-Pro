@@ -17,13 +17,10 @@ interface AuthButtonProps extends ButtonProps {
  */
 const AuthButton: React.FC<AuthButtonProps> = ({ auth, children, ...props }) => {
   const { initialState } = useModel('@@initialState');
-  const access = useAccess();
 
   const { currentUser } = initialState as { currentUser: API.CurrentUser };
   const [flag] = useState<boolean>(() =>
-    auth !== undefined
-      ? !!(currentUser?.authButton && currentUser.authButton?.find((item) => item === auth))
-      : true,
+    auth !== undefined ? !!(currentUser?.authButton && currentUser.authButton?.has(auth)) : true,
   );
   return <>{flag ? <Button {...props}>{children}</Button> : <></>}</>;
 };

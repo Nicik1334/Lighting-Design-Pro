@@ -134,7 +134,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
     <div
       className={`${styles.tags_wrapper} ${isFull ? styles.tabs_full : ''}`}
       ref={fullRef}
-      style={{ background: isFull ? '#fff' : 'unset' }}
+      style={{ background: isFull ? '#ffffff' : 'unset' }}
     >
       <DraggableTabs
         hideAdd
@@ -253,10 +253,10 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                         <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
                           {typeof item.icon === 'string' && item.icon.includes('icon') ? (
                             <IconFont type={item.icon} />
-                          ) : item.icon ? (
+                          ) : typeof item.icon === 'string' ? (
                             <Icon component={antIcons[item.icon]} />
                           ) : (
-                            <></>
+                            item.icon
                           )}
                         </div>
                       )}
@@ -272,7 +272,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                   !isFull
                     ? { margin: '0 24px 24px' }
                     : {
-                        background: '#fff',
+                        background: '#ffffff',
                         margin: '0 24px 24px',
                       }
                 }

@@ -285,16 +285,38 @@ function usechangeLocation(pathname: string, callBack: (location: any) => void) 
 /**
  * 铺平按钮权限
  * @param authList
+ * @param type  `Menu`,`Buttom`
  * @param newList
  * @returns
  */
-const onTreeNodes = (authList: MenuType[], newList: string[] = []) => {
+const onTreeNodes = (authList: MenuType[], type: 'Menu' | 'Button', newList: string[] = []) => {
   authList.forEach((item) => {
-    if (item.nodeData.menuType === 2 && item.nodeData.menuUrl) {
+    if (
+      item.nodeData.menuUrl &&
+      (type === 'Button' ? item.nodeData.menuType === 2 : item.nodeData.menuType != 2)
+    ) {
       newList.push(item.nodeData.menuUrl);
     }
+
+    if (item.children) onTreeNodes(item.children, type, newList);
+  });
+  return new Set([...newList]);
+};
+
+/**
+ * 铺平按钮权限
+ * @param menuList
+ * @param newList
+ * @returns
+ */
+const onRoundRoutes = (menuList: MenuType[], newList: MenuType['nodeData'][]) => {
+  menuList.forEach((item) => {
+    if (item.nodeData.menuType !== 2 && item.nodeData.menuUrl) {
+      const { nodeData } = item;
+      newList.push(nodeData);
+    }
     if (item.children) {
-      onTreeNodes(item.children, newList);
+      onRoundRoutes(item.children, newList);
     }
   });
   return new Set([...newList]);
@@ -344,4 +366,6 @@ export {
   getImgBase64Url,
   usechangeLocation,
   awaitTime,
+  onTreeNodes,
+  onRoundRoutes,
 };

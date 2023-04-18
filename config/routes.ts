@@ -82,7 +82,7 @@ export default [
         routes: [
           {
             path: '/system',
-            redirect: '/system/meun',
+            redirect: '/system/menu',
           },
           {
             name: '菜单管理',

@@ -28,11 +28,7 @@ const GlobalHeaderRight: React.FC = () => {
       <div className={`${styles.action} ${styles.hidden}`} style={{ fontFamily: 'initial' }}>
         <TimeRoll format="yyyy-MM-DD HH:mm" />
       </div>
-      <HeaderSearch
-        className={`${styles.action} ${styles.search}`}
-        placeholder="搜索"
-        options={[]}
-      />
+      <HeaderSearch className={`${styles.action} ${styles.fullscreen}  ${styles.hidden}`} />
       <div
         className={`${styles.action} ${styles.hidden}`}
         style={{ fontFamily: 'inherit' }}

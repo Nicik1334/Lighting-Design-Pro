@@ -74,7 +74,7 @@ const IconChildren = ({ itemProps }: { itemProps: MenuDataItem }) => {
 };
 
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
-  const { children, location } = props;
+  const { children } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
 
   // 路径为"/",则重定向到首页
@@ -126,9 +126,7 @@ const BasicLayout: React.FC<ProLayoutProps> = (props) => {
     >
       <ConfigProvider>
         {initialState?.settings?.tabView ? (
-          <BaseTabs home={HOME_PATH} aliveKey={location?.pathname as string}>
-            {children}
-          </BaseTabs>
+          <BaseTabs home={HOME_PATH}>{children}</BaseTabs>
         ) : (
           <div>{children}</div>
         )}

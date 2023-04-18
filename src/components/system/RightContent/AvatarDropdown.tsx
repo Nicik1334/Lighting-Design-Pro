@@ -12,7 +12,7 @@ import { history, useModel, useDispatch } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import copy from 'copy-to-clipboard';
 import styles from './index.less';
-import Password from './Password';
+import Password from '../Password';
 
 const { confirm } = Modal;
 export type GlobalHeaderRightProps = {
@@ -21,9 +21,8 @@ export type GlobalHeaderRightProps = {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  const dispatch = useDispatch<any>();
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch<any>();
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
       <Spin

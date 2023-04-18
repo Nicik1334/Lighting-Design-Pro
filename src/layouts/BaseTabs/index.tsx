@@ -7,17 +7,12 @@ import React, { createContext, memo, useEffect, useRef, useState, useContext } f
 import { history, useAccess, useModel } from 'umi';
 import TabsMenu from './TabsMenu';
 import type { TagsItemType } from './TabsMenu/data';
-import { useUnmount } from 'ahooks';
 
 interface BaseTabsProps {
   /**
    * 首页路由
    */
   home: string;
-  /**
-   * 缓存key
-   */
-  aliveKey: string;
 }
 
 interface BaseTabsContextProps {
@@ -170,7 +165,6 @@ const BaseTabs: React.FC<BaseTabsProps> = memo(({ children, home }) => {
 
   // 刷新选择的标签
   const handleRefreshPage = (tag: TagsItemType) => {
-    console.log(tag);
     const { path: pathname, query } = tag;
     const tagsList = tabList.map((item) => {
       if (item.path === tag.path) {

@@ -11,6 +11,7 @@ interface MenuType {
   leaf: boolean;
   icon: string;
   nodeData: {
+    icon: string;
     menuCode: string;
     menuName: string;
     menuUrl: string;

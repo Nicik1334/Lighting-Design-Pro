@@ -29,8 +29,8 @@ const Dashboard: React.FC = () => {
           <Tooltip title="/form">
             <Button onClick={() => history.push('/form')}>重定向</Button>
           </Tooltip>
-          <Tooltip title="/system/meun">
-            <Button onClick={() => history.push('/system/meun')}>无权限</Button>
+          <Tooltip title="/system/menu">
+            <Button onClick={() => history.push('/system/menu')}>无权限</Button>
           </Tooltip>
           <Tooltip title="/404">
             <Button onClick={() => history.push('/404')}>404</Button>

@@ -8,6 +8,7 @@ import defaultSettings from '../config/defaultSettings';
 import type { ThemeType } from './components/system/HeaderDark';
 import { LOGIN_PATH, THEME_DARK } from './constants';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { AUTHURL, ROUTES } from '../mock/mock';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -18,7 +19,9 @@ export const initialStateConfig = {
 const fetchUserInfo = async () => {
   try {
     const msg = await queryCurrentUser();
-    return msg.data;
+    console.log(msg);
+
+    return { ...msg.data, authButton: new Set([]), authUrl: new Set(AUTHURL), routes: ROUTES };
   } catch (error) {
     history.push(LOGIN_PATH);
   }
@@ -36,11 +39,7 @@ export async function getInitialState(): Promise<{
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
-      currentUser: {
-        ...currentUser,
-        authButton: [],
-        authUrl: [],
-      },
+      currentUser,
       settings: {
         ...defaultSettings,
         navTheme: sessionStorage.getItem(THEME_DARK) || ('light' as ThemeType),
