@@ -19,8 +19,6 @@ export const initialStateConfig = {
 const fetchUserInfo = async () => {
   try {
     const msg = await queryCurrentUser();
-    console.log(msg);
-
     return { ...msg.data, authButton: new Set([]), authUrl: new Set(AUTHURL), routes: ROUTES };
   } catch (error) {
     history.push(LOGIN_PATH);

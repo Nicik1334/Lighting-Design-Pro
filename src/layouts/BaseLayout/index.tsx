@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import RightContent from '@/components/system/RightContent';
 import BaseTabs from '@/layouts/BaseTabs';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
@@ -7,9 +8,10 @@ import { ConfigProvider } from 'antd';
 import React from 'react';
 import { Link, history, useModel, Redirect } from 'umi';
 import GlobalConfig from '@/global';
-import { HOME_PATH, LOGIN_PATH, USER_TOKEN } from '@/constants';
+import { HOME_PATH, LOGIN_PATH, TABS_LIST, USER_TOKEN } from '@/constants';
 import { IconFont } from '@/components/system/IconModal';
 import NProgress from '@/components/common/NProgress';
+import type { TagsItemType } from '../BaseTabs/TabsMenu/data';
 
 export const isDev = process.env.NODE_ENV === 'development';
 const links = isDev
@@ -48,46 +50,61 @@ const ItemChildren = ({
   defaultDom: React.ReactNode;
 }) => {
   if (!itemProps) return null;
-  if (itemProps.isUrl || !itemProps.path || location.pathname === itemProps.path)
-    return <a>{defaultDom}</a>;
-  return <Link to={itemProps.path}>{defaultDom as any}</Link>;
-};
-
-const IconChildren = ({ itemProps }: { itemProps: MenuDataItem }) => {
-  if (!itemProps || itemProps.catalogue) return null;
-  if (typeof itemProps.icon === 'object') {
-    return (
-      <>
-        {itemProps.icon}
-        <span />
-      </>
-    );
-  }
-  if (typeof itemProps.icon === 'string' && itemProps.icon.includes('icon'))
-    return (
-      <>
-        <IconFont type={itemProps.icon} />
-        <span />
-      </>
-    );
-  return null;
+  return itemProps.isUrl ? (
+    <a href={itemProps.path} target="_blank" rel="noreferrer">
+      {defaultDom}
+    </a>
+  ) : (
+    <a
+      onClick={() => {
+        if (location.pathname === itemProps.path) return;
+        const tabItem = (
+          JSON.parse(sessionStorage.getItem(TABS_LIST) || '[]') as TagsItemType[]
+        ).find((o) => o.path === itemProps.path);
+        if (tabItem) {
+          const { hash, search } = tabItem.location as Location;
+          history.push(`${itemProps.path}${search}${hash}`);
+        } else {
+          history.push(itemProps.path || '/');
+        }
+      }}
+    >
+      {defaultDom}
+    </a>
+  );
 };
 
 const BasicLayout: React.FC<ProLayoutProps> = (props) => {
-  const { children } = props;
+  const { children, route } = props;
   const { initialState, setInitialState } = useModel('@@initialState');
 
   // 路径为"/",则重定向到首页
   if (window.location.pathname === '/') return <Redirect to={HOME_PATH} />;
 
+  const loopMenuItem = (menus: MenuDataItem[] = []): MenuDataItem[] | [] =>
+    menus.map(({ icon, ...item }) => {
+      return {
+        ...item,
+        icon:
+          icon && typeof icon === 'string' && icon.includes('icon') ? (
+            <IconFont type={icon} />
+          ) : (
+            icon
+          ),
+        children: item.children && loopMenuItem(item.children),
+      };
+    });
+
   return (
     <ProLayout
       {...props}
+      route={{ routes: loopMenuItem(route?.routes as MenuDataItem[]) }}
       title={GlobalConfig.AppName}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(itemProps, defaultDom) => (
         <>
-          <IconChildren itemProps={itemProps} />
+          {!itemProps.catalogue && itemProps.icon}
+          <span />
           <ItemChildren itemProps={itemProps} defaultDom={defaultDom} />
         </>
       )}

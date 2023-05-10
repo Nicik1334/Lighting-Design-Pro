@@ -9,6 +9,7 @@
 
 // access: 权限标识
 // catalogue: (自定义属性)当前路由是否为目录类型
+const access = 'access';
 
 export default [
   {
@@ -89,6 +90,7 @@ export default [
             icon: 'MenuFoldOutlined',
             path: '/system/menu',
             component: './system/menu',
+            access,
           },
           {
             name: '字典管理',

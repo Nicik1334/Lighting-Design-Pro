@@ -35,6 +35,9 @@ const Dashboard: React.FC = () => {
           <Tooltip title="/404">
             <Button onClick={() => history.push('/404')}>404</Button>
           </Tooltip>
+          <Tooltip title="/form/modal-form?index=1">
+            <Button onClick={() => history.push('/form/modal-form?index=1')}>带参数</Button>
+          </Tooltip>
           <Button
             onClick={() => {
               handleRefreshPage();

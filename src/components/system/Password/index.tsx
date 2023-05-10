@@ -23,6 +23,13 @@ interface BasicModalProps extends LModalFormProps {
 
 const TextStyle = { marginBottom: 4, display: 'block' };
 
+const TooltipStyle = {
+  width: 400,
+  minHeight: 100,
+  padding: 16,
+  color: '#000',
+  fontSize: 13,
+};
 const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
   const { initialState } = useModel('@@initialState');
   if (!initialState) return null;
@@ -79,7 +86,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
           setSteps(3);
           break;
         case STATUS_TEXT[4]:
-          setValidateStatus('warning');
+          setValidateStatus('success');
           setSteps(4);
           break;
         case STATUS_TEXT[5]:
@@ -119,6 +126,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
     } else {
       newVerify[1] = true;
     }
+    console.log(newVerify);
 
     let i: number = 0;
     if (password.match(REG_NUMBER)) i++;
@@ -132,6 +140,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
     } else {
       newVerify[2] = true;
     }
+
     setVerify(newVerify);
     return true;
   };
@@ -165,12 +174,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
         color="#fff"
         trigger="focus"
         align={{ offset: [110, -5] }}
-        overlayInnerStyle={{
-          width: 400,
-          minHeight: 100,
-          color: '#000',
-          fontSize: 13,
-        }}
+        overlayInnerStyle={TooltipStyle}
         getTooltipContainer={(dom) => dom}
         title={<WordPopover />}
       >
@@ -184,7 +188,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
           rules={[
             {
               validator: (_, value: string) => {
-                const check = checkPasswordRule(value, currentUser?.workerName || '');
+                const check = checkPasswordRule(value, currentUser?.workerName || '管理员');
                 if (typeof check === 'string') {
                   return Promise.reject(new Error(check));
                 }
@@ -193,12 +197,7 @@ const Password: FC<BasicModalProps> = ({ onChange, open, ...restProps }) => {
             },
           ]}
         >
-          <Input.Password
-            maxLength={16}
-            onChange={(e) => pwdChange(e.target.value)}
-            placeholder="请输入新密码"
-            allowClear
-          />
+          <Input.Password maxLength={16} placeholder="请输入新密码" allowClear />
         </Form.Item>
       </Tooltip>
       <Form.Item

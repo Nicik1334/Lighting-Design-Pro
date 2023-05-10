@@ -6,11 +6,10 @@ import _ from 'lodash';
 import type { TabsProps } from 'antd';
 import { Button, Tooltip } from 'antd';
 import { Dropdown, Space, Tabs } from 'antd';
-import type { CSSProperties } from 'react';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { history, matchPath, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import type { DraggableTabPaneProps, TabsMenuProps, TagsItemType } from './data';
 import styles from './index.less';
 import { IconFont } from '@/components/system/IconModal';
@@ -20,21 +19,12 @@ import NotPage from '@/pages/404';
 
 const type = 'DraggableTabNode';
 
-const TabIconStyle: CSSProperties = {
+const tabIconStyle = {
   display: 'inline-block',
   verticalAlign: 'middle',
   transition: 'width .2s',
   overflow: 'hidden',
 };
-
-const TabBarStyle: CSSProperties = {
-  position: 'fixed',
-  zIndex: 1,
-  padding: 0,
-  width: '100%',
-  background: 'white',
-};
-
 const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [{ isOver, dropClassName }, drop] = useDrop({
@@ -64,9 +54,6 @@ const DraggableTabNode = ({ index, children, moveNode }: DraggableTabPaneProps) 
     </div>
   );
 };
-
-// 定义全屏路由
-const FULL_PATH = ['/dataScreen'];
 
 const TabsMenu: React.FC<TabsMenuProps> = ({
   cacheKeyMap,
@@ -133,6 +120,15 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
     [],
   );
 
+  const refresh = () => {
+    if (loading) return;
+    setLoading(true);
+    handleRefreshPage();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
     <div
       className={`${styles.tags_wrapper} ${isFull ? styles.tabs_full : ''}`}
@@ -148,13 +144,7 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
                 <Button type="text" style={{ display: 'flex', alignItems: 'center' }}>
                   <ReloadOutlined
                     spin={loading}
-                    onClick={() => {
-                      if (!loading) {
-                        setLoading(true);
-                        handleRefreshPage();
-                        setTimeout(() => setLoading(false), 1000);
-                      }
-                    }}
+                    onClick={refresh}
                     style={{ fontSize: 18, fontWeight: 800, cursor: 'pointer' }}
                   />
                 </Button>
@@ -162,7 +152,8 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
             </Space>
           ),
         }}
-        onEdit={(targetKey, action) => {
+        style={{ height: 42 }}
+        onEdit={(targetKey = '', action) => {
           if (action === 'remove') {
             const tabItem = tabList.find(
               (item) => item.path === (targetKey as string).split(':')[0],
@@ -170,14 +161,13 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
             if (tabItem) closePage(tabItem);
           }
         }}
-        style={{ height: 42 }}
         onChange={(key: string) => {
           const tabItem = (
             JSON.parse(sessionStorage.getItem(TABS_LIST) || '[]') as TagsItemType[]
           ).find((o) => o.path === key);
           if (tabItem) {
-            const search = (tabItem?.location?.search as Location) || '';
-            history.push(`${key}${search}`);
+            const search = tabItem?.location?.search as Location;
+            history.push(`${key}${search || ''}`);
           } else {
             history.push(key);
           }
@@ -185,113 +175,106 @@ const TabsMenu: React.FC<TabsMenuProps> = ({
         items={tabList.map((item): any => {
           return {
             label: (
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      label: (
-                        <Space align="center">
-                          <ReloadOutlined style={{ fontSize: 12 }} />
-                          <div>刷新</div>
-                          <div
-                            className={styles.drop_down_span}
-                            onClick={() => refreshPage && refreshPage(item)}
-                          />
-                        </Space>
-                      ),
-                      key: '1',
-                    },
-                    {
-                      label: (
-                        <Space align="center">
-                          <TagOutlined style={{ fontSize: 12 }} />
-                          <div>关闭其他</div>
-                          <div
-                            className={styles.drop_down_span}
-                            onClick={() => closeOtherPage && closeOtherPage()}
-                          />
-                        </Space>
-                      ),
-                      key: '2',
-                    },
-                    {
-                      label: (
-                        <Space align="center">
-                          <HomeOutlined style={{ fontSize: 12 }} />
-                          <div>关闭所有</div>
-                          <div className={styles.drop_down_span} onClick={closeAllPage} />
-                        </Space>
-                      ),
-                      key: '3',
-                    },
-                    {
-                      label: (
-                        <Space align="center">
-                          <FullscreenOutlined style={{ fontSize: 12 }} />
-                          <div>全屏</div>
-                          <div className={styles.drop_down_span} onClick={() => setIsFull(true)} />
-                        </Space>
-                      ),
-                      key: '4',
-                    },
-                  ],
-                }}
-                trigger={['contextMenu']}
-              >
-                <div>
-                  {initialState?.settings?.tabView && initialState?.settings?.tabView?.tabIcon && (
-                    <div style={{ ...TabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
-                      {typeof item.icon === 'string' && item.icon.includes('icon') ? (
-                        <IconFont type={item.icon} />
-                      ) : typeof item.icon === 'string' ? (
-                        <Icon component={antIcons[item.icon]} />
-                      ) : (
-                        item.icon
+              <div>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        label: (
+                          <Space align="center">
+                            <ReloadOutlined style={{ fontSize: 12 }} />
+                            <div>刷新</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => refreshPage && refreshPage(item)}
+                            />
+                          </Space>
+                        ),
+                        key: '1',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <TagOutlined style={{ fontSize: 12 }} />
+                            <div>关闭其他</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => closeOtherPage && closeOtherPage()}
+                            />
+                          </Space>
+                        ),
+                        key: '2',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <HomeOutlined style={{ fontSize: 12 }} />
+                            <div>关闭所有</div>
+                            <div className={styles.drop_down_span} onClick={closeAllPage} />
+                          </Space>
+                        ),
+                        key: '3',
+                      },
+                      {
+                        label: (
+                          <Space align="center">
+                            <FullscreenOutlined style={{ fontSize: 12 }} />
+                            <div>全屏</div>
+                            <div
+                              className={styles.drop_down_span}
+                              onClick={() => setIsFull(true)}
+                            />
+                          </Space>
+                        ),
+                        key: '4',
+                      },
+                    ],
+                  }}
+                  trigger={['contextMenu']}
+                >
+                  <div>
+                    {initialState?.settings?.tabView &&
+                      initialState?.settings?.tabView?.tabIcon && (
+                        <div style={{ ...tabIconStyle, width: item.active && item.icon ? 20 : 0 }}>
+                          {typeof item.icon === 'string' && item.icon.includes('icon') ? (
+                            <IconFont type={item.icon} />
+                          ) : typeof item.icon === 'string' ? (
+                            <Icon component={antIcons[item.icon]} />
+                          ) : (
+                            item.icon
+                          )}
+                        </div>
                       )}
-                    </div>
-                  )}
-                  {item.title}
-                  <div className={styles.drop_down_span} />
-                </div>
-              </Dropdown>
+                    {item.title}
+                    <div className={styles.drop_down_span} />
+                  </div>
+                </Dropdown>
+              </div>
             ),
-            key: item.path,
+            children: (
+              <div
+                style={
+                  !isFull
+                    ? { margin: '0 24px 24px' }
+                    : {
+                        background: '#ffffff',
+                        margin: '0 24px 24px',
+                      }
+                }
+                key={item.path}
+              >
+                <div className={item.active ? 'animate__animated animate__fadeIn' : ''}>
+                  {item.path === NOT_PATH ? <NotPage /> : item.children}
+                </div>
+              </div>
+            ),
+            key: `${item.path}:${cacheKeyMap[item.path as string] || '_'}`,
           };
         })}
-        renderTabBar={(props, DefaultTabBar: any) => {
-          if (FULL_PATH.includes(props.activeKey))
-            return <DefaultTabBar {...props} style={{ marginBottom: 0 }} />;
-          return (
-            <div style={TabBarStyle}>
-              <DefaultTabBar {...props} style={{ marginBottom: 0 }} />
-            </div>
-          );
-        }}
-        activeKey={location.pathname}
+        activeKey={`${location.pathname}:${cacheKeyMap[location.pathname] || '_'}`}
         size="small"
         type="editable-card"
       />
-
-      {tabList.map((item) => (
-        <div
-          className="keep-alive-layout"
-          key={`${item.path}:${cacheKeyMap[`${item.path}`] || '_'}`}
-          hidden={!matchPath(location.pathname, item.path as string)}
-        >
-          <div
-            className={item.active ? `animate__animated animate__fadeIn` : ''}
-            style={{
-              height: '100%',
-              width: '100%',
-              position: 'relative',
-              overflow: 'hidden auto',
-              padding: '24px',
-            }}
-          >
-            {item.path === NOT_PATH ? <NotPage /> : item.children}
-          </div>
-        </div>
-      ))}
     </div>
   );
 };

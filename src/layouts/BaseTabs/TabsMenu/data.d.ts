@@ -19,6 +19,7 @@ export type TagsItemType = {
    * query参数
    */
   query?: any;
+  location?: Location | any;
   /**
    * children
    */
@@ -34,10 +35,6 @@ export interface TabsMenuProps {
    * 缓存key
    */
   cacheKeyMap: Record<string, any>;
-  /**
-   * 选中key
-   */
-  activeKey: string;
   /**
    * 关闭当前标签
    */

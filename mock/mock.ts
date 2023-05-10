@@ -121,7 +121,7 @@ const AUTHURL = [
   '/form/basic-form',
   '/form/modal-form',
   '/form/step-form',
-  '/system/menu',
+  // '/system/menu',
   '/system/dictionary',
   '/system/user',
   '/system/role',

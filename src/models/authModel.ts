@@ -2,7 +2,7 @@ import { history } from 'umi';
 import { stringify } from 'qs';
 import type { Reducer } from 'redux';
 import type { Effect } from 'umi';
-import { HOME_PATH, LOGIN_PATH, NOT_PATH, USER_TOKEN } from '@/constants';
+import { HOME_PATH, LOGIN_PATH, NOT_PATH, TABS_LIST, USER_TOKEN } from '@/constants';
 import { outLogin } from '@/services/ant-design-pro/api';
 
 export interface AuthModelState {}
@@ -36,7 +36,11 @@ const LoginModel: AuthModelType = {
           search: stringify({ redirect: redirect === NOT_PATH ? HOME_PATH : redirect }),
         });
         const response = yield call(outLogin, payload);
-        if (response.success) sessionStorage.removeItem(USER_TOKEN);
+        if (response.success) {
+          // 判断是否有缓存路由则删除
+          if (sessionStorage.getItem(TABS_LIST)) sessionStorage.removeItem(TABS_LIST);
+          sessionStorage.removeItem(USER_TOKEN);
+        }
         return response;
       }
     },

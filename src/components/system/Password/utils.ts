@@ -51,19 +51,11 @@ const letters = (str: string) => {
   let count1 = 0,
     count2 = 0;
   for (let i = 0; i < str.length; i++) {
-    if (str.charAt(i) >= 'a' && str.charAt(i) <= 'z') {
-      count1++;
-    }
-    if (str.charAt(i) >= 'A' && str.charAt(i) <= 'Z') {
-      count2++;
-    }
+    if (str.charAt(i) >= 'a' && str.charAt(i) <= 'z') count1++;
+    if (str.charAt(i) >= 'A' && str.charAt(i) <= 'Z') count2++;
   }
-  if (count1 == 0 && count2 == 0) {
-    return 0;
-  }
-  if (count1 != 0 && count2 != 0) {
-    return 20;
-  }
+  if (count1 == 0 && count2 == 0) return 0;
+  if (count1 != 0 && count2 != 0) return 20;
   return 10;
 };
 
@@ -74,16 +66,10 @@ const letters = (str: string) => {
 const numbers = (str: string) => {
   let count = 0;
   for (let i = 0; i < str.length; i++) {
-    if (str.charAt(i) >= '0' && str.charAt(i) <= '9') {
-      count++;
-    }
+    if (str.charAt(i) >= '0' && str.charAt(i) <= '9') count++;
   }
-  if (count == 0) {
-    return 0;
-  }
-  if (count == 1) {
-    return 10;
-  }
+  if (count == 0) return 0;
+  if (count == 1) return 10;
   return 20;
 };
 /**
@@ -102,12 +88,8 @@ const symbols = (str: string) => {
       count++;
     }
   }
-  if (count == 0) {
-    return 0;
-  }
-  if (count == 1) {
-    return 10;
-  }
+  if (count == 0) return 0;
+  if (count == 1) return 10;
   return 25;
 };
 
@@ -119,18 +101,9 @@ const rewards = (str: string) => {
   const letter = letters(str); //字母
   const number = numbers(str); //数字
   const symbol = symbols(str); //符号
-  if (letter > 0 && number > 0 && symbol == 0) {
-    //字母和数字
-    return 2;
-  }
-  if (letter == 10 && number > 0 && symbol > 0) {
-    //字母、数字和符号
-    return 3;
-  }
-  if (letter == 20 && number > 0 && symbol > 0) {
-    //大小写字母、数字和符号
-    return 5;
-  }
+  if (letter > 0 && number > 0 && symbol == 0) return 2; //字母和数字
+  if (letter == 10 && number > 0 && symbol > 0) return 3; //字母、数字和符号
+  if (letter == 20 && number > 0 && symbol > 0) return 5; //大小写字母、数字和符号
   return 0;
 };
 /**
